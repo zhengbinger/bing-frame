@@ -84,7 +84,7 @@ http://localhost:8081/api/doc.html
 
 集成Spring Cache，支持多种缓存实现，可根据需要进行配置。
 
-详细的缓存使用说明请参阅：[CACHE_USAGE.md](CACHE_USAGE.md)
+详细的缓存使用说明请参阅：[CACHE_USAGE.md](docs/CACHE_USAGE.md)
 
 ## 快速开始
 
