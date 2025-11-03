@@ -1,0 +1,11 @@
+# 测试环境配置
+spring:
+  datasource:
+    url: jdbc:mysql://test-db:3306/cursor_zb_test?useUnicode=true&characterEncoding=UTF-8&serverTimezone=UTC
+    username: test_user
+    password: Test@123
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+logging:
+  level:
+    com.bing.framework: INFO

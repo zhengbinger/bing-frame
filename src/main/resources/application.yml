@@ -1,0 +1,81 @@
+# 应用名称
+spring:
+  application:
+    name: bing-framework
+  profiles:
+    active: dev  # 默认使用开发环境
+  # 国际化配置
+  messages:
+    basename: i18n/messages
+    encoding: UTF-8
+    fallback-to-system-locale: false
+    default-locale: zh_CN
+    cache-duration: 60s
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
+    cors:
+      allowed-origins: '*'
+      allowed-methods: GET,POST,PUT,DELETE,OPTIONS
+      allowed-headers: '*'
+  
+  # JPA配置
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    open-in-view: false
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL5InnoDBDialect
+  
+  # 缓存配置
+  cache:
+    type: simple
+  
+
+
+# 服务器配置
+server:
+  port: 8081
+  servlet:
+    context-path: /api
+  tomcat:
+    uri-encoding: UTF-8
+
+# MyBatis配置
+mybatis:
+  mapper-locations: classpath:mapper/*.xml
+  configuration:
+    map-underscore-to-camel-case: true
+mybatis-plus:
+  configuration:
+    map-underscore-to-camel-case: true
+  global-config:
+    db-config:
+      id-type: AUTO
+
+# 日志配置
+logging:
+  level:
+    root: INFO
+  pattern:
+    console: '%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n'
+
+# Knife4j配置
+knife4j:
+  enable: true
+  setting:
+    language: zh_cn
+  openapi:
+    title: Bing Framework API
+    description: Bing Framework RESTful API文档
+    version: 1.0.0
+    group:
+      default:
+        group-name: default
+        api-rule:
+          include-path-patterns:
+            - /api/**
+  cors: true
+  # 文档访问路径: http://localhost:8081/api/doc.html
