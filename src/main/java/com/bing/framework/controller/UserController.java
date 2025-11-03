@@ -8,6 +8,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import com.bing.framework.common.ErrorCode;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -130,7 +131,7 @@ public class UserController {
     public Result<?> resetPassword(@PathVariable final Long id, @RequestBody final Map<String, String> request) {
         String newPassword = request.get("newPassword");
         if (newPassword == null || newPassword.trim().isEmpty()) {
-            return Result.fail("新密码不能为空");
+            return Result.error(ErrorCode.PARAM_ERROR.getCode(), "新密码不能为空");
         }
         userService.resetPassword(id, newPassword);
         return Result.success();

@@ -1,6 +1,6 @@
 package com.bing.framework.util;
 
-import cn.hutool.crypto.SecureUtil;
+import cn.hutool.core.util.RandomUtil;
 import cn.hutool.crypto.digest.DigestUtil;
 
 /**
@@ -60,7 +60,7 @@ public class SecurityUtil {
         String chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()";
         StringBuilder password = new StringBuilder();
         for (int i = 0; i < length; i++) {
-            int index = SecureUtil.random().nextInt(chars.length());
+            int index = RandomUtil.randomInt(chars.length());
             password.append(chars.charAt(index));
         }
         return password.toString();

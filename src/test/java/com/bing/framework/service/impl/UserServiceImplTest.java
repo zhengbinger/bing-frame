@@ -5,6 +5,7 @@ import com.bing.framework.common.Result;
 import com.bing.framework.entity.User;
 import com.bing.framework.exception.BusinessException;
 import com.bing.framework.mapper.UserMapper;
+import com.bing.framework.util.SecurityUtil;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -48,6 +49,10 @@ public class UserServiceImplTest {
     
     @Test
     public void testCreateUser_Success() {
+        // 模拟用户不存在（防止重复）
+        when(userMapper.selectByUsername(testUser.getUsername())).thenReturn(null);
+        when(userMapper.selectByEmail(testUser.getEmail())).thenReturn(null);
+        when(userMapper.selectByPhone(null)).thenReturn(null);
         // 模拟Mapper行为
         when(userMapper.insert(testUser)).thenReturn(1);
         
@@ -61,15 +66,18 @@ public class UserServiceImplTest {
     
     @Test
     public void testCreateUser_Failure() {
-        // 模拟Mapper抛出异常
-        when(userMapper.insert(testUser)).thenThrow(new RuntimeException("数据库异常"));
+        // 模拟用户已存在
+        when(userMapper.selectByUsername(testUser.getUsername())).thenReturn(testUser);
         
         // 执行测试并验证异常
         BusinessException exception = Assertions.assertThrows(BusinessException.class, () -> {
             userService.saveUser(testUser);
         });
         
-        verify(userMapper, times(1)).insert(testUser);
+        // 验证异常信息
+        Assertions.assertEquals(ErrorCode.USER_EXIST.getCode(), exception.getCode());
+        // 不应该调用insert方法
+        verify(userMapper, never()).insert(testUser);
     }
     
     @Test
@@ -96,6 +104,7 @@ public class UserServiceImplTest {
             userService.getUserById(999L);
         });
         
+        // 验证异常信息
         Assertions.assertEquals(ErrorCode.USER_NOT_FOUND.getCode(), exception.getCode());
         verify(userMapper, times(1)).selectById(999L);
     }
@@ -116,5 +125,125 @@ public class UserServiceImplTest {
         Assertions.assertNotNull(result);
         Assertions.assertEquals(1, result.size());
         verify(userMapper, times(1)).selectList(null);
+    }
+    
+    @Test
+    public void testSaveUser_WithPasswordEncryption() {
+        // 准备测试数据
+        User newUser = new User();
+        newUser.setUsername("newuser");
+        newUser.setPassword("plainpassword");
+        
+        // 模拟用户不存在（防止重复）
+        when(userMapper.selectByUsername("newuser")).thenReturn(null);
+        when(userMapper.selectByEmail(null)).thenReturn(null);
+        when(userMapper.selectByPhone(null)).thenReturn(null);
+        // 模拟Mapper行为
+        when(userMapper.insert(any(User.class))).thenReturn(1);
+        
+        // 执行测试
+        boolean result = userService.saveUser(newUser);
+        
+        // 验证结果
+        Assertions.assertTrue(result);
+        // 验证密码已被加密
+        Assertions.assertNotEquals("plainpassword", newUser.getPassword());
+        Assertions.assertTrue(newUser.getPassword().length() > 10); // 加密后的密码应该更长
+        verify(userMapper, times(1)).insert(newUser);
+    }
+    
+    @Test
+    public void testUpdateUser_WithPasswordUpdate() {
+        // 准备测试数据
+        User existingUser = new User();
+        existingUser.setId(1L);
+        existingUser.setPassword(SecurityUtil.encryptPassword("oldpassword"));
+        
+        User updatedUser = new User();
+        updatedUser.setId(1L);
+        updatedUser.setPassword("newpassword");
+        
+        // 模拟Mapper行为
+        when(userMapper.selectById(1L)).thenReturn(existingUser);
+        when(userMapper.updateById(any(User.class))).thenReturn(1);
+        
+        // 执行测试
+        boolean result = userService.updateUser(updatedUser);
+        
+        // 验证结果
+        Assertions.assertTrue(result);
+        // 验证密码已被加密且与旧密码不同
+        Assertions.assertNotEquals("newpassword", updatedUser.getPassword());
+        Assertions.assertNotEquals(existingUser.getPassword(), updatedUser.getPassword());
+        verify(userMapper, times(1)).updateById(updatedUser);
+    }
+    
+    @Test
+    public void testResetPassword_Success() {
+        // 准备测试数据
+        User user = new User();
+        user.setId(1L);
+        
+        // 模拟Mapper行为
+        when(userMapper.selectById(1L)).thenReturn(user);
+        when(userMapper.updateById(any(User.class))).thenReturn(1);
+        
+        // 执行测试
+        boolean result = userService.resetPassword(1L, "newpassword123");
+        
+        // 验证结果
+        Assertions.assertTrue(result);
+        // 验证密码已被加密
+        Assertions.assertNotEquals("newpassword123", user.getPassword());
+        verify(userMapper, times(1)).updateById(any(User.class));
+    }
+    
+    @Test
+    public void testGenerateAndResetPassword_Success() {
+        // 准备测试数据
+        User user = new User();
+        user.setId(1L);
+        
+        // 模拟Mapper行为
+        when(userMapper.selectById(1L)).thenReturn(user);
+        when(userMapper.updateById(any(User.class))).thenReturn(1);
+        
+        // 执行测试
+        String randomPassword = userService.generateAndResetPassword(1L);
+        
+        // 验证生成的密码
+        Assertions.assertNotNull(randomPassword);
+        Assertions.assertEquals(8, randomPassword.length()); // 默认生成8位密码
+        // 验证密码已被加密
+        Assertions.assertNotEquals(randomPassword, user.getPassword());
+        verify(userMapper, times(1)).updateById(any(User.class));
+    }
+    
+    @Test
+    public void testPasswordEncryptionAndVerification() {
+        // 测试密码加密和验证功能
+        String plainPassword = "Test@123456";
+        String encryptedPassword = SecurityUtil.encryptPassword(plainPassword);
+        
+        // 验证加密后的密码与原密码不同
+        Assertions.assertNotEquals(plainPassword, encryptedPassword);
+        
+        // 验证密码验证功能
+        Assertions.assertTrue(SecurityUtil.verifyPassword(plainPassword, encryptedPassword));
+        Assertions.assertFalse(SecurityUtil.verifyPassword("wrongpassword", encryptedPassword));
+    }
+    
+    @Test
+    public void testRandomPasswordGeneration() {
+        // 测试随机密码生成
+        String password1 = SecurityUtil.generateRandomPassword(8);
+        String password2 = SecurityUtil.generateRandomPassword(8);
+        
+        // 验证密码长度
+        Assertions.assertEquals(8, password1.length());
+        Assertions.assertEquals(8, password2.length());
+        
+        // 验证两次生成的密码不同（概率上几乎肯定不同）
+        Assertions.assertNotEquals(password1, password2);
     }
 }
