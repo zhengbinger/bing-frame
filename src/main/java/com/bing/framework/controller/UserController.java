@@ -8,7 +8,9 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 用户控制器
@@ -114,5 +116,38 @@ public class UserController {
     public Result<?> deleteBatch(@RequestBody final List<Long> ids) {
         userService.deleteBatch(ids);
         return Result.success();
+    }
+    
+    /**
+     * 重置用户密码。
+     * 
+     * @param id 用户ID
+     * @param newPassword 新密码
+     * @return 操作结果
+     */
+    @Operation(summary = "重置用户密码")
+    @PutMapping("/{id}/password")
+    public Result<?> resetPassword(@PathVariable final Long id, @RequestBody final Map<String, String> request) {
+        String newPassword = request.get("newPassword");
+        if (newPassword == null || newPassword.trim().isEmpty()) {
+            return Result.fail("新密码不能为空");
+        }
+        userService.resetPassword(id, newPassword);
+        return Result.success();
+    }
+    
+    /**
+     * 生成随机密码并重置。
+     * 
+     * @param id 用户ID
+     * @return 生成的随机密码
+     */
+    @Operation(summary = "生成随机密码并重置")
+    @PostMapping("/{id}/random-password")
+    public Result<?> generateRandomPassword(@PathVariable final Long id) {
+        String randomPassword = userService.generateAndResetPassword(id);
+        Map<String, String> result = new HashMap<>();
+        result.put("randomPassword", randomPassword);
+        return Result.success(result);
     }
 }

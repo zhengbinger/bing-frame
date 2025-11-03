@@ -61,4 +61,19 @@ public interface UserService extends IService<User> {
      * @return 是否成功
      */
     boolean deleteBatch(List<Long> ids);
+    
+    /**
+     * 重置用户密码
+     * @param id 用户ID
+     * @param newPassword 新密码
+     * @return 是否成功
+     */
+    boolean resetPassword(Long id, String newPassword);
+    
+    /**
+     * 生成随机密码并重置
+     * @param id 用户ID
+     * @return 生成的随机密码
+     */
+    String generateAndResetPassword(Long id);
 }

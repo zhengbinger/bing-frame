@@ -6,6 +6,7 @@ import com.bing.framework.entity.User;
 import com.bing.framework.exception.BusinessException;
 import com.bing.framework.mapper.UserMapper;
 import com.bing.framework.service.UserService;
+import com.bing.framework.util.SecurityUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
@@ -76,6 +77,11 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
             }
         }
         
+        // 密码加密
+        if (user.getPassword() != null) {
+            user.setPassword(SecurityUtil.encryptPassword(user.getPassword()));
+        }
+        
         // 设置默认值
         user.setStatus(1);
         user.setCreateTime(new Date());
@@ -92,6 +98,11 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         User existingUser = userMapper.selectById(user.getId());
         if (existingUser == null) {
             throw new BusinessException(ErrorCode.USER_NOT_FOUND);
+        }
+        
+        // 如果密码有更新，需要加密
+        if (user.getPassword() != null && !user.getPassword().equals(existingUser.getPassword())) {
+            user.setPassword(SecurityUtil.encryptPassword(user.getPassword()));
         }
         
         // 更新时间
@@ -122,5 +133,41 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         }
         
         return userMapper.deleteBatchIds(ids) > 0;
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    @CacheEvict(value = {"userList", "user"}, allEntries = true)
+    public boolean resetPassword(Long id, String newPassword) {
+        // 检查用户是否存在
+        User existingUser = userMapper.selectById(id);
+        if (existingUser == null) {
+            throw new BusinessException(ErrorCode.USER_NOT_FOUND);
+        }
+        
+        // 加密新密码
+        String encryptedPassword = SecurityUtil.encryptPassword(newPassword);
+        
+        // 更新密码
+        User user = new User();
+        user.setId(id);
+        user.setPassword(encryptedPassword);
+        user.setUpdateTime(new Date());
+        
+        return userMapper.updateById(user) > 0;
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    @CacheEvict(value = {"userList", "user"}, allEntries = true)
+    public String generateAndResetPassword(Long id) {
+        // 生成8位随机密码
+        String randomPassword = SecurityUtil.generateRandomPassword(8);
+        
+        // 重置密码
+        resetPassword(id, randomPassword);
+        
+        // 返回明文密码（注意：实际项目中应通过安全渠道发送给用户）
+        return randomPassword;
     }
 }
