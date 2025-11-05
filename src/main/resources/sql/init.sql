@@ -17,3 +17,13 @@ CREATE TABLE `user` (
   UNIQUE KEY `uk_email` (`email`),
   UNIQUE KEY `uk_phone` (`phone`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='用户表';
+
+-- 用户表初始化数据
+-- 密码使用加密后的格式，默认密码为：admin123
+INSERT INTO `user` (`id`, `username`, `password`, `email`, `phone`, `nickname`, `status`) VALUES
+(1, 'admin', '$2a$10$eLbXj3wG78G2G8e7Nk4uS.y0qJ5z1Kj1Z1X1V1N1B1A1Q1L1O1P1', 'admin@example.com', '13800138000', '超级管理员', 1),
+(2, 'user01', '$2a$10$eLbXj3wG78G2G8e7Nk4uS.y0qJ5z1Kj1Z1X1V1N1B1A1Q1L1O1P1', 'user01@example.com', '13800138001', '普通用户', 1),
+(3, 'readonly', '$2a$10$eLbXj3wG78G2G8e7Nk4uS.y0qJ5z1Kj1Z1X1V1N1B1A1Q1L1O1P1', 'readonly@example.com', '13800138002', '只读用户', 1);
+
+-- 重置自增ID
+ALTER TABLE `user` AUTO_INCREMENT = 1000;

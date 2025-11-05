@@ -1,6 +1,7 @@
 package com.bing.framework.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.bing.framework.entity.Role;
 import com.bing.framework.entity.User;
 import java.util.List;
 
@@ -76,4 +77,18 @@ public interface UserService extends IService<User> {
      * @return 生成的随机密码
      */
     String generateAndResetPassword(Long id);
+    
+    /**
+     * 获取用户拥有的角色列表
+     * @param userId 用户ID
+     * @return 角色列表
+     */
+    List<Role> getUserRoles(Long userId);
+    
+    /**
+     * 为用户分配角色
+     * @param userId 用户ID
+     * @param roleIds 角色ID列表
+     */
+    void assignRolesToUser(Long userId, List<Long> roleIds);
 }

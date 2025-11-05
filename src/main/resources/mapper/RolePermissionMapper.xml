@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bing.framework.mapper.RolePermissionMapper">
+
+    <!-- 根据角色ID删除角色权限关联关系 -->
+    <delete id="deleteByRoleId">
+        DELETE FROM role_permission
+        WHERE role_id = #{roleId}
+    </delete>
+
+    <!-- 根据权限ID删除角色权限关联关系 -->
+    <delete id="deleteByPermissionId">
+        DELETE FROM role_permission
+        WHERE permission_id = #{permissionId}
+    </delete>
+
+    <!-- 根据角色ID查询角色权限关联列表 -->
+    <select id="findByRoleId" resultType="com.bing.framework.entity.RolePermission">
+        SELECT *
+        FROM role_permission
+        WHERE role_id = #{roleId}
+    </select>
+
+    <!-- 批量插入角色权限关联关系 -->
+    <insert id="insertBatch" parameterType="java.util.List">
+        INSERT INTO role_permission (role_id, permission_id)
+        VALUES
+        <foreach collection="list" item="item" index="index" separator=",">
+            (#{item.roleId}, #{item.permissionId})
+        </foreach>
+    </insert>
+</mapper>

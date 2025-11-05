@@ -86,6 +86,24 @@ http://localhost:8081/api/doc.html
 
 详细的缓存使用说明请参阅：[CACHE_USAGE.md](docs/CACHE_USAGE.md)
 
+## 7. RBAC权限系统
+
+本项目采用RBAC（基于角色的访问控制）模型实现权限管理，支持用户-角色-权限三层权限控制体系。
+
+### 核心功能
+- 权限的增删改查
+- 角色权限分配
+- 用户角色分配
+- 权限树形展示
+- 基于注解的权限验证
+
+### 相关文档
+详细设计请参考：[RBAC权限管理系统设计文档](docs/RBAC_SYSTEM.md)
+
+### 数据库脚本
+- `src/main/resources/sql/permission_init.sql` - 权限表初始化脚本
+- `src/main/resources/sql/role_init.sql` - 角色表初始化脚本
+
 ## 快速开始
 
 ### 1. 环境准备

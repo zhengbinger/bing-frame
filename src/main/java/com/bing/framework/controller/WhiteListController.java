@@ -6,6 +6,8 @@ import com.bing.framework.common.ErrorCode;
 import com.bing.framework.common.Result;
 import com.bing.framework.entity.WhiteList;
 import com.bing.framework.service.WhiteListService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,6 +20,7 @@ import java.util.List;
  * @author zhengbing
  * @date 2024-11-03
  */
+@Tag(name = "白名单管理")
 @RestController
 @RequestMapping("/api/white-list")
 public class WhiteListController {
@@ -32,6 +35,7 @@ public class WhiteListController {
      * @param size 每页大小
      * @return 分页结果
      */
+    @Operation(summary = "分页查询白名单列表")
     @GetMapping("/page")
     public Result<IPage<WhiteList>> page(@RequestParam(defaultValue = "1") Long page, 
                                         @RequestParam(defaultValue = "10") Long size) {
@@ -45,6 +49,7 @@ public class WhiteListController {
      *
      * @return 白名单列表
      */
+    @Operation(summary = "查询所有白名单")
     @GetMapping("/list")
     public Result<List<WhiteList>> list() {
         List<WhiteList> whiteLists = whiteListService.list();
@@ -57,6 +62,7 @@ public class WhiteListController {
      * @param id 白名单ID
      * @return 白名单信息
      */
+    @Operation(summary = "根据ID查询白名单")
     @GetMapping("/{id}")
     public Result<WhiteList> getById(@PathVariable Long id) {
         WhiteList whiteList = whiteListService.getById(id);

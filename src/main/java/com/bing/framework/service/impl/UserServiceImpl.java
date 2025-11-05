@@ -2,9 +2,11 @@ package com.bing.framework.service.impl;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.bing.framework.common.ErrorCode;
+import com.bing.framework.entity.Role;
 import com.bing.framework.entity.User;
 import com.bing.framework.exception.BusinessException;
 import com.bing.framework.mapper.UserMapper;
+import com.bing.framework.service.RoleService;
 import com.bing.framework.service.UserService;
 import com.bing.framework.util.SecurityUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +30,9 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 
     @Autowired
     private UserMapper userMapper;
+    
+    @Autowired
+    private RoleService roleService;
 
     @Override
     @Cacheable(value = "user", key = "#id")
@@ -169,5 +174,29 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         
         // 返回明文密码（注意：实际项目中应通过安全渠道发送给用户）
         return randomPassword;
+    }
+    
+    @Override
+    public List<Role> getUserRoles(Long userId) {
+        // 检查用户是否存在
+        User user = this.getById(userId);
+        if (user == null) {
+            throw new BusinessException(ErrorCode.USER_NOT_FOUND);
+        }
+        
+        return roleService.getRolesByUserId(userId);
+    }
+    
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    @CacheEvict(value = {"userList", "user"}, allEntries = true)
+    public void assignRolesToUser(Long userId, List<Long> roleIds) {
+        // 检查用户是否存在
+        User user = this.getById(userId);
+        if (user == null) {
+            throw new BusinessException(ErrorCode.USER_NOT_FOUND);
+        }
+        
+        roleService.assignRolesToUser(userId, roleIds);
     }
 }
