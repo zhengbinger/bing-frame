@@ -1,6 +1,7 @@
 package com.bing.framework.config;
 
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 
@@ -13,7 +14,9 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
  * @author zhengbing
  * @date 2025-11-01
  */
+// 添加@Lazy注解实现延迟初始化，提升启动性能
 @Configuration
+@Lazy
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override

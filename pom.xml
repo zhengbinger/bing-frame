@@ -167,6 +167,24 @@
 							<artifactId>lombok</artifactId>
 						</exclude>
 					</excludes>
+					<!-- 配置JVM参数以优化启动性能 -->
+					<jvmArguments>
+						-Dfile.encoding=UTF-8
+						-Xms128m
+						-Xmx512m
+						-XX:+UseG1GC
+						-XX:+UseStringDeduplication
+						-XX:+ParallelRefProcEnabled
+						-XX:+TieredCompilation
+						-XX:TieredStopAtLevel=1
+						-XX:+AlwaysPreTouch
+						-XX:+DisableExplicitGC
+						-Dspring.output.ansi.enabled=ALWAYS
+					</jvmArguments>
+					<!-- 启用并行构建以加快启动 -->
+					<arguments>
+						<argument>--spring.main.lazy-initialization=true</argument>
+					</arguments>
 				</configuration>
 			</plugin>
 			<!-- Checkstyle 代码风格检查 -->

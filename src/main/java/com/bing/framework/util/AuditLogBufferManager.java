@@ -6,6 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
@@ -24,7 +25,9 @@ import java.util.concurrent.atomic.AtomicBoolean;
  * @author zhengbing
  * @date 2025-11-05
  */
+// 添加@Lazy注解实现延迟初始化，提升启动性能
 @Component
+@Lazy
 public class AuditLogBufferManager {
 
     private static final Logger logger = LoggerFactory.getLogger(AuditLogBufferManager.class);

@@ -8,10 +8,14 @@ import com.bing.framework.util.AuditLogBufferManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.Clock;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.Date;
 
 /**
@@ -22,16 +26,20 @@ import java.util.Date;
  * @author zhengbing
  * @date 2025-11-05
  */
+// 添加@Lazy注解实现延迟初始化，提升启动性能
 @Service
+@Lazy
 public class AuditLogServiceImpl extends ServiceImpl<AuditLogMapper, AuditLog> implements AuditLogService {
 
     private static final Logger logger = LoggerFactory.getLogger(AuditLogServiceImpl.class);
     
     private final AuditLogBufferManager bufferManager;
+    private final Clock clock;
     
     @Autowired
-    public AuditLogServiceImpl(AuditLogBufferManager bufferManager) {
+    public AuditLogServiceImpl(AuditLogBufferManager bufferManager, Clock clock) {
         this.bufferManager = bufferManager;
+        this.clock = clock;
     }
     
     /**
@@ -43,9 +51,11 @@ public class AuditLogServiceImpl extends ServiceImpl<AuditLogMapper, AuditLog> i
     @Transactional
     public void recordAuditLog(AuditLog auditLog) {
         try {
-            // 设置创建时间
-            if (auditLog.getCreatedAt() == null) {
-                auditLog.setCreatedAt(new Date());
+            // 设置操作时间
+            if (auditLog.getOperationTime() == null) {
+                // 使用Clock抽象获取当前时间，提高可测试性
+                LocalDateTime now = LocalDateTime.now(clock);
+                auditLog.setOperationTime(Date.from(now.atZone(ZoneId.systemDefault()).toInstant()));
             }
             
             // 使用缓冲池管理器添加审计日志

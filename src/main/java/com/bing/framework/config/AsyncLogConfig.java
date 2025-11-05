@@ -2,6 +2,7 @@ package com.bing.framework.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 
 import java.util.concurrent.Executor;
@@ -14,7 +15,9 @@ import java.util.concurrent.ThreadPoolExecutor;
  * @author zhengbing
  * @date 2025-11-05
  */
+// 添加@Lazy注解实现延迟初始化，提升启动性能
 @Configuration
+@Lazy
 public class AsyncLogConfig {
 
     /**

@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.extension.plugins.MybatisPlusInterceptor;
 import com.baomidou.mybatisplus.extension.plugins.inner.PaginationInnerInterceptor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Lazy;
 
 /**
  * MyBatis-Plus配置类
@@ -13,7 +14,9 @@ import org.springframework.context.annotation.Configuration;
  * @author zhengbing
  * @date 2025-11-01
  */
+// 添加@Lazy注解实现延迟初始化，提升启动性能
 @Configuration
+@Lazy
 public class MyBatisPlusConfig {
 
     /**

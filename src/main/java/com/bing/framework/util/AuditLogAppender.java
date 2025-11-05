@@ -25,7 +25,7 @@ import java.util.concurrent.Executor;
  * @author zhengbing
  * @date 2025-11-05
  */
-@Component
+// 移除@Component注解，改为通过配置类进行延迟注册
 public class AuditLogAppender extends AppenderBase<ILoggingEvent> implements ApplicationContextAware {
     
     private static ApplicationContext applicationContext;
@@ -60,7 +60,7 @@ public class AuditLogAppender extends AppenderBase<ILoggingEvent> implements App
             }
         }
         return auditLogExecutor;
-    
+    }
     private void processAuditLog(ILoggingEvent event) {
         try {
             // 获取AuditLogService实例
