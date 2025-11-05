@@ -18,7 +18,7 @@ import java.util.Date;
  * 适用于需要手动记录重要操作的审计场景，如关键业务操作、系统配置变更等
  * 
  * @author zhengbing
- * @date 2025-11-04
+ * @date 2025-11-05
  */
 @Component
 public class AuditLogUtil {
@@ -37,6 +37,12 @@ public class AuditLogUtil {
     
     /**
      * 记录审计日志
+     * 
+     * @param module 模块名
+     * @param operationType 操作类型
+     * @param description 操作描述
+     * @param requestParams 请求参数
+     * @param result 操作结果
      */
     public static void log(String module, String operationType, String description, String requestParams, String result) {
         if (instance == null) {
@@ -49,6 +55,11 @@ public class AuditLogUtil {
     
     /**
      * 记录成功操作的审计日志
+     * 
+     * @param module 模块名
+     * @param operationType 操作类型
+     * @param description 操作描述
+     * @param requestParams 请求参数
      */
     public static void logSuccess(String module, String operationType, String description, String requestParams) {
         log(module, operationType, description, requestParams, "成功");
@@ -56,6 +67,12 @@ public class AuditLogUtil {
     
     /**
      * 记录失败操作的审计日志
+     * 
+     * @param module 模块名
+     * @param operationType 操作类型
+     * @param description 操作描述
+     * @param requestParams 请求参数
+     * @param errorMessage 错误信息
      */
     public static void logFailure(String module, String operationType, String description, String requestParams, String errorMessage) {
         if (instance == null) {
@@ -132,6 +149,8 @@ public class AuditLogUtil {
     
     /**
      * 获取当前请求的IP地址
+     * 
+     * @return IP地址
      */
     private static String getCurrentIp() {
         try {
@@ -161,6 +180,8 @@ public class AuditLogUtil {
     
     /**
      * 获取当前用户名
+     * 
+     * @return 用户名
      */
     private static String getCurrentUsername() {
         try {

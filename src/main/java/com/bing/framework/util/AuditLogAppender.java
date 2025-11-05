@@ -19,7 +19,12 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 /**
- * 自定义审计日志Appender，用于将审计日志写入数据库
+ * 自定义审计日志Appender
+ * 继承logback的AppenderBase，实现ApplicationContextAware接口获取Spring容器中的Bean
+ * 用于捕获日志系统中的审计日志并异步写入数据库，支持日志解析和异常处理
+ * 
+ * @author zhengbing
+ * @date 2025-11-05
  */
 @Component
 public class AuditLogAppender extends AppenderBase<ILoggingEvent> implements ApplicationContextAware {

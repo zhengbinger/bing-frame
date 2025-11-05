@@ -8,7 +8,11 @@ import java.util.Date;
 
 /**
  * 审计日志实体类
- * 用于存储重要操作的审计信息到数据库
+ * 使用MyBatis-Plus注解进行数据库映射，使用Lombok的@Data注解简化开发
+ * 用于存储系统中重要操作的审计信息，记录操作人、操作时间、操作类型等详细信息
+ * 
+ * @author zhengbing
+ * @date 2025-11-05
  */
 @Data
 @TableName("audit_log")

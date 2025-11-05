@@ -11,6 +11,11 @@ import org.springframework.stereotype.Service;
 
 /**
  * 审计日志Service实现类
+ * 继承MyBatis-Plus的ServiceImpl，实现AuditLogService接口
+ * 提供审计日志的同步和异步记录功能，包含异常处理机制
+ * 
+ * @author zhengbing
+ * @date 2025-11-05
  */
 @Service
 public class AuditLogServiceImpl extends ServiceImpl<AuditLogMapper, AuditLog> implements AuditLogService {
@@ -19,6 +24,7 @@ public class AuditLogServiceImpl extends ServiceImpl<AuditLogMapper, AuditLog> i
     
     /**
      * 同步记录审计日志
+     * 
      * @param auditLog 审计日志对象
      */
     @Override
@@ -34,6 +40,7 @@ public class AuditLogServiceImpl extends ServiceImpl<AuditLogMapper, AuditLog> i
     
     /**
      * 异步记录审计日志
+     * 
      * @param auditLog 审计日志对象
      */
     @Async
