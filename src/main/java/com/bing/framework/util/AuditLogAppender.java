@@ -15,8 +15,7 @@ import java.lang.reflect.Field;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Map;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
+import java.util.concurrent.Executor;
 
 /**
  * 自定义审计日志Appender
@@ -30,7 +29,7 @@ import java.util.concurrent.Executors;
 public class AuditLogAppender extends AppenderBase<ILoggingEvent> implements ApplicationContextAware {
     
     private static ApplicationContext applicationContext;
-    private static final ExecutorService executorService = Executors.newFixedThreadPool(5);
+    private static Executor auditLogExecutor;
     private static final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
     
     @Override
@@ -38,7 +37,7 @@ public class AuditLogAppender extends AppenderBase<ILoggingEvent> implements App
         // 检查是否是审计日志标记
         if (event.getLoggerName().startsWith("AUDIT_LOG")) {
             // 异步处理，避免影响主业务
-            executorService.submit(() -> {
+            getAuditLogExecutor().execute(() -> {
                 try {
                     processAuditLog(event);
                 } catch (Exception e) {
@@ -47,6 +46,20 @@ public class AuditLogAppender extends AppenderBase<ILoggingEvent> implements App
             });
         }
     }
+    
+    /**
+     * 获取审计日志线程池
+     * 如果线程池未初始化，则从Spring容器中获取
+     */
+    private Executor getAuditLogExecutor() {
+        if (auditLogExecutor == null) {
+            synchronized (AuditLogAppender.class) {
+                if (auditLogExecutor == null) {
+                    auditLogExecutor = applicationContext.getBean("auditLogExecutor", Executor.class);
+                }
+            }
+        }
+        return auditLogExecutor;
     
     private void processAuditLog(ILoggingEvent event) {
         try {
@@ -126,5 +139,7 @@ public class AuditLogAppender extends AppenderBase<ILoggingEvent> implements App
     @Override
     public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
         AuditLogAppender.applicationContext = applicationContext;
+        // 初始化线程池
+        this.auditLogExecutor = applicationContext.getBean("auditLogExecutor", Executor.class);
     }
 }
