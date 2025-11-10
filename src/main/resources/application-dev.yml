@@ -5,11 +5,14 @@ spring:
     username: root
     password: Zb@123
     driver-class-name: com.mysql.cj.jdbc.Driver
-    redis:
-      host: localhost
-      port: 6379
-      database: 0
+  
+  # Redis配置
+  redis:
+    host: localhost
+    port: 6379
+    database: 0
 
+# 日志配置
 logging:
   level:
     com.bing.framework: DEBUG
