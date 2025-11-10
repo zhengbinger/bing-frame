@@ -32,7 +32,7 @@
 	<properties>
 		<java.version>1.8</java.version>
 		<mybatis-plus.version>3.5.3.1</mybatis-plus.version>
-		<knife4j.version>3.0.3</knife4j.version>
+
 
 		<fastjson.version>1.2.83</fastjson.version>
 		<log4j2.version>2.17.2</log4j2.version>
@@ -45,8 +45,9 @@
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-data-jpa</artifactId>
+			<artifactId>spring-boot-starter-aop</artifactId>
 		</dependency>
+		
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-cache</artifactId>
@@ -103,11 +104,13 @@
 			<version>5.8.22</version>
 		</dependency>
 
-		<!-- API文档工具 -->
+		<!-- API文档工具已移除 -->
+		
+		<!-- JWT认证支持 -->
 		<dependency>
-			<groupId>com.github.xiaoymin</groupId>
-			<artifactId>knife4j-spring-boot-starter</artifactId>
-			<version>${knife4j.version}</version>
+			<groupId>io.jsonwebtoken</groupId>
+			<artifactId>jjwt</artifactId>
+			<version>0.9.1</version>
 		</dependency>
 
 
@@ -154,6 +157,10 @@
 						<version>1.18.24</version>
 					</path>
 				</annotationProcessorPaths>
+				<compilerArgs>
+					<arg>-Xlint:unchecked</arg>
+					<arg>-Xlint:deprecation</arg>
+				</compilerArgs>
 				</configuration>
 			</plugin>
 			<plugin>
@@ -187,28 +194,26 @@
 					</arguments>
 				</configuration>
 			</plugin>
-			<!-- Checkstyle 代码风格检查 -->
-		<!-- 暂时注释掉以解决构建问题 -->
-		<!-- <plugin>
-			<groupId>org.apache.maven.plugins</groupId>
-			<artifactId>maven-checkstyle-plugin</artifactId>
-			<version>3.2.1</version>
-			<executions>
-				<execution>
-					<id>checkstyle</id>
-					<phase>validate</phase>
-					<goals>
-						<goal>check</goal>
-					</goals>
-				</execution>
-			</executions>
-			<configuration>
-				<configLocation>checkstyle.xml</configLocation>
-				<encoding>UTF-8</encoding>
-				<consoleOutput>true</consoleOutput>
-				<failsOnError>false</failsOnError>
-			</configuration>
-		</plugin> -->
+			<!-- Checkstyle 代码风格检查 - 验证未使用导入 -->
+			<!-- <plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-checkstyle-plugin</artifactId>
+				<version>3.2.1</version>
+				<executions>
+					<execution>
+						<id>checkstyle</id>
+						<phase>validate</phase>
+						<goals>
+							<goal>check</goal>
+						</goals>
+					</execution>
+				</executions>
+				<configuration>
+					<configLocation>checkstyle.xml</configLocation>
+					<consoleOutput>true</consoleOutput>
+					<failsOnError>false</failsOnError>
+				</configuration>
+			</plugin> -->
 			<!-- Spotbugs 静态代码分析 -->
 			<plugin>
 				<groupId>com.github.spotbugs</groupId>

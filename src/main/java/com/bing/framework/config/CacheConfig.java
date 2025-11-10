@@ -3,9 +3,13 @@ package com.bing.framework.config;
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.PropertyAccessor;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.CachingConfigurerSupport;
 import org.springframework.cache.annotation.EnableCaching;
+import org.springframework.cache.interceptor.CacheErrorHandler;
 import org.springframework.cache.interceptor.KeyGenerator;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -33,6 +37,17 @@ import java.time.Duration;
 @EnableCaching
 @Lazy
 public class CacheConfig extends CachingConfigurerSupport {
+
+    private static final Logger log = LoggerFactory.getLogger(CacheConfig.class);
+    
+    @Value("${spring.cache.redis.key-prefix:bing:}")
+    private String keyPrefix;
+    
+    @Value("${spring.cache.redis.time-to-live:3600000}")
+    private long timeToLive;
+    
+    @Value("${spring.cache.redis.cache-null-values:false}")
+    private boolean cacheNullValues;
 
     /**
      * 自定义缓存键生成器
@@ -91,28 +106,76 @@ public class CacheConfig extends CachingConfigurerSupport {
     
     /**
      * 缓存管理器配置
-     * 设置默认缓存过期时间等
+     * 设置默认缓存过期时间等，与application.yml配置保持一致
      */
     @Bean
     public CacheManager cacheManager(RedisConnectionFactory factory) {
+        log.info("初始化Redis缓存管理器，前缀: {}, 过期时间: {}ms", keyPrefix, timeToLive);
+        
         RedisSerializer<String> redisSerializer = new StringRedisSerializer();
         Jackson2JsonRedisSerializer<Object> jackson2JsonRedisSerializer = new Jackson2JsonRedisSerializer<>(Object.class);
         
         // 解决查询缓存转换异常的问题
         ObjectMapper om = new ObjectMapper();
         om.setVisibility(PropertyAccessor.ALL, JsonAutoDetect.Visibility.ANY);
-        om.enableDefaultTyping(ObjectMapper.DefaultTyping.NON_FINAL);
+        om.activateDefaultTyping(om.getPolymorphicTypeValidator(), ObjectMapper.DefaultTyping.NON_FINAL);
         jackson2JsonRedisSerializer.setObjectMapper(om);
         
         // 配置序列化（解决乱码的问题）
         RedisCacheConfiguration config = RedisCacheConfiguration.defaultCacheConfig()
-                .entryTtl(Duration.ofMinutes(60)) // 设置缓存默认过期时间为60分钟
+                .entryTtl(Duration.ofMillis(timeToLive)) // 使用配置的过期时间
+                .prefixCacheNameWith(keyPrefix) // 使用配置的key前缀
                 .serializeKeysWith(RedisSerializationContext.SerializationPair.fromSerializer(redisSerializer))
-                .serializeValuesWith(RedisSerializationContext.SerializationPair.fromSerializer(jackson2JsonRedisSerializer))
-                .disableCachingNullValues(); // 不缓存空值
+                .serializeValuesWith(RedisSerializationContext.SerializationPair.fromSerializer(jackson2JsonRedisSerializer));
         
-        return RedisCacheManager.builder(factory)
+        // 根据配置决定是否缓存空值
+        if (!cacheNullValues) {
+            config = config.disableCachingNullValues();
+        }
+        
+        RedisCacheManager cacheManager = RedisCacheManager.builder(factory)
                 .cacheDefaults(config)
                 .build();
+        
+        log.info("Redis缓存管理器初始化完成，缓存名称: auditLogCache, userCache, whiteListCache");
+        return cacheManager;
+    }
+    
+    /**
+     * 缓存错误处理器
+     * 捕获Redis缓存操作中的异常，避免缓存问题影响业务逻辑
+     * 记录详细的异常信息，便于问题排查
+     */
+    @Bean
+    @Override
+    public CacheErrorHandler errorHandler() {
+        return new CacheErrorHandler() {
+            @Override
+            public void handleCacheGetError(RuntimeException exception, org.springframework.cache.Cache cache, Object key) {
+                handleCacheError(exception, cache, key);
+            }
+
+            @Override
+            public void handleCachePutError(RuntimeException exception, org.springframework.cache.Cache cache, Object key, Object value) {
+                handleCacheError(exception, cache, key);
+            }
+
+            @Override
+            public void handleCacheEvictError(RuntimeException exception, org.springframework.cache.Cache cache, Object key) {
+                handleCacheError(exception, cache, key);
+            }
+
+            @Override
+            public void handleCacheClearError(RuntimeException exception, org.springframework.cache.Cache cache) {
+                String cacheName = cache != null ? cache.getName() : "unknown";
+                log.error("Redis缓存清除异常 - 缓存名称: {}", cacheName, exception);
+            }
+
+            private void handleCacheError(RuntimeException exception, org.springframework.cache.Cache cache, Object key) {
+                String cacheName = cache != null ? cache.getName() : "unknown";
+                String keyStr = key != null ? key.toString() : "unknown";
+                log.error("Redis缓存操作异常 - 缓存名称: {}, 键: {}", cacheName, keyStr, exception);
+            }
+        };
     }
 }

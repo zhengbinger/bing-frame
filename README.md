@@ -11,7 +11,6 @@
 - **ORM框架**：MyBatis-Plus 3.5.3.1、Spring Data JPA
 - **数据库**：MySQL
 - **安全框架**：Spring Security
-- **API文档**：Knife4j 3.0.3（Swagger增强版）
 - **缓存**：Spring Cache
 - **国际化**：Spring MessageSource
 - **工具类**：Lombok、Fastjson、Hutool
@@ -55,10 +54,7 @@ src/main/resources/
 
 ### 2. API文档
 
-集成Knife4j（Swagger增强版），自动生成API文档，可通过以下地址访问：
-```
-http://localhost:8081/api/doc.html
-```
+API文档工具已移除
 
 ### 3. 异常处理
 
@@ -124,7 +120,7 @@ http://localhost:8081/api/doc.html
 ```yaml
 spring:
   datasource:
-    url: jdbc:mysql://localhost:3306/bing?useUnicode=true&characterEncoding=utf-8&useSSL=false&serverTimezone=Asia/Shanghai
+    url: jdbc:mysql://localhost:3306/bing?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai
     username: root
     password: root
 ```
@@ -161,7 +157,6 @@ java -jar target/bing-framework-0.0.1-SNAPSHOT.jar
 ### 5. 访问应用
 
 - 应用地址：http://localhost:8081/api
-- Knife4j文档：http://localhost:8081/api/doc.html
 - 国际化测试接口：http://localhost:8081/api/i18n/error-info
 
 ## API接口
@@ -182,9 +177,8 @@ java -jar target/bing-framework-0.0.1-SNAPSHOT.jar
 1. 本脚手架使用Java 8开发，确保JDK版本正确。
 2. 数据库连接信息需要根据实际环境进行修改。
 3. 生产环境中需要修改默认的数据库用户名和密码。
-4. 生产环境中建议关闭Knife4j文档。
-5. 实际项目中建议加强安全配置，如添加JWT认证等。
-6. 如需添加更多语言支持，只需在i18n目录下创建对应的消息属性文件即可（如messages_en_US.properties）。
+4. 实际项目中建议加强安全配置，如添加JWT认证等。
+5. 如需添加更多语言支持，只需在i18n目录下创建对应的消息属性文件即可（如messages_en_US.properties）。
 
 ## 扩展建议
 

@@ -29,6 +29,9 @@ public enum ErrorCode {
     USER_NOT_FOUND(3001, "error.user.not_found"),
     USER_EXIST(3002, "error.user.exist"),
     USER_LOGIN_FAILED(3003, "error.user.login_failed"),
+    USER_DISABLED(3004, "error.user.disabled"),
+    INCORRECT_PASSWORD(3005, "error.user.incorrect_password"),
+    REGISTER_FAILED(3006, "error.user.register_failed"),
     
     // 数据库相关错误码 4000-4999
     DATABASE_ERROR(4000, "error.database"),
@@ -36,6 +39,7 @@ public enum ErrorCode {
     // 权限相关错误码 5000-5999
     UNAUTHORIZED(5000, "error.unauthorized"),
     FORBIDDEN(5001, "error.forbidden"),
+    INVALID_TOKEN(5002, "error.token.invalid"),
     
     // 未知错误
     UNKNOWN_ERROR(9999, "error.unknown");
