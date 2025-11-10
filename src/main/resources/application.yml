@@ -2,6 +2,27 @@
 spring:
   application:
     name: bing-framework
+
+# Knife4j配置
+knife4j:
+  enable: true
+  setting:
+    # 语言设置为中文
+    language: zh-CN
+    # 显示请求参数缓存
+    enable-request-cache: true
+    # 开启登录认证
+    enable-security: false
+    # 忽略参数属性（Spring Security相关）
+    ignore-parameters: 
+      - token
+      - Authorization
+  # 增强功能配置
+  enhancement:
+    # 启用接口排序
+    enable-order: true
+    # 启用返回参数缓存
+    enable-response-cache: true
   profiles:
     active: dev  # 默认使用开发环境
   
