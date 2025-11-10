@@ -2,8 +2,7 @@ package com.bing.framework.controller;
 
 import com.bing.framework.common.ErrorCode;
 import com.bing.framework.common.Result;
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.tags.Tag;
+
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,7 +19,6 @@ import java.util.Map;
  *
  * @author zhengbing
  */
-@Tag(name = "国际化测试")
 @RestController
 @RequestMapping("/api/i18n")
 public class I18nTestController {
@@ -31,7 +29,6 @@ public class I18nTestController {
      * 
      * @return 包含语言环境和各错误码消息的响应数据
      */
-    @Operation(summary = "获取当前语言环境的错误码信息")
     @GetMapping("/error-info")
     public Result<?> getErrorInfo() {
         Locale currentLocale = LocaleContextHolder.getLocale();
@@ -54,7 +51,6 @@ public class I18nTestController {
      * @param language 语言代码，如zh-CN, en
      * @return 包含请求语言环境和各错误码消息的响应数据
      */
-    @Operation(summary = "通过参数指定语言环境获取错误码信息")
     @GetMapping("/error-info-by-lang")
     public Result<?> getErrorInfoByLanguage(@RequestParam(required = false) final String language) {
         Locale locale = Locale.getDefault();

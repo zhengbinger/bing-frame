@@ -45,38 +45,54 @@ public class WhiteListServiceImpl extends ServiceImpl<WhiteListMapper, WhiteList
     private static final String WHITE_LIST_CACHE_KEY = "white_list:patterns";
 
     @Override
-    @Cacheable(value = "whiteListCache", key = WHITE_LIST_CACHE_KEY)
+    @Cacheable(value = "whiteListCache", key = WHITE_LIST_CACHE_KEY, unless = "#result == null or #result.isEmpty()")
     public Set<String> getEnabledPatterns() {
+        log.info("白名单缓存未命中，从数据库查询白名单模式");
         List<WhiteList> whiteLists = whiteListMapper.selectEnabledWhiteLists();
+        log.info("从数据库获取到 {} 条白名单记录", whiteLists.size());
+        
         Set<String> patterns = new HashSet<>();
         for (WhiteList whiteList : whiteLists) {
             if (whiteList.getEnabled()) {
                 patterns.add(whiteList.getPattern());
+                log.info("添加白名单模式: '{}'", whiteList.getPattern());
             }
         }
+        
+        log.info("转换后获取到 {} 个启用的白名单模式，即将存入Redis缓存", patterns.size());
         return patterns;
     }
 
     @Override
-    @CacheEvict(value = "whiteListCache", key = WHITE_LIST_CACHE_KEY)
+    @CacheEvict(value = "whiteListCache", key = WHITE_LIST_CACHE_KEY, beforeInvocation = true)
     public void refreshWhiteListCache() {
+        log.info("开始刷新白名单缓存");
         // 缓存驱逐后，下次调用getEnabledPatterns会自动从数据库重新加载
-        // 这里可以添加日志记录
-        log.info("白名单缓存已刷新");
+        log.info("白名单缓存已驱逐，下次访问将重新加载");
     }
 
     @Override
     public boolean isInWhiteList(String path) {
+        log.debug("[DEBUG] 检查路径 '{}' 是否在白名单中", path);
+        
         if (path == null || path.isEmpty()) {
+            log.debug("[DEBUG] 路径为空，不在白名单中");
             return false;
         }
         
         Set<String> patterns = getEnabledPatterns();
+        log.debug("[DEBUG] 当前启用的白名单模式数量: {}", patterns.size());
+        
         for (String pattern : patterns) {
-            if (pathMatcher.match(pattern, path)) {
+            boolean matches = pathMatcher.match(pattern, path);
+            log.debug("[DEBUG] 路径 '{}' 匹配模式 '{}': {}", path, pattern, matches);
+            if (matches) {
+                log.debug("[DEBUG] 路径 '{}' 在白名单中，匹配成功", path);
                 return true;
             }
         }
+        
+        log.debug("[DEBUG] 路径 '{}' 不在白名单中，所有模式都不匹配", path);
         return false;
     }
 }

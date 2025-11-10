@@ -3,8 +3,7 @@ package com.bing.framework.controller;
 import com.bing.framework.entity.User;
 import com.bing.framework.service.UserService;
 import com.bing.framework.common.Result;
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.tags.Tag;
+
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -21,9 +20,8 @@ import java.util.Map;
  * @author zhengbing
  * @date 2025-11-01
  */
-@Tag(name = "用户管理")
 @RestController
-@RequestMapping("/user")
+@RequestMapping("/api/user")
 public class UserController {
 
     @Autowired
@@ -35,7 +33,6 @@ public class UserController {
      * @param id 用户ID
      * @return 用户信息
      */
-    @Operation(summary = "根据ID查询用户")
     @GetMapping("/{id}")
     public Result<?> getUserById(@PathVariable final Long id) {
         User user = userService.getUserById(id);
@@ -48,7 +45,6 @@ public class UserController {
      * @param username 用户名
      * @return 用户信息
      */
-    @Operation(summary = "根据用户名查询用户")
     @GetMapping("/username/{username}")
     public Result<?> getUserByUsername(@PathVariable final String username) {
         User user = userService.getUserByUsername(username);
@@ -60,7 +56,6 @@ public class UserController {
      * 
      * @return 用户列表
      */
-    @Operation(summary = "查询所有用户")
     @GetMapping("/")
     public Result<?> getAllUsers() {
         List<User> users = userService.getAllUsers();
@@ -73,7 +68,6 @@ public class UserController {
      * @param user 用户信息
      * @return 操作结果
      */
-    @Operation(summary = "新增用户")
     @PostMapping("/")
     public Result<?> saveUser(@RequestBody final User user) {
         userService.saveUser(user);
@@ -86,7 +80,6 @@ public class UserController {
      * @param user 用户信息
      * @return 操作结果
      */
-    @Operation(summary = "更新用户")
     @PutMapping("/")
     public Result<?> updateUser(@RequestBody final User user) {
         userService.updateUser(user);
@@ -99,7 +92,6 @@ public class UserController {
      * @param id 用户ID
      * @return 操作结果
      */
-    @Operation(summary = "删除用户")
     @DeleteMapping("/{id}")
     public Result<?> deleteUser(@PathVariable final Long id) {
         userService.deleteUser(id);
@@ -112,7 +104,6 @@ public class UserController {
      * @param ids 用户ID列表
      * @return 操作结果
      */
-    @Operation(summary = "批量删除用户")
     @DeleteMapping("/batch")
     public Result<?> deleteBatch(@RequestBody final List<Long> ids) {
         userService.deleteBatch(ids);
@@ -126,7 +117,6 @@ public class UserController {
      * @param newPassword 新密码
      * @return 操作结果
      */
-    @Operation(summary = "重置用户密码")
     @PutMapping("/{id}/password")
     public Result<?> resetPassword(@PathVariable final Long id, @RequestBody final Map<String, String> request) {
         String newPassword = request.get("newPassword");
@@ -143,7 +133,6 @@ public class UserController {
      * @param id 用户ID
      * @return 生成的随机密码
      */
-    @Operation(summary = "生成随机密码并重置")
     @PostMapping("/{id}/random-password")
     public Result<?> generateRandomPassword(@PathVariable final Long id) {
         String randomPassword = userService.generateAndResetPassword(id);

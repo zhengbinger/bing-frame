@@ -1,11 +1,9 @@
 package com.bing.framework.controller;
 
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.bing.framework.dto.PermissionDTO;
 import com.bing.framework.entity.Permission;
 import com.bing.framework.service.PermissionService;
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.tags.Tag;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -19,7 +17,6 @@ import java.util.List;
  * @author zhengbing
  * @date 2025-11-05
  */
-@Tag(name = "权限管理")
 @RestController
 @RequestMapping("/api/permissions")
 public class PermissionController {
@@ -33,7 +30,6 @@ public class PermissionController {
      * @param permissionDTO 权限数据传输对象
      * @return 创建的权限
      */
-    @Operation(summary = "创建权限")
     @PostMapping
     public ResponseEntity<Permission> createPermission(@RequestBody PermissionDTO permissionDTO) {
         Permission permission = permissionService.createPermission(permissionDTO);
@@ -47,7 +43,6 @@ public class PermissionController {
      * @param permissionDTO 权限数据传输对象
      * @return 更新后的权限
      */
-    @Operation(summary = "更新权限信息")
     @PutMapping("/{id}")
     public ResponseEntity<Permission> updatePermission(@PathVariable Long id, @RequestBody PermissionDTO permissionDTO) {
         permissionDTO.setId(id);
@@ -61,7 +56,6 @@ public class PermissionController {
      * @param id 权限ID
      * @return 响应状态
      */
-    @Operation(summary = "删除权限")
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deletePermission(@PathVariable Long id) {
         permissionService.deletePermission(id);
@@ -74,7 +68,6 @@ public class PermissionController {
      * @param id 权限ID
      * @return 权限信息
      */
-    @Operation(summary = "根据ID获取权限")
     @GetMapping("/{id}")
     public ResponseEntity<PermissionDTO> getPermissionById(@PathVariable Long id) {
         PermissionDTO permissionDTO = permissionService.getPermissionById(id);
@@ -86,7 +79,6 @@ public class PermissionController {
      * 
      * @return 权限列表
      */
-    @Operation(summary = "获取所有权限列表")
     @GetMapping
     public ResponseEntity<List<Permission>> listAllPermissions() {
         List<Permission> permissions = permissionService.listAllPermissions();
@@ -98,7 +90,6 @@ public class PermissionController {
      * 
      * @return 权限树列表
      */
-    @Operation(summary = "获取权限树（树形结构）")
     @GetMapping("/tree")
     public ResponseEntity<List<PermissionDTO>> getPermissionTree() {
         List<PermissionDTO> permissionTree = permissionService.getPermissionTree();
@@ -111,7 +102,6 @@ public class PermissionController {
      * @param roleId 角色ID
      * @return 权限列表
      */
-    @Operation(summary = "根据角色ID获取权限列表")
     @GetMapping("/by-role/{roleId}")
     public ResponseEntity<List<Permission>> getPermissionsByRoleId(@PathVariable Long roleId) {
         List<Permission> permissions = permissionService.getPermissionsByRoleId(roleId);
@@ -125,7 +115,6 @@ public class PermissionController {
      * @param permissionIds 权限ID列表
      * @return 响应状态
      */
-    @Operation(summary = "为角色分配权限")
     @PostMapping("/assign-to-role/{roleId}")
     public ResponseEntity<Void> assignPermissionsToRole(@PathVariable Long roleId, @RequestBody List<Long> permissionIds) {
         permissionService.assignPermissionsToRole(roleId, permissionIds);
@@ -139,7 +128,6 @@ public class PermissionController {
      * @param id 排除的权限ID（更新时使用）
      * @return 是否已存在
      */
-    @Operation(summary = "检查权限编码是否已存在")
     @GetMapping("/check-code")
     public ResponseEntity<Boolean> checkCodeExists(@RequestParam String code, @RequestParam(required = false) Long id) {
         boolean exists = permissionService.isCodeExists(code, id);

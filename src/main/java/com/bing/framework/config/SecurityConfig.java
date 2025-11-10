@@ -1,9 +1,11 @@
 package com.bing.framework.config;
 
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 /**
  * Spring Security配置类
@@ -35,5 +37,15 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             // 禁用表单登录和HTTP基本认证
             .formLogin().disable()
             .httpBasic().disable();
+    }
+    
+    /**
+     * 配置BCryptPasswordEncoder用于密码加密和验证
+     * 
+     * @return BCryptPasswordEncoder实例
+     */
+    @Bean
+    public BCryptPasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
     }
 }

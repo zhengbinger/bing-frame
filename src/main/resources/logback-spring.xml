@@ -1,39 +1,85 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<configuration>
-    
-    <!-- 引用Spring Boot的默认配置 -->
-    <include resource="org/springframework/boot/logging/logback/defaults.xml"/>
-    <include resource="org/springframework/boot/logging/logback/console-appender.xml"/>
-    
-    <!-- 自定义审计日志Appender -->
-    <appender name="AUDIT_LOG_APPENDER" class="com.bing.framework.util.AuditLogAppender">
-        <!-- 可以在这里添加自定义属性 -->
+<configuration debug="true">
+    <!-- 全局编码设置 - 确保所有组件使用UTF-8 -->
+    <property name="ENCODER_CHARSET" value="UTF-8"/>
+    <!-- 增强的日志格式，包含线程信息和更多上下文 -->
+    <property name="CONSOLE_LOG_PATTERN" value="%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{50} - %msg%n"/>
+    <property name="FILE_LOG_PATTERN" value="%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{50} - %msg%n"/>
+
+    <!-- 控制台输出 - 优化编码配置确保中文正常显示 -->
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <!-- 确保使用System.out而不是System.err -->
+        <target>System.out</target>
+        <!-- 禁用Jansi以避免编码转换问题 -->
+        <withJansi>false</withJansi>
+        <!-- 编码器配置 -->
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <!-- 显式指定UTF-8字符集 -->
+            <!-- <charset>UTF-8</charset> -->
+            <!-- 日志格式 -->
+            <pattern>${CONSOLE_LOG_PATTERN}</pattern>
+            <!-- 移除重复的配置 -->
+        </encoder>
+        <!-- 确保消息及时刷新 -->
+        <immediateFlush>true</immediateFlush>
     </appender>
-    
-    <!-- 常规文件日志Appender -->
+
+    <!-- 审计日志输出 -->
+    <appender name="AUDIT_LOG_APPENDER" class="com.bing.framework.util.AuditLogAppender">
+    </appender>
+
+    <!-- 文件输出 -->
     <appender name="FILE_APPENDER" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <file>${LOG_FILE:-logs/bing-framework.log}</file>
-        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <!-- 按天回滚 -->
-            <fileNamePattern>logs/bing-framework.%d{yyyy-MM-dd}.log</fileNamePattern>
-            <!-- 保留30天的日志 -->
-            <maxHistory>30</maxHistory>
+        <file>logs/bing-framework.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <fileNamePattern>logs/bing-framework.%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+            <maxFileSize>10MB</maxFileSize>
+            <maxHistory>7</maxHistory>
+            <totalSizeCap>100MB</totalSizeCap>
         </rollingPolicy>
-        <encoder>
-            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <!-- <charset>${ENCODER_CHARSET}</charset> -->
+            <pattern>${FILE_LOG_PATTERN}</pattern>
         </encoder>
     </appender>
-    
-    <!-- 审计日志记录器 -->
-    <logger name="AUDIT_LOG" level="INFO" additivity="false">
-        <appender-ref ref="AUDIT_LOG_APPENDER" />
+
+    <!-- 专门针对HTTP请求线程的特殊日志配置 -->
+    <!-- 为白名单服务添加详细日志 -->
+    <logger name="com.bing.framework.service.impl.WhiteListServiceImpl" level="DEBUG" additivity="false">
+        <appender-ref ref="CONSOLE" />
         <appender-ref ref="FILE_APPENDER" />
     </logger>
     
-    <!-- 根日志配置 -->
-    <root level="INFO">
+    <!-- 为请求拦截器添加详细日志 -->
+    <logger name="com.bing.framework.interceptor.RequestInterceptor" level="DEBUG" additivity="false">
         <appender-ref ref="CONSOLE" />
         <appender-ref ref="FILE_APPENDER" />
-    </root>
+    </logger>
     
+    <!-- 为Spring MVC相关组件添加日志配置，确保HTTP请求线程的日志正常 -->
+    <logger name="org.springframework.web.servlet.DispatcherServlet" level="INFO" additivity="false">
+        <appender-ref ref="CONSOLE" />
+    </logger>
+    
+    <!-- 为Tomcat连接器添加日志，确保HTTP请求线程的编码设置 -->
+    <logger name="org.apache.catalina.connector.CoyoteAdapter" level="INFO" additivity="false">
+        <appender-ref ref="CONSOLE" />
+    </logger>
+    
+    <!-- 为Spring Web过滤器链添加日志，监控编码处理 -->
+    <logger name="org.springframework.web.filter" level="INFO" additivity="false">
+        <appender-ref ref="CONSOLE" />
+    </logger>
+
+    <!-- 审计日志记录器 -->
+    <logger name="AUDIT_LOG" level="INFO" additivity="false">
+        <appender-ref ref="AUDIT_LOG_APPENDER"/>
+        <appender-ref ref="FILE_APPENDER"/>
+    </logger>
+
+    <!-- 根日志配置 - 保持INFO级别 -->
+    <root level="INFO">
+        <appender-ref ref="CONSOLE"/>
+        <appender-ref ref="FILE_APPENDER"/>
+    </root>
 </configuration>

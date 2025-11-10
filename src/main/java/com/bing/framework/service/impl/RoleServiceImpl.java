@@ -10,6 +10,7 @@ import com.bing.framework.mapper.RoleMapper;
 import com.bing.framework.mapper.RolePermissionMapper;
 import com.bing.framework.mapper.UserRoleMapper;
 import com.bing.framework.service.RoleService;
+import com.bing.framework.util.AuditLogUtil;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -37,6 +38,9 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
     
     @Autowired
     private RolePermissionMapper rolePermissionMapper;
+    
+    @Autowired
+    private AuditLogUtil auditLogUtil;
 
     @Override
     @Transactional(rollbackFor = Exception.class)
@@ -71,6 +75,9 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
             assignPermissions(role.getId(), roleDTO.getPermissionIds());
         }
 
+        // 手动记录创建角色的审计日志
+        auditLogUtil.logSuccess("角色管理", "创建角色", "成功创建角色: " + role.getName(), roleDTO.toString());
+        
         return role;
     }
 
@@ -98,6 +105,9 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
             assignPermissions(role.getId(), roleDTO.getPermissionIds());
         }
 
+        // 手动记录更新角色的审计日志
+        auditLogUtil.logSuccess("角色管理", "更新角色", "成功更新角色: " + role.getName(), roleDTO.toString());
+        
         return role;
     }
 
@@ -118,6 +128,9 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
 
         // 删除角色
         this.removeById(id);
+        
+        // 手动记录删除角色的审计日志
+        auditLogUtil.log("角色管理", "删除角色", "成功删除角色: " + role.getName(), null, "成功");
     }
 
     @Override
@@ -181,6 +194,9 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
             }
             userRoleMapper.insertBatch(userRoles);
         }
+        
+        // 手动记录分配角色的审计日志
+        auditLogUtil.logSuccess("角色管理", "分配角色", "成功为用户ID: " + userId + " 分配角色", roleIds.toString());
     }
 
     @Override
