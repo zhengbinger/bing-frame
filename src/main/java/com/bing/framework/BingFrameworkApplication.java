@@ -4,6 +4,7 @@ import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
+import org.springframework.boot.autoconfigure.security.servlet.SecurityFilterAutoConfiguration;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
@@ -21,7 +22,8 @@ import org.springframework.context.annotation.EnableAspectJAutoProxy;
 // 禁用不必要的自动配置类，优化启动性能
 @SpringBootApplication(exclude = {
         // 禁用Spring Security自动配置，使用自定义安全配置
-        SecurityAutoConfiguration.class
+        SecurityAutoConfiguration.class,
+        SecurityFilterAutoConfiguration.class
 })
 @MapperScan("com.bing.framework.mapper") // 扫描Mapper接口
 @EnableTransactionManagement // 启用事务管理

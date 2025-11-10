@@ -13,6 +13,9 @@ CREATE TABLE IF NOT EXISTS `sys_white_list` (
 
 -- 插入初始数据
 INSERT INTO `sys_white_list` (`pattern`, `type`, `description`, `enabled`) VALUES
+('/api/auth/login', 'URL', '用户登录接口', 1),
+('/api/auth/register', 'URL', '用户注册接口', 1),
+('/api/auth/logout', 'URL', '用户注销接口', 1),
 ('/api/white-list/**', 'URL', '白名单管理接口', 1),
 ('/doc.html', 'URL', 'Swagger文档页面', 1),
 ('/swagger-resources/**', 'URL', 'Swagger资源', 1),

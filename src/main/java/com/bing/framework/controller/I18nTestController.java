@@ -2,6 +2,11 @@ package com.bing.framework.controller;
 
 import com.bing.framework.common.ErrorCode;
 import com.bing.framework.common.Result;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
+import io.swagger.annotations.ApiResponses;
+import io.swagger.annotations.ApiResponse;
 
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,6 +24,7 @@ import java.util.Map;
  *
  * @author zhengbing
  */
+@Api(tags = "国际化测试", description = "提供国际化功能测试接口，演示多语言错误消息的处理")
 @RestController
 @RequestMapping("/api/i18n")
 public class I18nTestController {
@@ -29,6 +35,11 @@ public class I18nTestController {
      * 
      * @return 包含语言环境和各错误码消息的响应数据
      */
+    @ApiOperation(value = "获取当前语言环境错误信息", notes = "根据请求头中的Accept-Language自动返回对应语言的错误码信息")
+    @ApiResponses({
+        @ApiResponse(code = 200, message = "查询成功"),
+        @ApiResponse(code = 500, message = "查询失败")
+    })
     @GetMapping("/error-info")
     public Result<?> getErrorInfo() {
         Locale currentLocale = LocaleContextHolder.getLocale();
@@ -51,8 +62,13 @@ public class I18nTestController {
      * @param language 语言代码，如zh-CN, en
      * @return 包含请求语言环境和各错误码消息的响应数据
      */
+    @ApiOperation(value = "通过参数指定语言获取错误信息", notes = "根据请求参数指定的语言代码返回对应语言的错误码信息")
+    @ApiResponses({
+        @ApiResponse(code = 200, message = "查询成功"),
+        @ApiResponse(code = 500, message = "查询失败")
+    })
     @GetMapping("/error-info-by-lang")
-    public Result<?> getErrorInfoByLanguage(@RequestParam(required = false) final String language) {
+    public Result<?> getErrorInfoByLanguage(@ApiParam(name = "language", value = "语言代码，如zh-CN、en，不指定则使用系统默认语言", required = false) @RequestParam(required = false) final String language) {
         Locale locale = Locale.getDefault();
         
         if (language != null && !language.isEmpty()) {
@@ -82,6 +98,10 @@ public class I18nTestController {
      * 
      * @return 全局异常处理器处理后的统一响应格式
      */
+    @ApiOperation(value = "测试异常多语言处理", notes = "模拟业务异常，测试全局异常处理器的多语言错误消息转换功能")
+    @ApiResponses({
+        @ApiResponse(code = 500, message = "测试异常，将通过全局异常处理器转换为多语言错误消息")
+    })
     @GetMapping("/test-exception")
     public Result<?> testException() {
         // 模拟业务异常，将触发全局异常处理器返回多语言错误消息
