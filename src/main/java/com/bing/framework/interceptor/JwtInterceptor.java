@@ -4,6 +4,7 @@ import com.bing.framework.common.ErrorCode;
 import com.bing.framework.exception.BusinessException;
 import com.bing.framework.util.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
@@ -23,6 +24,11 @@ public class JwtInterceptor implements HandlerInterceptor {
 
     @Autowired
     private JwtUtil jwtUtil;
+    
+    @Autowired
+    private RedisTemplate<String, Object> redisTemplate;
+    
+    private static final String TOKEN_BLACKLIST_PREFIX = "token:blacklist:";
 
     /**
      * 拦截请求，验证JWT令牌
@@ -39,6 +45,12 @@ public class JwtInterceptor implements HandlerInterceptor {
         
         // 提取JWT令牌
         String token = authorization.substring(7);
+        
+        // 检查令牌是否在黑名单中
+        String blacklistKey = TOKEN_BLACKLIST_PREFIX + token;
+        if (redisTemplate.hasKey(blacklistKey)) {
+            throw new BusinessException(ErrorCode.TOKEN_BLACKLISTED);
+        }
         
         // 验证JWT令牌
         if (!jwtUtil.validateToken(token)) {

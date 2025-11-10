@@ -87,6 +87,12 @@ RBAC（Role-Based Access Control，基于角色的访问控制）是一种广泛
 
 ## 4. API接口设计
 
+### 4.0 认证管理接口
+- `POST /api/auth/login` - 用户登录
+- `POST /api/auth/register` - 用户注册
+- `GET /api/auth/current` - 获取当前登录用户信息
+- `POST /api/auth/logout` - 用户注销（新增）
+
 ### 4.1 用户管理接口
 - `GET /api/users` - 获取用户列表
 - `GET /api/users/{id}` - 获取用户详情

@@ -40,6 +40,8 @@ public enum ErrorCode {
     UNAUTHORIZED(5000, "error.unauthorized"),
     FORBIDDEN(5001, "error.forbidden"),
     INVALID_TOKEN(5002, "error.token.invalid"),
+    TOKEN_BLACKLISTED(5003, "error.token.blacklisted"),
+    LOGOUT_FAILED(5004, "error.logout.failed"),
     
     // 未知错误
     UNKNOWN_ERROR(9999, "error.unknown");
