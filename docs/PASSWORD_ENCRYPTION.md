@@ -4,7 +4,7 @@
 
 ## 1. 功能概述
 
-项目使用SHA256算法对用户密码进行安全加密，并提供以下功能：
+项目使用BCrypt算法对用户密码进行安全加密，并提供以下功能：
 
 - 用户密码加密存储
 - 密码验证功能
@@ -15,39 +15,37 @@
 
 ### 2.1 加密算法
 
-使用SHA256哈希算法进行密码加密，该算法具有以下特点：
+使用BCrypt哈希算法进行密码加密，该算法具有以下特点：
 
 - 单向哈希函数，不可逆
-- 输出固定长度（256位）
-- 抗碰撞性强
-- 安全性高，适合密码存储
+- 自动生成随机盐值，提高安全性
+- 适应性强，可以通过工作因子调整算法强度
+- 安全性高，广泛应用于企业级应用
 
-### 2.2 盐值处理
+### 2.2 实现方式
 
-为了增强密码安全性，采用了加盐处理：
-
-```java
-// 密码加盐，增强安全性
-String saltedPassword = password + DEFAULT_SALT;
-// 使用SHA256加密
-return DigestUtil.sha256Hex(saltedPassword);
-```
-
-## 3. 核心工具类
-
-### 3.1 SecurityUtil
-
-`SecurityUtil`是密码加密和验证的核心工具类，提供以下方法：
+使用Spring Security提供的BCryptPasswordEncoder进行密码加密和验证：
 
 ```java
 // 密码加密
-public static String encryptPassword(String password)
+String encodedPassword = passwordEncoder.encode(rawPassword);
 
 // 密码验证
-public static boolean verifyPassword(String inputPassword, String encryptedPassword)
+boolean isMatch = passwordEncoder.matches(rawPassword, encodedPassword);
+```
 
-// 生成随机密码
-public static String generateRandomPassword(int length)
+## 3. 核心组件
+
+### 3.1 BCryptPasswordEncoder
+
+项目使用Spring Security的`BCryptPasswordEncoder`作为密码加密和验证的核心组件，它提供以下主要方法：
+
+```java
+// 密码加密
+String encode(CharSequence rawPassword)
+
+// 密码验证
+boolean matches(CharSequence rawPassword, String encodedPassword)
 ```
 
 ## 4. 用户密码处理流程
@@ -59,7 +57,7 @@ public static String generateRandomPassword(int length)
 ```java
 // 密码加密
 if (user.getPassword() != null) {
-    user.setPassword(SecurityUtil.encryptPassword(user.getPassword()));
+    user.setPassword(passwordEncoder.encode(user.getPassword()));
 }
 ```
 
@@ -70,7 +68,7 @@ if (user.getPassword() != null) {
 ```java
 // 如果密码有更新，需要加密
 if (user.getPassword() != null && !user.getPassword().equals(existingUser.getPassword())) {
-    user.setPassword(SecurityUtil.encryptPassword(user.getPassword()));
+    user.setPassword(passwordEncoder.encode(user.getPassword()));
 }
 ```
 
@@ -145,7 +143,7 @@ public boolean login(String username, String password) {
     }
     
     // 验证密码
-    return SecurityUtil.verifyPassword(password, user.getPassword());
+    return passwordEncoder.matches(password, user.getPassword());
 }
 ```
 

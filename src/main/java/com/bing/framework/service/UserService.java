@@ -91,4 +91,19 @@ public interface UserService extends IService<User> {
      * @param roleIds 角色ID列表
      */
     void assignRolesToUser(Long userId, List<Long> roleIds);
+    
+    /**
+     * 批量重置用户密码为指定密码
+     * @param userIds 用户ID列表
+     * @param newPassword 新密码
+     * @return 重置成功的用户数量
+     */
+    int batchResetPassword(List<Long> userIds, String newPassword);
+    
+    /**
+     * 批量重置所有非BCrypt格式密码为指定密码
+     * @param newPassword 新密码
+     * @return 重置成功的用户数量
+     */
+    int batchResetNonBCryptPassword(String newPassword);
 }

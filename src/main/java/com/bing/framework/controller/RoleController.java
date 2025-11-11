@@ -1,6 +1,5 @@
 package com.bing.framework.controller;
 
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.bing.framework.annotation.AuditLogLevel;
 import com.bing.framework.dto.RoleDTO;
 import com.bing.framework.entity.Role;

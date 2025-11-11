@@ -3,6 +3,8 @@ package com.bing.framework.mapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.bing.framework.entity.User;
 import org.apache.ibatis.annotations.Mapper;
+import java.util.List;
+import java.util.Date;
 
 /**
  * 用户Mapper接口
@@ -35,4 +37,21 @@ public interface UserMapper extends BaseMapper<User> {
      * @return 用户对象
      */
     User selectByPhone(String phone);
+    
+    /**
+     * 批量更新用户密码
+     * @param userIds 用户ID列表
+     * @param password 加密后的密码
+     * @param updateTime 更新时间
+     * @return 更新成功的数量
+     */
+    int batchUpdatePassword(List<Long> userIds, String password, Date updateTime);
+    
+    /**
+     * 批量更新所有非BCrypt格式的密码
+     * @param password 加密后的密码
+     * @param updateTime 更新时间
+     * @return 更新成功的数量
+     */
+    int batchUpdateNonBCryptPassword(String password, Date updateTime);
 }

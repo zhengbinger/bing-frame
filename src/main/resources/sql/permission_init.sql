@@ -42,6 +42,8 @@ INSERT INTO `permission` (`name`, `code`, `description`, `url`, `method`, `paren
 ('用户创建', 'sys:user:create', '创建用户权限', '/api/users', 'POST', 2, 2, 1, NULL, 1),
 ('用户更新', 'sys:user:update', '更新用户权限', '/api/users/{id}', 'PUT', 2, 3, 1, NULL, 1),
 ('用户删除', 'sys:user:delete', '删除用户权限', '/api/users/{id}', 'DELETE', 2, 4, 1, NULL, 1),
+('批量重置用户密码', 'sys:user:batch:resetPassword', '批量重置用户密码权限', '/api/users/batch/password', 'PUT', 2, 5, 1, NULL, 1),
+('批量重置非BCrypt密码', 'sys:user:batch:resetNonBCryptPassword', '批量重置非BCrypt格式用户密码权限', '/api/users/batch/non-bcrypt/password', 'PUT', 2, 6, 1, NULL, 1),
 ('角色管理', 'sys:role:manage', '角色管理菜单', '/api/roles', NULL, 1, 2, 0, 'role', 1),
 ('角色查询', 'sys:role:query', '查询角色权限', '/api/roles', 'GET', 7, 1, 1, NULL, 1),
 ('角色创建', 'sys:role:create', '创建角色权限', '/api/roles', 'POST', 7, 2, 1, NULL, 1),

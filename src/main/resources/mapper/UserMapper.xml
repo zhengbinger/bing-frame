@@ -38,5 +38,26 @@
         FROM user
         WHERE phone = #{phone}
     </select>
+    
+    <!-- 批量更新用户密码 -->
+    <update id="batchUpdatePassword">
+        UPDATE user
+        SET password = #{password},
+            update_time = #{updateTime}
+        WHERE id IN
+        <foreach collection="userIds" item="userId" open="(" separator="," close=")">
+            #{userId}
+        </foreach>
+    </update>
+    
+    <!-- 批量更新所有非BCrypt格式的密码 -->
+    <update id="batchUpdateNonBCryptPassword">
+        UPDATE user
+        SET password = #{password},
+            update_time = #{updateTime}
+        WHERE password NOT LIKE '$2a$%'
+          AND password NOT LIKE '$2b$%'
+          AND password NOT LIKE '$2y$%'
+    </update>
 
 </mapper>

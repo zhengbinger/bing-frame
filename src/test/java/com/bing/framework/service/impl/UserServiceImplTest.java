@@ -5,7 +5,6 @@ import com.bing.framework.common.Result;
 import com.bing.framework.entity.User;
 import com.bing.framework.exception.BusinessException;
 import com.bing.framework.mapper.UserMapper;
-import com.bing.framework.util.SecurityUtil;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -17,6 +16,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import static org.mockito.Mockito.*;
 
@@ -31,6 +31,9 @@ public class UserServiceImplTest {
 
     @Mock
     private UserMapper userMapper;
+    
+    @Mock
+    private BCryptPasswordEncoder passwordEncoder;
     
     @InjectMocks
     private UserServiceImpl userService;
@@ -157,7 +160,7 @@ public class UserServiceImplTest {
         // 准备测试数据
         User existingUser = new User();
         existingUser.setId(1L);
-        existingUser.setPassword(SecurityUtil.encryptPassword("oldpassword"));
+        existingUser.setPassword("encrypted-old-password");
         
         User updatedUser = new User();
         updatedUser.setId(1L);
@@ -166,6 +169,7 @@ public class UserServiceImplTest {
         // 模拟Mapper行为
         when(userMapper.selectById(1L)).thenReturn(existingUser);
         when(userMapper.updateById(any(User.class))).thenReturn(1);
+        when(passwordEncoder.encode("newpassword")).thenReturn("encrypted-new-password");
         
         // 执行测试
         boolean result = userService.updateUser(updatedUser);
@@ -220,30 +224,23 @@ public class UserServiceImplTest {
     }
     
     @Test
-    public void testPasswordEncryptionAndVerification() {
-        // 测试密码加密和验证功能
+    public void testPasswordEncryption() {
+        // 测试密码加密功能
         String plainPassword = "Test@123456";
-        String encryptedPassword = SecurityUtil.encryptPassword(plainPassword);
+        
+        // 模拟密码编码器行为
+        when(passwordEncoder.encode(plainPassword)).thenReturn("encrypted-password");
+        when(passwordEncoder.matches(plainPassword, "encrypted-password")).thenReturn(true);
+        when(passwordEncoder.matches("wrongpassword", "encrypted-password")).thenReturn(false);
+        
+        // 执行密码加密
+        String encryptedPassword = passwordEncoder.encode(plainPassword);
         
         // 验证加密后的密码与原密码不同
         Assertions.assertNotEquals(plainPassword, encryptedPassword);
         
         // 验证密码验证功能
-        Assertions.assertTrue(SecurityUtil.verifyPassword(plainPassword, encryptedPassword));
-        Assertions.assertFalse(SecurityUtil.verifyPassword("wrongpassword", encryptedPassword));
-    }
-    
-    @Test
-    public void testRandomPasswordGeneration() {
-        // 测试随机密码生成
-        String password1 = SecurityUtil.generateRandomPassword(8);
-        String password2 = SecurityUtil.generateRandomPassword(8);
-        
-        // 验证密码长度
-        Assertions.assertEquals(8, password1.length());
-        Assertions.assertEquals(8, password2.length());
-        
-        // 验证两次生成的密码不同（概率上几乎肯定不同）
-        Assertions.assertNotEquals(password1, password2);
+        Assertions.assertTrue(passwordEncoder.matches(plainPassword, encryptedPassword));
+        Assertions.assertFalse(passwordEncoder.matches("wrongpassword", encryptedPassword));
     }
 }

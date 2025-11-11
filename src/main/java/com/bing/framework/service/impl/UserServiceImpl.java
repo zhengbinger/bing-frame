@@ -8,12 +8,15 @@ import com.bing.framework.exception.BusinessException;
 import com.bing.framework.mapper.UserMapper;
 import com.bing.framework.service.RoleService;
 import com.bing.framework.service.UserService;
-import com.bing.framework.util.SecurityUtil;
+import com.bing.framework.util.PasswordValidator;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import java.util.Date;
 import java.util.List;
 
@@ -33,6 +36,14 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     
     @Autowired
     private RoleService roleService;
+    
+    @Autowired
+    private BCryptPasswordEncoder passwordEncoder;
+    
+    @Autowired
+    private PasswordValidator passwordValidator;
+    
+    private static final Logger log = LoggerFactory.getLogger(UserServiceImpl.class);
 
     @Override
     @Cacheable(value = "user", key = "#id")
@@ -84,7 +95,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         
         // 密码加密
         if (user.getPassword() != null) {
-            user.setPassword(SecurityUtil.encryptPassword(user.getPassword()));
+            user.setPassword(passwordEncoder.encode(user.getPassword()));
         }
         
         // 设置默认值
@@ -107,7 +118,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         
         // 如果密码有更新，需要加密
         if (user.getPassword() != null && !user.getPassword().equals(existingUser.getPassword())) {
-            user.setPassword(SecurityUtil.encryptPassword(user.getPassword()));
+            user.setPassword(passwordEncoder.encode(user.getPassword()));
         }
         
         // 更新时间
@@ -151,7 +162,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         }
         
         // 加密新密码
-        String encryptedPassword = SecurityUtil.encryptPassword(newPassword);
+        String encryptedPassword = passwordEncoder.encode(newPassword);
         
         // 更新密码
         User user = new User();
@@ -167,7 +178,13 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     @CacheEvict(value = {"userList", "user"}, allEntries = true)
     public String generateAndResetPassword(Long id) {
         // 生成8位随机密码
-        String randomPassword = SecurityUtil.generateRandomPassword(8);
+        String chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()";
+        StringBuilder password = new StringBuilder();
+        for (int i = 0; i < 8; i++) {
+            int index = (int) (Math.random() * chars.length());
+            password.append(chars.charAt(index));
+        }
+        String randomPassword = password.toString();
         
         // 重置密码
         resetPassword(id, randomPassword);
@@ -198,5 +215,49 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         }
         
         roleService.assignRolesToUser(userId, roleIds);
+    }
+    
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    @CacheEvict(value = {"userList", "user"}, allEntries = true)
+    public int batchResetPassword(List<Long> userIds, String newPassword) {
+        if (userIds == null || userIds.isEmpty()) {
+            return 0;
+        }
+        
+        // 验证密码强度
+        String validationResult = passwordValidator.validatePassword(newPassword);
+        if (validationResult != null) {
+            throw new BusinessException(ErrorCode.PARAM_ERROR, validationResult);
+        }
+        
+        // 加密新密码
+        String encryptedPassword = passwordEncoder.encode(newPassword);
+        Date now = new Date();
+        
+        // 批量更新密码
+        int count = userMapper.batchUpdatePassword(userIds, encryptedPassword, now);
+        log.info("批量重置密码成功，共更新{}个用户的密码", count);
+        return count;
+    }
+    
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    @CacheEvict(value = {"userList", "user"}, allEntries = true)
+    public int batchResetNonBCryptPassword(String newPassword) {
+        // 验证密码强度
+        String validationResult = passwordValidator.validatePassword(newPassword);
+        if (validationResult != null) {
+            throw new BusinessException(ErrorCode.PARAM_ERROR, validationResult);
+        }
+        
+        // 加密新密码
+        String encryptedPassword = passwordEncoder.encode(newPassword);
+        Date now = new Date();
+        
+        // 更新所有非BCrypt格式的密码
+        int count = userMapper.batchUpdateNonBCryptPassword(encryptedPassword, now);
+        log.info("批量重置非BCrypt格式密码成功，共更新{}个用户的密码", count);
+        return count;
     }
 }

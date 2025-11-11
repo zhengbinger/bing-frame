@@ -27,6 +27,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 
+
 import java.util.Date;
 import java.util.Arrays;
 import java.util.List;
@@ -44,6 +45,8 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping("/api/auth")
 public class AuthController {
+    
+
     
     private static final Logger log = LoggerFactory.getLogger(AuthController.class);
     
@@ -64,8 +67,8 @@ public class AuthController {
     @Value("${jwt.expiration:24}")
     private Integer jwtExpiration;
 
-    // 直接创建BCryptPasswordEncoder实例，避免依赖注入问题
-    private final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+    @Autowired
+    private BCryptPasswordEncoder passwordEncoder;
 
     /**
      * 用户登录
@@ -88,18 +91,124 @@ public class AuthController {
         
         // 检查用户是否存在
         if (user == null) {
+            log.info("Login failed: user not found, username={}", loginRequest.getUsername());
             throw new BusinessException(ErrorCode.USER_NOT_FOUND);
         }
         
         // 检查用户状态
         if (user.getStatus() == 0) {
+            log.info("Login failed: user disabled, username={}", loginRequest.getUsername());
             throw new BusinessException(ErrorCode.USER_DISABLED);
         }
         
-        // 检查密码
-        if (!passwordEncoder.matches(loginRequest.getPassword(), user.getPassword())) {
+        // 详细日志记录
+        log.info("========== Password Validation Diagnostics ==========");
+        log.info("Username: {}", loginRequest.getUsername());
+        log.info("Input password length: {}", loginRequest.getPassword().length());
+        log.info("Database password length: {}", user.getPassword().length());
+        
+        // 获取输入密码和数据库密码
+        String inputPassword = loginRequest.getPassword();
+        String dbPassword = user.getPassword();
+        
+        // 检查是否为BCrypt格式
+        boolean isBCryptFormat = dbPassword.startsWith("$2a$") || 
+                               dbPassword.startsWith("$2b$") || 
+                               dbPassword.startsWith("$2y$");
+        log.info("Database password format: isBCrypt={}", isBCryptFormat);
+        
+        // 验证密码的多种策略
+        boolean passwordMatch = false;
+        
+        try {
+            // 优先尝试BCrypt验证（如果数据库密码是BCrypt格式）
+            if (isBCryptFormat) {
+                try {
+                    passwordMatch = passwordEncoder.matches(inputPassword, dbPassword);
+                    log.info("Strategy 1 - BCrypt validation result: {}", passwordMatch);
+                } catch (Exception e) {
+                    log.warn("BCrypt validation exception: {}", e.getMessage());
+                }
+            }
+            
+            // 如果BCrypt验证失败或者不是BCrypt格式，尝试明文密码比较
+            // if (!passwordMatch) {
+            //     passwordMatch = inputPassword.equals(dbPassword);
+            //     log.info("Strategy 2 - Plain text comparison result: {}", passwordMatch);
+                
+            //     if (passwordMatch) {
+            //         log.warn("Plain text password detected for user: {}", user.getUsername());
+            //         // 自动更新为BCrypt格式
+            //         try {
+            //             user.setPassword(passwordEncoder.encode(inputPassword));
+            //             userService.updateUser(user);
+            //             log.info("Successfully updated password format to BCrypt for user: {}", user.getUsername());
+            //         } catch (Exception e) {
+            //             log.error("Failed to update password format for user: {}", user.getUsername(), e);
+            //         }
+            //     }
+            // }
+            
+            // 检查是否有前后空白字符问题
+            // if (!passwordMatch) {
+            //     String trimmedPassword = inputPassword.trim();
+            //     // 尝试修剪后的密码BCrypt验证
+            //     if (isBCryptFormat) {
+            //         boolean trimmedMatch = passwordEncoder.matches(trimmedPassword, dbPassword);
+            //         log.info("Strategy 3a - Trimmed password BCrypt result: {}", trimmedMatch);
+            //         if (trimmedMatch) {
+            //             passwordMatch = true;
+            //             log.warn("Password contains leading/trailing whitespace: {}", user.getUsername());
+            //         }
+            //     }
+            //     // 尝试修剪后的密码明文比较
+            //     if (!passwordMatch) {
+            //         boolean trimmedPlainMatch = trimmedPassword.equals(dbPassword);
+            //         log.info("Strategy 3b - Trimmed password plain text result: {}", trimmedPlainMatch);
+            //         if (trimmedPlainMatch) {
+            //             passwordMatch = true;
+            //             log.warn("Password contains leading/trailing whitespace: {}", user.getUsername());
+            //         }
+            //     }
+            // }
+            
+            // 特殊处理已知的非BCrypt格式用户（根据启动日志发现）
+            // if (!passwordMatch && ("admin".equals(user.getUsername()) || 
+            //                        "user01".equals(user.getUsername()) || 
+            //                        "readonly".equals(user.getUsername()))) {
+            //     log.info("Strategy 4 - Special handling for known non-BCrypt user: {}", user.getUsername());
+            //     // 对于这些用户，直接使用明文密码比较
+            //     passwordMatch = inputPassword.equals(dbPassword);
+                
+            //     // 如果匹配成功，自动更新为BCrypt格式
+            //     if (passwordMatch) {
+            //         log.warn("Auto-updating password to BCrypt format for user: {}", user.getUsername());
+            //         try {
+            //             user.setPassword(passwordEncoder.encode(inputPassword));
+            //             userService.updateUser(user);
+            //             log.info("Successfully updated password format for user: {}", user.getUsername());
+            //         } catch (Exception e) {
+            //             log.error("Failed to update password format for user: {}", user.getUsername(), e);
+            //         }
+            //     }
+            // }
+            
+            // 开发环境特殊处理：允许测试密码"123456"
+            // if (!passwordMatch && "123456".equals(inputPassword)) {
+            //     log.warn("DEBUG MODE: Allowing login with test password for user: {}", user.getUsername());
+            //     passwordMatch = true;
+            // }
+            
+        } catch (Exception e) {
+            log.error("Error during password validation: {}", e.getMessage(), e);
+        }
+        
+        if (!passwordMatch) {
+            log.info("Password validation failed for user: {}", user.getUsername());
             throw new BusinessException(ErrorCode.INCORRECT_PASSWORD);
         }
+        
+        log.info("Password validation successful for user: {}", user.getUsername());
         
         // 生成JWT令牌
         String token = jwtUtil.generateToken(user.getId(), user.getUsername());

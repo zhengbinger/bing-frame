@@ -3,15 +3,17 @@ package com.bing.framework.controller;
 import com.bing.framework.entity.User;
 import com.bing.framework.service.UserService;
 import com.bing.framework.common.Result;
+import com.bing.framework.common.ErrorCode;
+import com.bing.framework.service.PermissionService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponses;
 import io.swagger.annotations.ApiResponse;
+import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import com.bing.framework.common.ErrorCode;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -31,6 +33,9 @@ public class UserController {
 
     @Autowired
     private UserService userService;
+    
+    @Autowired
+    private PermissionService permissionService;
 
     /**
      * 根据ID查询用户。
@@ -196,7 +201,85 @@ public class UserController {
     public Result<?> generateRandomPassword(@ApiParam(name = "id", value = "用户ID", required = true) @PathVariable final Long id) {
         String randomPassword = userService.generateAndResetPassword(id);
         Map<String, String> result = new HashMap<>();
-        result.put("randomPassword", randomPassword);
+        result.put("password", randomPassword);
         return Result.success(result);
+    }
+    
+    /**
+     * 批量重置用户密码
+     * 
+     * @param request 包含用户ID列表和新密码的请求体
+     * @return 操作结果
+     */
+    @ApiOperation(value = "批量重置用户密码", notes = "一次性为多个用户重置密码为指定密码")
+    @ApiResponses({
+        @ApiResponse(code = 200, message = "密码重置成功"),
+        @ApiResponse(code = 400, message = "参数错误"),
+        @ApiResponse(code = 403, message = "无权限操作")
+    })
+    @PutMapping("/batch/password")
+    public Result<?> batchResetPassword(@ApiParam(name = "request", value = "包含用户ID列表和新密码的请求体", required = true) @RequestBody final Map<String, Object> request, HttpServletRequest servletRequest) {
+        // 权限验证
+        Long currentUserId = (Long) servletRequest.getAttribute("userId");
+        if (!permissionService.hasPermission(currentUserId, "user:password:batchReset")) {
+            return Result.error(403, "无权限执行批量密码重置操作");
+        }
+        
+        List<Long> userIds = (List<Long>) request.get("userIds");
+        String newPassword = (String) request.get("newPassword");
+        
+        if (userIds == null || userIds.isEmpty()) {
+            return Result.error(400, "用户ID列表不能为空");
+        }
+        if (newPassword == null || newPassword.isEmpty()) {
+            return Result.error(400, "新密码不能为空");
+        }
+        
+        try {
+            int count = userService.batchResetPassword(userIds, newPassword);
+            Map<String, Object> result = new HashMap<>();
+            result.put("resetCount", count);
+            result.put("message", "成功重置" + count + "个用户的密码");
+            return Result.success(result);
+        } catch (Exception e) {
+            return Result.error(400, e.getMessage());
+        }
+    }
+    
+    /**
+     * 批量重置所有非BCrypt格式密码
+     * 
+     * @param request 包含新密码的请求体
+     * @return 操作结果
+     */
+    @ApiOperation(value = "批量重置非BCrypt格式密码", notes = "将所有非BCrypt格式的密码重置为指定密码")
+    @ApiResponses({
+        @ApiResponse(code = 200, message = "密码重置成功"),
+        @ApiResponse(code = 400, message = "参数错误"),
+        @ApiResponse(code = 403, message = "无权限操作")
+    })
+    @PutMapping("/batch/non-bcrypt-password")
+    public Result<?> batchResetNonBCryptPassword(@ApiParam(name = "request", value = "包含新密码的请求体", required = true) @RequestBody final Map<String, String> request, HttpServletRequest servletRequest) {
+        // 权限验证
+        Long currentUserId = (Long) servletRequest.getAttribute("userId");
+        if (!permissionService.hasPermission(currentUserId, "user:password:batchResetNonBCrypt")) {
+            return Result.error(403, "无权限执行批量非BCrypt密码重置操作");
+        }
+        
+        String newPassword = request.get("newPassword");
+        
+        if (newPassword == null || newPassword.isEmpty()) {
+            return Result.error(400, "新密码不能为空");
+        }
+        
+        try {
+            int count = userService.batchResetNonBCryptPassword(newPassword);
+            Map<String, Object> result = new HashMap<>();
+            result.put("resetCount", count);
+            result.put("message", "成功重置" + count + "个非BCrypt格式密码");
+            return Result.success(result);
+        } catch (Exception e) {
+            return Result.error(400, e.getMessage());
+        }
     }
 }
