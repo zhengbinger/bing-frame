@@ -281,22 +281,88 @@ public class CacheConfig {
 }
 ```
 
-## 5. 缓存最佳实践
+## 5. 高级缓存应用场景
 
-### 5.1 缓存键设计
+### 5.1 令牌缓存优化
+
+在身份认证系统中，JWT令牌的缓存是一个重要的应用场景。通过缓存用户的访问令牌和刷新令牌，可以提高系统性能并保持会话一致性。
+
+#### 实现原理
+
+```java
+// 在AuthController中的登录逻辑
+public LoginResponseDTO login(LoginRequestDTO loginRequest) {
+    // 验证用户身份...
+    
+    // 尝试从Redis缓存获取token
+    String cacheKey = "user:token:" + user.getId();
+    String accessToken = redisTemplate.opsForValue().get(cacheKey);
+    
+    if (accessToken != null) {
+        // 验证缓存token的有效性
+        try {
+            Claims claims = jwtTokenProvider.getClaimsFromToken(accessToken);
+            if (!jwtTokenProvider.isTokenExpired(claims)) {
+                // 查找对应的刷新token
+                String refreshTokenKey = "user:refresh:" + user.getId();
+                String refreshToken = redisTemplate.opsForValue().get(refreshTokenKey);
+                
+                if (refreshToken != null) {
+                    Claims refreshClaims = jwtTokenProvider.getClaimsFromToken(refreshToken);
+                    if (!jwtTokenProvider.isTokenExpired(refreshClaims)) {
+                        // 返回缓存的token
+                        return new LoginResponseDTO(accessToken, refreshToken, user);
+                    }
+                }
+            }
+        } catch (Exception e) {
+            // token无效，继续生成新token
+            log.warn("Cached token is invalid for user {}", user.getId());
+        }
+    }
+    
+    // 生成新token并缓存
+    accessToken = jwtTokenProvider.generateAccessToken(user);
+    String refreshToken = jwtTokenProvider.generateRefreshToken(user);
+    
+    // 缓存新token
+    redisTemplate.opsForValue().set(cacheKey, accessToken, tokenExpireTime, TimeUnit.MINUTES);
+    redisTemplate.opsForValue().set("user:refresh:" + user.getId(), refreshToken, refreshTokenExpireTime, TimeUnit.DAYS);
+    
+    // 记录token关联关系
+    redisTemplate.opsForValue().set("token:user:" + accessToken, String.valueOf(user.getId()), tokenExpireTime, TimeUnit.MINUTES);
+    
+    return new LoginResponseDTO(accessToken, refreshToken, user);
+}
+```
+
+#### 缓存键设计
+
+- **用户访问令牌键**: `user:token:{userId}` - 存储用户当前的访问令牌
+- **用户刷新令牌键**: `user:refresh:{userId}` - 存储用户的刷新令牌
+- **令牌到用户映射键**: `token:user:{token}` - 存储令牌到用户ID的映射关系
+
+#### 缓存策略
+
+1. **优先读取**: 登录时优先检查缓存中是否存在有效令牌
+2. **有效性验证**: 获取缓存令牌后进行有效性检查，确保未过期
+3. **原子性操作**: 使用Redis的原子操作确保令牌管理的一致性
+4. **合理过期**: 设置与令牌有效期匹配的缓存过期时间
+
+### 5.3 缓存键设计
 
 - **唯一性**: 确保缓存键唯一，避免键冲突
 - **简洁性**: 键名应该简洁明了，便于维护
 - **一致性**: 相关操作（查询、更新、删除）使用相同的键生成逻辑
 
-### 5.2 缓存失效策略
+### 5.4 缓存失效策略
 
 - **合理设置过期时间**: 避免缓存数据过期时间过长导致数据不一致
 - **缓存穿透保护**: 对于不存在的数据，可以缓存一个特殊值，设置较短的过期时间
 - **缓存预热**: 应用启动时预先加载热点数据到缓存
 - **缓存更新**: 更新数据时同时更新缓存，或采用缓存失效策略
 
-### 5.3 性能考虑
+### 5.5 性能考虑
 
 - **缓存粒度**: 适当控制缓存粒度，避免缓存过大的数据对象
 - **批量操作**: 对于批量查询，考虑使用缓存批量键或分别缓存单个对象

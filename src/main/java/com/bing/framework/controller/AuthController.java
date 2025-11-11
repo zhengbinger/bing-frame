@@ -16,6 +16,7 @@ import com.bing.framework.service.LoginRecordService;
 import com.bing.framework.service.RoleService;
 import com.bing.framework.service.UserService;
 import com.bing.framework.util.JwtUtil;
+import com.bing.framework.util.RedisUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -75,6 +76,9 @@ public class AuthController {
     
     @Autowired
     private RedisTemplate<String, Object> redisTemplate;
+    
+    @Autowired
+    private RedisUtil redisUtil;
     
     @Value("${jwt.expiration:24}")
     private Integer jwtExpiration;
@@ -162,7 +166,7 @@ public class AuthController {
         
         // 优先从缓存中获取token，如果没有则生成新的
         String userTokenKey = USER_TOKEN_PREFIX + user.getId();
-        String accessToken = (String) redisTemplate.opsForValue().get(userTokenKey);
+        String accessToken = (String) redisUtil.get(userTokenKey);
         String refreshToken = null;
         
         // 检查token是否存在且有效
@@ -170,10 +174,10 @@ public class AuthController {
             log.info("从缓存获取到有效的访问令牌，用户ID: {}", user.getId());
             
             // 查找对应的刷新令牌
-            Set<String> keys = redisTemplate.keys(REFRESH_TOKEN_PREFIX + "*");
+            Set<String> keys = redisUtil.getKeysByPattern(REFRESH_TOKEN_PREFIX + "*");
             if (keys != null) {
                 for (String key : keys) {
-                    if (user.getId().equals(redisTemplate.opsForValue().get(key))) {
+                    if (user.getId().equals(redisUtil.get(key))) {
                         refreshToken = key.substring(REFRESH_TOKEN_PREFIX.length());
                         break;
                     }
@@ -184,7 +188,7 @@ public class AuthController {
             if (refreshToken == null || !jwtUtil.validateRefreshToken(refreshToken)) {
                 refreshToken = jwtUtil.generateRefreshToken(user.getId(), user.getUsername());
                 String refreshTokenKey = REFRESH_TOKEN_PREFIX + refreshToken;
-                redisTemplate.opsForValue().set(refreshTokenKey, user.getId(), jwtUtil.getRefreshExpiration(), TimeUnit.HOURS);
+                redisUtil.set(refreshTokenKey, user.getId(), jwtUtil.getRefreshExpiration(), TimeUnit.HOURS);
                 log.info("刷新令牌不存在或无效，重新生成，用户ID: {}", user.getId());
             }
         } else {
@@ -193,11 +197,11 @@ public class AuthController {
             refreshToken = jwtUtil.generateRefreshToken(user.getId(), user.getUsername());
             
             // 将访问令牌保存到Redis，设置过期时间
-            redisTemplate.opsForValue().set(userTokenKey, accessToken, jwtExpiration, TimeUnit.HOURS);
+            redisUtil.set(userTokenKey, accessToken, jwtExpiration, TimeUnit.HOURS);
             
             // 将刷新令牌保存到Redis，设置过期时间
             String refreshTokenKey = REFRESH_TOKEN_PREFIX + refreshToken;
-            redisTemplate.opsForValue().set(refreshTokenKey, user.getId(), jwtUtil.getRefreshExpiration(), TimeUnit.HOURS);
+            redisUtil.set(refreshTokenKey, user.getId(), jwtUtil.getRefreshExpiration(), TimeUnit.HOURS);
             
             log.info("生成新的访问令牌和刷新令牌，用户ID: {}", user.getId());
         }
@@ -334,11 +338,11 @@ public class AuthController {
             
             // 将令牌加入黑名单，设置与原令牌相同的过期时间
             String blacklistKey = TOKEN_BLACKLIST_PREFIX + token;
-            redisTemplate.opsForValue().set(blacklistKey, userId, jwtExpiration, TimeUnit.HOURS);
+            redisUtil.set(blacklistKey, userId, jwtExpiration, TimeUnit.HOURS);
             
             // 删除用户的访问令牌缓存
             String userTokenKey = USER_TOKEN_PREFIX + userId;
-            redisTemplate.delete(userTokenKey);
+            redisUtil.delete(userTokenKey);
             
             log.info("用户注销成功，用户ID: {}, 用户名: {}", userId, username);
             
@@ -375,7 +379,7 @@ public class AuthController {
             
             // 检查刷新令牌是否在Redis中存在
             String refreshTokenKey = REFRESH_TOKEN_PREFIX + refreshToken;
-            if (!redisTemplate.hasKey(refreshTokenKey)) {
+            if (!redisUtil.hasKey(refreshTokenKey)) {
                 log.info("Refresh token not found in Redis");
                 throw new BusinessException(ErrorCode.INVALID_REFRESH_TOKEN);
             }
@@ -389,7 +393,7 @@ public class AuthController {
             if (user == null || user.getStatus() == 0) {
                 log.info("User not found or disabled");
                 // 删除无效的刷新令牌
-                redisTemplate.delete(refreshTokenKey);
+                redisUtil.delete(refreshTokenKey);
                 throw new BusinessException(ErrorCode.USER_NOT_FOUND);
             }
             
@@ -398,7 +402,7 @@ public class AuthController {
             
             // 更新Redis中的访问令牌
             String userTokenKey = USER_TOKEN_PREFIX + userId;
-            redisTemplate.opsForValue().set(userTokenKey, newAccessToken, jwtExpiration, TimeUnit.HOURS);
+            redisUtil.set(userTokenKey, newAccessToken, jwtExpiration, TimeUnit.HOURS);
             
             // 获取用户角色列表
             List<Role> roles = roleService.getRolesByUserId(userId);

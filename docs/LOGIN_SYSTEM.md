@@ -368,7 +368,58 @@ CREATE TABLE IF NOT EXISTS user_device (
 - **刷新令牌（Refresh Token）**：长期有效（7-30天），用于刷新访问令牌
 - **设备令牌（Device Token）**：设备级别令牌，支持离线推送
 
-#### 9.4.2 令牌存储优化
+#### 9.4.2 令牌缓存优化
+
+为提高系统性能并保持用户会话一致性，实现了基于Redis的令牌缓存优化机制：
+
+- **缓存优先策略**：用户登录时优先从Redis缓存获取有效的访问令牌
+- **有效性验证**：从缓存获取的令牌会进行有效性检查，确保未过期且未被吊销
+- **缓存未命中处理**：当缓存中不存在有效令牌时，生成新的访问令牌和刷新令牌并存入Redis
+- **令牌关联管理**：在Redis中维护用户ID、访问令牌和刷新令牌之间的映射关系，方便快速查找和管理
+
+实现示例：
+```java
+// 用户登录时的令牌生成与缓存逻辑
+public LoginResponseDTO login(LoginRequestDTO request) {
+    // 身份验证...
+    
+    // 尝试从缓存获取token
+    String cacheKey = "user:token:" + user.getId();
+    String cachedAccessToken = redisTemplate.opsForValue().get(cacheKey);
+    
+    if (cachedAccessToken != null) {
+        // 验证缓存token的有效性
+        if (isTokenValid(cachedAccessToken)) {
+            // 查找对应的刷新token
+            String refreshTokenKey = "user:refresh:" + user.getId();
+            String refreshToken = redisTemplate.opsForValue().get(refreshTokenKey);
+            
+            if (refreshToken != null && isTokenValid(refreshToken)) {
+                // 返回缓存的token
+                return buildLoginResponse(user, cachedAccessToken, refreshToken);
+            }
+        }
+    }
+    
+    // 生成新token并缓存
+    String newAccessToken = generateAccessToken(user);
+    String newRefreshToken = generateRefreshToken(user);
+    
+    // 缓存新token
+    redisTemplate.opsForValue().set(cacheKey, newAccessToken, tokenExpireTime, TimeUnit.MINUTES);
+    redisTemplate.opsForValue().set("user:refresh:" + user.getId(), newRefreshToken, refreshTokenExpireTime, TimeUnit.DAYS);
+    
+    return buildLoginResponse(user, newAccessToken, newRefreshToken);
+}
+```
+
+这种优化设计带来的好处：
+1. **减少重复生成令牌**：避免短时间内重复生成相同功能的令牌
+2. **保持会话一致性**：同一用户在短时间内使用相同的有效令牌
+3. **提高响应速度**：从缓存读取令牌比重新生成更高效
+4. **简化令牌管理**：通过Redis统一管理令牌生命周期
+
+#### 9.4.3 令牌存储优化
 
 ```java
 public class EnhancedJwtTokenProvider {

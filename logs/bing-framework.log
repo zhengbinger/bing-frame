@@ -25038,3 +25038,212 @@ org.apache.ibatis.binding.BindingException: Invalid bound statement (not found):
 2025-11-11 11:30:28.570 [http-nio-8081-exec-5] DEBUG com.bing.framework.mapper.LoginRecordMapper.insert - <==    Updates: 1
 2025-11-11 11:30:28.574 [http-nio-8081-exec-5] INFO  c.b.framework.service.impl.LoginRecordServiceImpl - 保存登录记录成功：用户=admin, 状态=1
 2025-11-11 11:30:28.586 [http-nio-8081-exec-5] INFO  AUDIT_LOG - userId:,username:anonymous,ipAddress:0:0:0:0:0:0:0:1,module:Auth,operationType:新增,description:AuthController.login,requestParams:[LoginRequest(username=admin, password=ybc@8602), org.apache.catalina.connector.RequestFacade@792a5316],result:成功,executionTime:387
+2025-11-11 13:42:05.539 [http-nio-8081-exec-10] DEBUG c.b.framework.mapper.UserMapper.selectByUsername - ==>  Preparing: SELECT id, username, password, email, phone, nickname, status, create_time, update_time FROM user WHERE username = ?
+2025-11-11 13:42:05.571 [http-nio-8081-exec-10] DEBUG c.b.framework.mapper.UserMapper.selectByUsername - ==> Parameters: admin(String)
+2025-11-11 13:42:05.675 [http-nio-8081-exec-10] DEBUG c.b.framework.mapper.UserMapper.selectByUsername - <==      Total: 1
+2025-11-11 13:42:05.708 [http-nio-8081-exec-10] INFO  com.bing.framework.controller.AuthController - ========== Password Validation Diagnostics ==========
+2025-11-11 13:42:05.713 [http-nio-8081-exec-10] INFO  com.bing.framework.controller.AuthController - Username: admin
+2025-11-11 13:42:05.718 [http-nio-8081-exec-10] INFO  com.bing.framework.controller.AuthController - Input password length: 8
+2025-11-11 13:42:05.720 [http-nio-8081-exec-10] INFO  com.bing.framework.controller.AuthController - Database password length: 60
+2025-11-11 13:42:05.721 [http-nio-8081-exec-10] INFO  com.bing.framework.controller.AuthController - Database password format: isBCrypt=true
+2025-11-11 13:42:05.841 [http-nio-8081-exec-10] INFO  com.bing.framework.controller.AuthController - Strategy 1 - BCrypt validation result: true
+2025-11-11 13:42:05.841 [http-nio-8081-exec-10] INFO  com.bing.framework.controller.AuthController - Password validation successful for user: admin
+2025-11-11 13:42:06.276 [http-nio-8081-exec-10] DEBUG c.b.framework.mapper.RoleMapper.findRolesByUserId - ==>  Preparing: SELECT r.* FROM role r LEFT JOIN user_role ur ON r.id = ur.role_id WHERE ur.user_id = ? AND r.status = 1 ORDER BY r.id
+2025-11-11 13:42:06.280 [http-nio-8081-exec-10] DEBUG c.b.framework.mapper.RoleMapper.findRolesByUserId - ==> Parameters: 1(Long)
+2025-11-11 13:42:06.318 [http-nio-8081-exec-10] DEBUG c.b.framework.mapper.RoleMapper.findRolesByUserId - <==      Total: 1
+2025-11-11 13:42:06.336 [http-nio-8081-exec-10] DEBUG com.bing.framework.mapper.LoginRecordMapper.insert - ==>  Preparing: INSERT INTO login_record ( user_id, username, ip_address, user_agent, status, login_time, message ) VALUES ( ?, ?, ?, ?, ?, ?, ? )
+2025-11-11 13:42:06.340 [http-nio-8081-exec-10] DEBUG com.bing.framework.mapper.LoginRecordMapper.insert - ==> Parameters: 1(Long), admin(String), 0:0:0:0:0:0:0:1(String), Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36 Edg/142.0.0.0(String), 1(Integer), 2025-11-11 13:42:06.321(Timestamp), 登录成功(String)
+2025-11-11 13:42:06.375 [http-nio-8081-exec-10] DEBUG com.bing.framework.mapper.LoginRecordMapper.insert - <==    Updates: 1
+2025-11-11 13:42:06.378 [http-nio-8081-exec-10] INFO  c.b.framework.service.impl.LoginRecordServiceImpl - 保存登录记录成功：用户=admin, 状态=1
+2025-11-11 13:42:06.465 [http-nio-8081-exec-10] INFO  AUDIT_LOG - userId:,username:anonymous,ipAddress:0:0:0:0:0:0:0:1,module:Auth,operationType:新增,description:AuthController.login,requestParams:[LoginRequest(username=admin, password=ybc@8602), org.apache.catalina.connector.RequestFacade@4e8286a1],result:成功,executionTime:1069
+2025-11-11 13:43:07.424 [http-nio-8081-exec-3] INFO  AUDIT_LOG - userId:,username:anonymous,ipAddress:0:0:0:0:0:0:0:1,module:Auth,operationType:查询,description:AuthController.getCurrentUser,requestParams:[org.apache.catalina.connector.RequestFacade@4e8286a1],result:失败,executionTime:17,errorMessage:Null key returned for cache operation (maybe you are using named params on classes without debug info?) Builder[public com.bing.framework.entity.User com.bing.framework.service.impl.UserServiceImpl.getUserById(java.lang.Long)] caches=[user] | key='#id' | keyGenerator='' | cacheManager='' | cacheResolver='' | condition='' | unless='' | sync='false'
+2025-11-11 13:43:07.496 [http-nio-8081-exec-3] ERROR c.bing.framework.exception.GlobalExceptionHandler - 参数异常: Null key returned for cache operation (maybe you are using named params on classes without debug info?) Builder[public com.bing.framework.entity.User com.bing.framework.service.impl.UserServiceImpl.getUserById(java.lang.Long)] caches=[user] | key='#id' | keyGenerator='' | cacheManager='' | cacheResolver='' | condition='' | unless='' | sync='false'
+java.lang.IllegalArgumentException: Null key returned for cache operation (maybe you are using named params on classes without debug info?) Builder[public com.bing.framework.entity.User com.bing.framework.service.impl.UserServiceImpl.getUserById(java.lang.Long)] caches=[user] | key='#id' | keyGenerator='' | cacheManager='' | cacheResolver='' | condition='' | unless='' | sync='false'
+	at org.springframework.cache.interceptor.CacheAspectSupport.generateKey(CacheAspectSupport.java:594)
+	at org.springframework.cache.interceptor.CacheAspectSupport.findCachedItem(CacheAspectSupport.java:534)
+	at org.springframework.cache.interceptor.CacheAspectSupport.execute(CacheAspectSupport.java:401)
+	at org.springframework.cache.interceptor.CacheAspectSupport.execute(CacheAspectSupport.java:345)
+	at org.springframework.cache.interceptor.CacheInterceptor.invoke(CacheInterceptor.java:64)
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:186)
+	at org.springframework.aop.framework.CglibAopProxy$CglibMethodInvocation.proceed(CglibAopProxy.java:762)
+	at org.springframework.aop.framework.CglibAopProxy$DynamicAdvisedInterceptor.intercept(CglibAopProxy.java:707)
+	at com.bing.framework.service.impl.UserServiceImpl$$EnhancerBySpringCGLIB$$b13fe792.getUserById(<generated>)
+	at com.bing.framework.controller.AuthController.getCurrentUser(AuthController.java:324)
+	at com.bing.framework.controller.AuthController$$FastClassBySpringCGLIB$$cd400345.invoke(<generated>)
+	at org.springframework.cglib.proxy.MethodProxy.invoke(MethodProxy.java:218)
+	at org.springframework.aop.framework.CglibAopProxy$CglibMethodInvocation.invokeJoinpoint(CglibAopProxy.java:792)
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:163)
+	at org.springframework.aop.framework.CglibAopProxy$CglibMethodInvocation.proceed(CglibAopProxy.java:762)
+	at org.springframework.aop.aspectj.AspectJAfterThrowingAdvice.invoke(AspectJAfterThrowingAdvice.java:64)
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:186)
+	at org.springframework.aop.framework.CglibAopProxy$CglibMethodInvocation.proceed(CglibAopProxy.java:762)
+	at org.springframework.aop.framework.adapter.AfterReturningAdviceInterceptor.invoke(AfterReturningAdviceInterceptor.java:57)
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:186)
+	at org.springframework.aop.framework.CglibAopProxy$CglibMethodInvocation.proceed(CglibAopProxy.java:762)
+	at org.springframework.aop.framework.adapter.MethodBeforeAdviceInterceptor.invoke(MethodBeforeAdviceInterceptor.java:58)
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:186)
+	at org.springframework.aop.framework.CglibAopProxy$CglibMethodInvocation.proceed(CglibAopProxy.java:762)
+	at org.springframework.aop.interceptor.ExposeInvocationInterceptor.invoke(ExposeInvocationInterceptor.java:97)
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:186)
+	at org.springframework.aop.framework.CglibAopProxy$CglibMethodInvocation.proceed(CglibAopProxy.java:762)
+	at org.springframework.aop.framework.CglibAopProxy$DynamicAdvisedInterceptor.intercept(CglibAopProxy.java:707)
+	at com.bing.framework.controller.AuthController$$EnhancerBySpringCGLIB$$fc4b5c72.getCurrentUser(<generated>)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:498)
+	at org.springframework.web.method.support.InvocableHandlerMethod.doInvoke(InvocableHandlerMethod.java:205)
+	at org.springframework.web.method.support.InvocableHandlerMethod.invokeForRequest(InvocableHandlerMethod.java:150)
+	at org.springframework.web.servlet.mvc.method.annotation.ServletInvocableHandlerMethod.invokeAndHandle(ServletInvocableHandlerMethod.java:117)
+	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.invokeHandlerMethod(RequestMappingHandlerAdapter.java:895)
+	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.handleInternal(RequestMappingHandlerAdapter.java:808)
+	at org.springframework.web.servlet.mvc.method.AbstractHandlerMethodAdapter.handle(AbstractHandlerMethodAdapter.java:87)
+	at org.springframework.web.servlet.DispatcherServlet.doDispatch(DispatcherServlet.java:1072)
+	at org.springframework.web.servlet.DispatcherServlet.doService(DispatcherServlet.java:965)
+	at org.springframework.web.servlet.FrameworkServlet.processRequest(FrameworkServlet.java:1006)
+	at org.springframework.web.servlet.FrameworkServlet.doGet(FrameworkServlet.java:898)
+	at javax.servlet.http.HttpServlet.service(HttpServlet.java:529)
+	at org.springframework.web.servlet.FrameworkServlet.service(FrameworkServlet.java:883)
+	at javax.servlet.http.HttpServlet.service(HttpServlet.java:623)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:209)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:153)
+	at org.apache.tomcat.websocket.server.WsFilter.doFilter(WsFilter.java:51)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:178)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:153)
+	at org.springframework.web.filter.CorsFilter.doFilterInternal(CorsFilter.java:91)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:117)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:178)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:153)
+	at org.springframework.web.filter.RequestContextFilter.doFilterInternal(RequestContextFilter.java:100)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:117)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:178)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:153)
+	at org.springframework.web.filter.FormContentFilter.doFilterInternal(FormContentFilter.java:93)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:117)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:178)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:153)
+	at org.springframework.web.filter.CharacterEncodingFilter.doFilterInternal(CharacterEncodingFilter.java:201)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:117)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:178)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:153)
+	at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:168)
+	at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:90)
+	at org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:481)
+	at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:130)
+	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:93)
+	at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:74)
+	at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:342)
+	at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:390)
+	at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:63)
+	at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:928)
+	at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1794)
+	at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:52)
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1191)
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:659)
+	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:61)
+	at java.lang.Thread.run(Thread.java:750)
+2025-11-11 13:43:44.793 [main] INFO  com.bing.framework.BingFrameworkApplication - Starting BingFrameworkApplication using Java 1.8.0_451 on zhengbing with PID 44948 (D:\ai_code\cursor\bing-framework\bing-framework\target\classes started by mydre in D:\ai_code\cursor\bing-framework\bing-framework)
+2025-11-11 13:43:44.795 [main] DEBUG com.bing.framework.BingFrameworkApplication - Running with Spring Boot v2.7.18, Spring v5.3.31
+2025-11-11 13:43:44.796 [main] INFO  com.bing.framework.BingFrameworkApplication - The following 1 profile is active: "dev"
+2025-11-11 13:43:47.491 [main] INFO  org.apache.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-8081"]
+2025-11-11 13:43:47.495 [main] INFO  org.apache.catalina.core.StandardService - Starting service [Tomcat]
+2025-11-11 13:43:47.495 [main] INFO  org.apache.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/9.0.83]
+2025-11-11 13:43:47.699 [main] INFO  o.a.c.core.ContainerBase.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+2025-11-11 13:43:49.042 [main] INFO  com.bing.framework.config.LogConfig - [LOG_CONFIG] ApplicationContext injected via constructor
+2025-11-11 13:43:49.043 [main] INFO  com.bing.framework.config.LogConfig - [LOG_CONFIG] @PostConstruct called, attempting to set ApplicationContext to AuditLogAppender
+2025-11-11 13:43:49.062 [main] INFO  com.bing.framework.config.LogConfig - [LOG_CONFIG] afterPropertiesSet called
+2025-11-11 13:43:49.062 [main] INFO  com.bing.framework.config.LogConfig - [LOG_CONFIG] Creating new AuditLogAppender instance
+2025-11-11 13:43:49.062 [main] INFO  com.bing.framework.config.LogConfig - [LOG_CONFIG] AuditLogAppender started
+2025-11-11 13:43:49.063 [main] INFO  com.bing.framework.config.LogConfig - [LOG_CONFIG] AuditLogAppender registered to AUDIT_LOG logger
+2025-11-11 13:43:51.517 [main] INFO  com.bing.framework.config.CacheConfig - 初始化Redis缓存管理器，前缀: bing:, 过期时间: 3600000ms
+2025-11-11 13:43:51.527 [main] INFO  com.bing.framework.config.CacheConfig - Redis缓存管理器初始化完成，缓存名称: auditLogCache, userCache, whiteListCache
+2025-11-11 13:43:51.538 [main] INFO  org.apache.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-8081"]
+2025-11-11 13:43:52.087 [main] INFO  com.bing.framework.config.LogConfig - [LOG_CONFIG] ContextRefreshedEvent received, ensuring ApplicationContext is set
+2025-11-11 13:43:52.087 [main] INFO  com.bing.framework.config.LogConfig - [LOG_CONFIG] ContextRefreshedEvent: ApplicationContext available: true
+2025-11-11 13:43:52.091 [main] INFO  com.bing.framework.BingFrameworkApplication - Started BingFrameworkApplication in 8.025 seconds (JVM running for 9.648)
+2025-11-11 13:43:52.093 [main] INFO  c.bing.framework.runner.PasswordFormatCheckRunner - 启动密码格式检查...
+2025-11-11 13:43:52.641 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+2025-11-11 13:43:53.450 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+2025-11-11 13:43:53.460 [main] DEBUG com.bing.framework.mapper.UserMapper.selectList - ==>  Preparing: SELECT id,username,password,email,phone,nickname,status,create_time,update_time FROM user
+2025-11-11 13:43:53.490 [main] DEBUG com.bing.framework.mapper.UserMapper.selectList - ==> Parameters: 
+2025-11-11 13:43:53.520 [main] DEBUG com.bing.framework.mapper.UserMapper.selectList - <==      Total: 4
+2025-11-11 13:43:53.569 [main] INFO  com.bing.framework.util.PasswordFormatChecker - 开始检查所有用户密码格式，共 4 个用户
+2025-11-11 13:43:53.569 [main] WARN  com.bing.framework.util.PasswordFormatChecker - 发现非BCrypt格式密码，用户ID: 2, 用户名: user01
+2025-11-11 13:43:53.569 [main] WARN  com.bing.framework.util.PasswordFormatChecker - 发现非BCrypt格式密码，用户ID: 3, 用户名: readonly
+2025-11-11 13:43:53.570 [main] INFO  com.bing.framework.util.PasswordFormatChecker - 密码格式检查完成，共检查 4 个用户，发现 0 个需要修复的密码（已记录但未自动修复）
+2025-11-11 13:43:53.570 [main] INFO  com.bing.framework.util.PasswordFormatChecker - 警告：请联系相关用户重置密码，使用标准BCrypt加密格式
+2025-11-11 13:43:53.570 [main] INFO  c.bing.framework.runner.PasswordFormatCheckRunner - 密码格式检查完成
+2025-11-11 14:15:16.035 [main] INFO  com.bing.framework.BingFrameworkApplication - Starting BingFrameworkApplication using Java 1.8.0_451 on zhengbing with PID 26464 (D:\ai_code\cursor\bing-framework\bing-framework\target\classes started by mydre in D:\ai_code\cursor\bing-framework\bing-framework)
+2025-11-11 14:15:16.039 [main] DEBUG com.bing.framework.BingFrameworkApplication - Running with Spring Boot v2.7.18, Spring v5.3.31
+2025-11-11 14:15:16.039 [main] INFO  com.bing.framework.BingFrameworkApplication - The following 1 profile is active: "dev"
+2025-11-11 14:15:20.817 [main] INFO  org.apache.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-8081"]
+2025-11-11 14:15:20.829 [main] INFO  org.apache.catalina.core.StandardService - Starting service [Tomcat]
+2025-11-11 14:15:20.831 [main] INFO  org.apache.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/9.0.83]
+2025-11-11 14:15:21.087 [main] INFO  o.a.c.core.ContainerBase.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+2025-11-11 14:15:22.541 [main] INFO  com.bing.framework.config.LogConfig - [LOG_CONFIG] ApplicationContext injected via constructor
+2025-11-11 14:15:22.543 [main] INFO  com.bing.framework.config.LogConfig - [LOG_CONFIG] @PostConstruct called, attempting to set ApplicationContext to AuditLogAppender
+2025-11-11 14:15:22.557 [main] INFO  com.bing.framework.config.LogConfig - [LOG_CONFIG] afterPropertiesSet called
+2025-11-11 14:15:22.557 [main] INFO  com.bing.framework.config.LogConfig - [LOG_CONFIG] Creating new AuditLogAppender instance
+2025-11-11 14:15:22.557 [main] INFO  com.bing.framework.config.LogConfig - [LOG_CONFIG] AuditLogAppender started
+2025-11-11 14:15:22.558 [main] INFO  com.bing.framework.config.LogConfig - [LOG_CONFIG] AuditLogAppender registered to AUDIT_LOG logger
+2025-11-11 14:15:25.169 [main] INFO  com.bing.framework.config.CacheConfig - 初始化Redis缓存管理器，前缀: bing:, 过期时间: 3600000ms
+2025-11-11 14:15:25.195 [main] INFO  com.bing.framework.config.CacheConfig - Redis缓存管理器初始化完成，缓存名称: auditLogCache, userCache, whiteListCache
+2025-11-11 14:15:25.206 [main] INFO  org.apache.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-8081"]
+2025-11-11 14:15:25.921 [main] INFO  com.bing.framework.config.LogConfig - [LOG_CONFIG] ContextRefreshedEvent received, ensuring ApplicationContext is set
+2025-11-11 14:15:25.922 [main] INFO  com.bing.framework.config.LogConfig - [LOG_CONFIG] ContextRefreshedEvent: ApplicationContext available: true
+2025-11-11 14:15:25.927 [main] INFO  com.bing.framework.BingFrameworkApplication - Started BingFrameworkApplication in 10.59 seconds (JVM running for 11.147)
+2025-11-11 14:15:25.928 [main] INFO  c.bing.framework.runner.PasswordFormatCheckRunner - 启动密码格式检查...
+2025-11-11 14:15:26.577 [main] INFO  com.bing.framework.util.PasswordFormatChecker - 开始检查所有用户密码格式，共 4 个用户
+2025-11-11 14:15:26.577 [main] WARN  com.bing.framework.util.PasswordFormatChecker - 发现非BCrypt格式密码，用户ID: 2, 用户名: user01
+2025-11-11 14:15:26.578 [main] WARN  com.bing.framework.util.PasswordFormatChecker - 发现非BCrypt格式密码，用户ID: 3, 用户名: readonly
+2025-11-11 14:15:26.578 [main] INFO  com.bing.framework.util.PasswordFormatChecker - 密码格式检查完成，共检查 4 个用户，发现 0 个需要修复的密码（已记录但未自动修复）
+2025-11-11 14:15:26.578 [main] INFO  com.bing.framework.util.PasswordFormatChecker - 警告：请联系相关用户重置密码，使用标准BCrypt加密格式
+2025-11-11 14:15:26.578 [main] INFO  c.bing.framework.runner.PasswordFormatCheckRunner - 密码格式检查完成
+2025-11-11 14:15:54.532 [http-nio-8081-exec-2] INFO  o.a.c.core.ContainerBase.[Tomcat].[localhost].[/] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+2025-11-11 14:15:54.570 [http-nio-8081-exec-2] DEBUG com.bing.framework.interceptor.JwtInterceptor - 拦截请求: /api/auth/login
+2025-11-11 14:15:54.594 [http-nio-8081-exec-2] DEBUG c.bing.framework.service.impl.WhiteListServiceImpl - [DEBUG] 检查路径 '/api/auth/login' 是否在白名单中
+2025-11-11 14:15:54.594 [http-nio-8081-exec-2] INFO  c.bing.framework.service.impl.WhiteListServiceImpl - 白名单缓存未命中，从数据库查询白名单模式
+2025-11-11 14:15:54.646 [http-nio-8081-exec-2] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+2025-11-11 14:15:55.876 [http-nio-8081-exec-2] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+2025-11-11 14:15:55.886 [http-nio-8081-exec-2] DEBUG c.b.f.m.WhiteListMapper.selectEnabledWhiteLists - ==>  Preparing: SELECT id, pattern, type, description, enabled, create_time, update_time FROM sys_white_list WHERE enabled = 1 ORDER BY create_time DESC
+2025-11-11 14:15:55.933 [http-nio-8081-exec-2] DEBUG c.b.f.m.WhiteListMapper.selectEnabledWhiteLists - ==> Parameters: 
+2025-11-11 14:15:56.031 [http-nio-8081-exec-2] DEBUG c.b.f.m.WhiteListMapper.selectEnabledWhiteLists - <==      Total: 10
+2025-11-11 14:15:56.041 [http-nio-8081-exec-2] INFO  c.bing.framework.service.impl.WhiteListServiceImpl - 从数据库获取到 10 条白名单记录
+2025-11-11 14:15:56.042 [http-nio-8081-exec-2] INFO  c.bing.framework.service.impl.WhiteListServiceImpl - 添加白名单模式: '/api/auth/login'
+2025-11-11 14:15:56.043 [http-nio-8081-exec-2] INFO  c.bing.framework.service.impl.WhiteListServiceImpl - 添加白名单模式: '/api/auth/register'
+2025-11-11 14:15:56.044 [http-nio-8081-exec-2] INFO  c.bing.framework.service.impl.WhiteListServiceImpl - 添加白名单模式: '/api/auth/logout'
+2025-11-11 14:15:56.046 [http-nio-8081-exec-2] INFO  c.bing.framework.service.impl.WhiteListServiceImpl - 添加白名单模式: '/api/white-list/**'
+2025-11-11 14:15:56.050 [http-nio-8081-exec-2] INFO  c.bing.framework.service.impl.WhiteListServiceImpl - 添加白名单模式: '/doc.html'
+2025-11-11 14:15:56.051 [http-nio-8081-exec-2] INFO  c.bing.framework.service.impl.WhiteListServiceImpl - 添加白名单模式: '/swagger-resources/**'
+2025-11-11 14:15:56.051 [http-nio-8081-exec-2] INFO  c.bing.framework.service.impl.WhiteListServiceImpl - 添加白名单模式: '/v2/api-docs'
+2025-11-11 14:15:56.051 [http-nio-8081-exec-2] INFO  c.bing.framework.service.impl.WhiteListServiceImpl - 添加白名单模式: '/webjars/**'
+2025-11-11 14:15:56.051 [http-nio-8081-exec-2] INFO  c.bing.framework.service.impl.WhiteListServiceImpl - 添加白名单模式: '/knife4j/**'
+2025-11-11 14:15:56.051 [http-nio-8081-exec-2] INFO  c.bing.framework.service.impl.WhiteListServiceImpl - 添加白名单模式: '/swagger-ui/**'
+2025-11-11 14:15:56.053 [http-nio-8081-exec-2] INFO  c.bing.framework.service.impl.WhiteListServiceImpl - 转换后获取到 10 个启用的白名单模式，即将存入Redis缓存
+2025-11-11 14:15:56.053 [http-nio-8081-exec-2] DEBUG c.bing.framework.service.impl.WhiteListServiceImpl - [DEBUG] 当前启用的白名单模式数量: 10
+2025-11-11 14:15:56.054 [http-nio-8081-exec-2] DEBUG c.bing.framework.service.impl.WhiteListServiceImpl - [DEBUG] 路径 '/api/auth/login' 匹配模式 '/api/auth/register': false
+2025-11-11 14:15:56.054 [http-nio-8081-exec-2] DEBUG c.bing.framework.service.impl.WhiteListServiceImpl - [DEBUG] 路径 '/api/auth/login' 匹配模式 '/v2/api-docs': false
+2025-11-11 14:15:56.055 [http-nio-8081-exec-2] DEBUG c.bing.framework.service.impl.WhiteListServiceImpl - [DEBUG] 路径 '/api/auth/login' 匹配模式 '/doc.html': false
+2025-11-11 14:15:56.055 [http-nio-8081-exec-2] DEBUG c.bing.framework.service.impl.WhiteListServiceImpl - [DEBUG] 路径 '/api/auth/login' 匹配模式 '/swagger-ui/**': false
+2025-11-11 14:15:56.055 [http-nio-8081-exec-2] DEBUG c.bing.framework.service.impl.WhiteListServiceImpl - [DEBUG] 路径 '/api/auth/login' 匹配模式 '/api/auth/login': true
+2025-11-11 14:15:56.057 [http-nio-8081-exec-2] DEBUG c.bing.framework.service.impl.WhiteListServiceImpl - [DEBUG] 路径 '/api/auth/login' 在白名单中，匹配成功
+2025-11-11 14:15:56.061 [http-nio-8081-exec-2] DEBUG com.bing.framework.interceptor.JwtInterceptor - 请求路径 '/api/auth/login' 在白名单中，直接通过
+2025-11-11 14:15:56.310 [http-nio-8081-exec-2] INFO  com.bing.framework.controller.AuthController - ========== Password Validation Diagnostics ==========
+2025-11-11 14:15:56.311 [http-nio-8081-exec-2] INFO  com.bing.framework.controller.AuthController - Username: admin
+2025-11-11 14:15:56.311 [http-nio-8081-exec-2] INFO  com.bing.framework.controller.AuthController - Input password length: 8
+2025-11-11 14:15:56.311 [http-nio-8081-exec-2] INFO  com.bing.framework.controller.AuthController - Database password length: 60
+2025-11-11 14:15:56.312 [http-nio-8081-exec-2] INFO  com.bing.framework.controller.AuthController - Database password format: isBCrypt=true
+2025-11-11 14:15:56.427 [http-nio-8081-exec-2] INFO  com.bing.framework.controller.AuthController - Strategy 1 - BCrypt validation result: true
+2025-11-11 14:15:56.429 [http-nio-8081-exec-2] INFO  com.bing.framework.controller.AuthController - Password validation successful for user: admin
+2025-11-11 14:15:56.529 [http-nio-8081-exec-2] DEBUG c.b.framework.mapper.RoleMapper.findRolesByUserId - ==>  Preparing: SELECT r.* FROM role r LEFT JOIN user_role ur ON r.id = ur.role_id WHERE ur.user_id = ? AND r.status = 1 ORDER BY r.id
+2025-11-11 14:15:56.531 [http-nio-8081-exec-2] DEBUG c.b.framework.mapper.RoleMapper.findRolesByUserId - ==> Parameters: 1(Long)
+2025-11-11 14:15:56.547 [http-nio-8081-exec-2] DEBUG c.b.framework.mapper.RoleMapper.findRolesByUserId - <==      Total: 1
+2025-11-11 14:15:56.550 [http-nio-8081-exec-2] DEBUG com.bing.framework.context.UserContext - 设置用户上下文成功，用户ID: 1, 用户名: admin
+2025-11-11 14:15:56.550 [http-nio-8081-exec-2] DEBUG com.bing.framework.context.UserContext - 设置用户角色列表成功，角色数量: 1
+2025-11-11 14:15:56.605 [http-nio-8081-exec-2] DEBUG com.bing.framework.mapper.LoginRecordMapper.insert - ==>  Preparing: INSERT INTO login_record ( user_id, username, ip_address, user_agent, status, login_time, message ) VALUES ( ?, ?, ?, ?, ?, ?, ? )
+2025-11-11 14:15:56.606 [http-nio-8081-exec-2] DEBUG com.bing.framework.mapper.LoginRecordMapper.insert - ==> Parameters: 1(Long), admin(String), 0:0:0:0:0:0:0:1(String), Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36 Edg/142.0.0.0(String), 1(Integer), 2025-11-11 14:15:56.552(Timestamp), 登录成功(String)
+2025-11-11 14:15:56.641 [http-nio-8081-exec-2] DEBUG com.bing.framework.mapper.LoginRecordMapper.insert - <==    Updates: 1
+2025-11-11 14:15:56.646 [http-nio-8081-exec-2] INFO  c.b.framework.service.impl.LoginRecordServiceImpl - 保存登录记录成功：用户=admin, 状态=1
+2025-11-11 14:15:56.670 [http-nio-8081-exec-2] INFO  AUDIT_LOG - userId:,username:anonymous,ipAddress:0:0:0:0:0:0:0:1,module:认证管理,operationType:新增,description:用户登录、注册、注销和获取当前用户信息等认证相关功能,requestParams:[LoginRequest(username=admin, password=ybc@8602)],result:成功,executionTime:397
+2025-11-11 14:15:56.734 [http-nio-8081-exec-2] DEBUG com.bing.framework.context.UserContext - 清理用户上下文成功
+2025-11-11 14:15:56.735 [http-nio-8081-exec-2] DEBUG c.b.f.interceptor.UserContextCleanupInterceptor - 请求处理完成，自动清理用户上下文
