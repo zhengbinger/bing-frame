@@ -10,10 +10,8 @@ import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 
-import java.lang.reflect.Field;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.Map;
 import java.util.concurrent.Executor;
 
 /**
@@ -27,9 +25,44 @@ import java.util.concurrent.Executor;
 // 移除@Component注解，改为通过配置类进行延迟注册
 public class AuditLogAppender extends AppenderBase<ILoggingEvent> implements ApplicationContextAware {
     
+    // 静态的ApplicationContext引用
     private static ApplicationContext applicationContext;
     private static Executor auditLogExecutor;
     private static final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+    
+    /**
+     * 静态方法，用于直接设置ApplicationContext
+     * 这是一个备用机制，确保ApplicationContext可以从Spring容器中正确注入
+     */
+    public static synchronized void setStaticApplicationContext(ApplicationContext context) {
+        if (context != null) {
+            applicationContext = context;
+            System.out.println("[AUDIT_LOG] ApplicationContext set via static method");
+            // 如果设置了ApplicationContext，尝试初始化线程池
+            try {
+                if (auditLogExecutor == null) {
+                    auditLogExecutor = context.getBean("auditLogExecutor", Executor.class);
+                    System.out.println("[AUDIT_LOG] auditLogExecutor initialized via static method");
+                }
+            } catch (Exception e) {
+                System.err.println("[AUDIT_LOG] Failed to initialize auditLogExecutor: " + e.getMessage());
+            }
+        }
+    }
+    
+    /**
+     * 获取当前的ApplicationContext实例
+     */
+    public static ApplicationContext getApplicationContext() {
+        return applicationContext;
+    }
+    
+    /**
+     * 检查ApplicationContext是否已设置
+     */
+    public static boolean isApplicationContextAvailable() {
+        return applicationContext != null;
+    }
     
     @Override
     protected void append(ILoggingEvent event) {
@@ -138,7 +171,14 @@ public class AuditLogAppender extends AppenderBase<ILoggingEvent> implements App
     @Override
     public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
         AuditLogAppender.applicationContext = applicationContext;
+        System.out.println("[AUDIT_LOG] ApplicationContext set via ApplicationContextAware interface");
+        
         // 初始化线程池
-        this.auditLogExecutor = applicationContext.getBean("auditLogExecutor", Executor.class);
+        try {
+            this.auditLogExecutor = applicationContext.getBean("auditLogExecutor", Executor.class);
+            System.out.println("[AUDIT_LOG] auditLogExecutor initialized");
+        } catch (Exception e) {
+            System.err.println("[AUDIT_LOG] Failed to initialize auditLogExecutor: " + e.getMessage());
+        }
     }
 }
