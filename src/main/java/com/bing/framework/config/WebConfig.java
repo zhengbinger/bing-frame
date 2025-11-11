@@ -1,6 +1,7 @@
 package com.bing.framework.config;
 
 import com.bing.framework.interceptor.JwtInterceptor;
+import com.bing.framework.interceptor.RequestContextInterceptor;
 import com.bing.framework.interceptor.UserContextCleanupInterceptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
@@ -23,8 +24,15 @@ public class WebConfig implements WebMvcConfigurer {
     /**
      * 注册拦截器
      */
+    @Autowired
+    private RequestContextInterceptor requestContextInterceptor;
+    
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
+        // 注册请求上下文拦截器，应用于所有请求，必须首先执行
+        registry.addInterceptor(requestContextInterceptor)
+                .addPathPatterns("/**");
+        
         // 注册JWT拦截器
         registry.addInterceptor(jwtInterceptor)
                 // 设置需要拦截的路径

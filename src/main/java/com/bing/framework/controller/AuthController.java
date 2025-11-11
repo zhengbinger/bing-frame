@@ -2,6 +2,7 @@ package com.bing.framework.controller;
 
 import com.bing.framework.common.ErrorCode;
 import com.bing.framework.common.Result;
+import com.bing.framework.context.UserContext;
 import com.bing.framework.dto.LoginRequest;
 import com.bing.framework.dto.LoginResponse;
 import com.bing.framework.dto.RegisterRequest;
@@ -27,7 +28,7 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import javax.servlet.http.HttpServletRequest;
+// 不再直接导入HttpServletRequest，使用RequestContext代替
 
 
 import java.util.Date;
@@ -92,7 +93,7 @@ public class AuthController {
         @ApiResponse(code = 500, message = "登录失败")
     })
     @PostMapping("/login")
-    public Result<LoginResponse> login(@ApiParam(name = "loginRequest", value = "登录请求数据", required = true) @Validated @RequestBody LoginRequest loginRequest, HttpServletRequest request) {
+    public Result<LoginResponse> login(@ApiParam(name = "loginRequest", value = "登录请求数据", required = true) @Validated @RequestBody LoginRequest loginRequest) {
         // 根据用户名查询用户
         User user = userService.getUserByUsername(loginRequest.getUsername());
         
@@ -100,15 +101,15 @@ public class AuthController {
         if (user == null) {
             log.info("Login failed: user not found, username={}", loginRequest.getUsername());
             // 记录失败的登录日志
-            recordLoginRecord(request, loginRequest.getUsername(), null, 0, "用户不存在");
+            recordLoginRecord(loginRequest.getUsername(), null, 0, "用户不存在");
             throw new BusinessException(ErrorCode.USER_NOT_FOUND);
         }
         
         // 检查用户状态
         if (user.getStatus() == 0) {
             log.info("Login failed: user disabled, username={}", loginRequest.getUsername());
-            // 记录失败的登录日志
-            recordLoginRecord(request, loginRequest.getUsername(), user.getId(), 0, "用户已禁用");
+            // 记录登录记录
+            recordLoginRecord(loginRequest.getUsername(), user.getId(), 0, "用户已禁用");
             throw new BusinessException(ErrorCode.USER_DISABLED);
         }
         
@@ -142,82 +143,14 @@ public class AuthController {
                 }
             }
             
-            // 如果BCrypt验证失败或者不是BCrypt格式，尝试明文密码比较
-            // if (!passwordMatch) {
-            //     passwordMatch = inputPassword.equals(dbPassword);
-            //     log.info("Strategy 2 - Plain text comparison result: {}", passwordMatch);
-                
-            //     if (passwordMatch) {
-            //         log.warn("Plain text password detected for user: {}", user.getUsername());
-            //         // 自动更新为BCrypt格式
-            //         try {
-            //             user.setPassword(passwordEncoder.encode(inputPassword));
-            //             userService.updateUser(user);
-            //             log.info("Successfully updated password format to BCrypt for user: {}", user.getUsername());
-            //         } catch (Exception e) {
-            //             log.error("Failed to update password format for user: {}", user.getUsername(), e);
-            //         }
-            //     }
-            // }
-            
-            // 检查是否有前后空白字符问题
-            // if (!passwordMatch) {
-            //     String trimmedPassword = inputPassword.trim();
-            //     // 尝试修剪后的密码BCrypt验证
-            //     if (isBCryptFormat) {
-            //         boolean trimmedMatch = passwordEncoder.matches(trimmedPassword, dbPassword);
-            //         log.info("Strategy 3a - Trimmed password BCrypt result: {}", trimmedMatch);
-            //         if (trimmedMatch) {
-            //             passwordMatch = true;
-            //             log.warn("Password contains leading/trailing whitespace: {}", user.getUsername());
-            //         }
-            //     }
-            //     // 尝试修剪后的密码明文比较
-            //     if (!passwordMatch) {
-            //         boolean trimmedPlainMatch = trimmedPassword.equals(dbPassword);
-            //         log.info("Strategy 3b - Trimmed password plain text result: {}", trimmedPlainMatch);
-            //         if (trimmedPlainMatch) {
-            //             passwordMatch = true;
-            //             log.warn("Password contains leading/trailing whitespace: {}", user.getUsername());
-            //         }
-            //     }
-            // }
-            
-            // 特殊处理已知的非BCrypt格式用户（根据启动日志发现）
-            // if (!passwordMatch && ("admin".equals(user.getUsername()) || 
-            //                        "user01".equals(user.getUsername()) || 
-            //                        "readonly".equals(user.getUsername()))) {
-            //     log.info("Strategy 4 - Special handling for known non-BCrypt user: {}", user.getUsername());
-            //     // 对于这些用户，直接使用明文密码比较
-            //     passwordMatch = inputPassword.equals(dbPassword);
-                
-            //     // 如果匹配成功，自动更新为BCrypt格式
-            //     if (passwordMatch) {
-            //         log.warn("Auto-updating password to BCrypt format for user: {}", user.getUsername());
-            //         try {
-            //             user.setPassword(passwordEncoder.encode(inputPassword));
-            //             userService.updateUser(user);
-            //             log.info("Successfully updated password format for user: {}", user.getUsername());
-            //         } catch (Exception e) {
-            //             log.error("Failed to update password format for user: {}", user.getUsername(), e);
-            //         }
-            //     }
-            // }
-            
-            // 开发环境特殊处理：允许测试密码"123456"
-            // if (!passwordMatch && "123456".equals(inputPassword)) {
-            //     log.warn("DEBUG MODE: Allowing login with test password for user: {}", user.getUsername());
-            //     passwordMatch = true;
-            // }
-            
         } catch (Exception e) {
             log.error("Error during password validation: {}", e.getMessage(), e);
         }
         
         if (!passwordMatch) {
             log.info("Password validation failed for user: {}", user.getUsername());
-            // 记录失败的登录日志
-            recordLoginRecord(request, loginRequest.getUsername(), user.getId(), 0, "密码错误");
+            // 记录登录记录
+            recordLoginRecord(loginRequest.getUsername(), user.getId(), 0, "密码错误");
             throw new BusinessException(ErrorCode.INCORRECT_PASSWORD);
         }
         
@@ -253,11 +186,11 @@ public class AuthController {
         response.setRoles(roleCodes);
         
         // 设置用户上下文信息
-        com.bing.framework.context.UserContext.setUser(user);
-        com.bing.framework.context.UserContext.setRoles(roleCodes);
+        UserContext.setUser(user);
+        UserContext.setRoles(roleCodes);
         
         // 记录成功的登录日志
-        recordLoginRecord(request, user.getUsername(), user.getId(), 1, "登录成功");
+        recordLoginRecord(user.getUsername(), user.getId(), 1, "登录成功");
         
         return Result.success(response);
     }
@@ -320,9 +253,9 @@ public class AuthController {
         @ApiResponse(code = 500, message = "查询失败")
     })
     @GetMapping("/current")
-    public Result<User> getCurrentUser(@ApiParam(hidden = true) HttpServletRequest request) {
-        // 从请求属性中获取用户ID
-        Long userId = (Long) request.getAttribute("userId");
+    public Result<User> getCurrentUser() {
+        // 从请求上下文获取用户ID
+        Long userId = (Long) RequestContext.getRequest().getAttribute("userId");
         
         // 查询用户信息
         User user = userService.getUserById(userId);
@@ -350,10 +283,10 @@ public class AuthController {
         @ApiResponse(code = 500, message = "注销失败")
     })
     @PostMapping("/logout")
-    public Result<?> logout(HttpServletRequest request) {
+    public Result<?> logout() {
         try {
-            // 从请求头获取Authorization
-            String authorization = request.getHeader("Authorization");
+            // 从请求上下文获取Authorization头
+            String authorization = RequestContext.getHeader("Authorization");
             if (authorization == null || !authorization.startsWith("Bearer ")) {
                 throw new BusinessException(ErrorCode.UNAUTHORIZED);
             }
@@ -469,7 +402,7 @@ public class AuthController {
      * @param status 登录状态：0-失败，1-成功
      * @param message 登录结果描述
      */
-    private void recordLoginRecord(HttpServletRequest request, String username, Long userId, Integer status, String message) {
+    private void recordLoginRecord(String username, Long userId, Integer status, String message) {
         try {
             LoginRecord loginRecord = new LoginRecord();
             loginRecord.setUsername(username);
@@ -478,8 +411,8 @@ public class AuthController {
             }
             loginRecord.setStatus(status);
             loginRecord.setMessage(message);
-            loginRecord.setIpAddress(getClientIp(request));
-            loginRecord.setUserAgent(request.getHeader("User-Agent"));
+            loginRecord.setIpAddress(RequestContext.getClientIp());
+            loginRecord.setUserAgent(RequestContext.getUserAgent());
             loginRecord.setLoginTime(new Date());
             
             // 异步记录登录记录
@@ -496,21 +429,5 @@ public class AuthController {
      * @param request HTTP请求
      * @return 客户端IP地址
      */
-    private String getClientIp(HttpServletRequest request) {
-        String ip = request.getHeader("X-Forwarded-For");
-        if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
-            ip = request.getHeader("Proxy-Client-IP");
-        }
-        if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
-            ip = request.getHeader("WL-Proxy-Client-IP");
-        }
-        if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
-            ip = request.getRemoteAddr();
-        }
-        // 处理多个代理的情况，取第一个IP
-        if (ip != null && ip.contains(",")) {
-            ip = ip.split(",")[0].trim();
-        }
-        return ip;
-    }
+    // getClientIp方法已被RequestContext.getClientIp()替代，不再需要此方法
 }
