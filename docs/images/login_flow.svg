@@ -1,0 +1,96 @@
+<svg width="800" height="600" xmlns="http://www.w3.org/2000/svg">
+  <!-- 背景 -->
+  <rect width="800" height="600" fill="#f8f9fa" rx="10" ry="10"/>
+  
+  <!-- 标题 -->
+  <text x="400" y="40" font-family="Arial, sans-serif" font-size="24" font-weight="bold" text-anchor="middle" fill="#333">登录系统数据流图</text>
+  
+  <!-- 前端组件 -->
+  <rect x="100" y="100" width="150" height="80" rx="5" ry="5" fill="#e7f3ff" stroke="#2196F3" stroke-width="2"/>
+  <text x="175" y="140" font-family="Arial, sans-serif" font-size="16" font-weight="bold" text-anchor="middle" fill="#333">用户界面</text>
+  <text x="175" y="165" font-family="Arial, sans-serif" font-size="12" text-anchor="middle" fill="#666">Login Page</text>
+  
+  <!-- AuthController -->
+  <rect x="400" y="100" width="180" height="80" rx="5" ry="5" fill="#e8f5e9" stroke="#4CAF50" stroke-width="2"/>
+  <text x="490" y="135" font-family="Arial, sans-serif" font-size="14" font-weight="bold" text-anchor="middle" fill="#333">AuthController</text>
+  <text x="490" y="155" font-family="Arial, sans-serif" font-size="12" text-anchor="middle" fill="#666">/api/auth/login</text>
+  <text x="490" y="175" font-family="Arial, sans-serif" font-size="12" text-anchor="middle" fill="#666">参数验证</text>
+  
+  <!-- AuthService -->
+  <rect x="400" y="220" width="180" height="80" rx="5" ry="5" fill="#fff3e0" stroke="#FF9800" stroke-width="2"/>
+  <text x="490" y="255" font-family="Arial, sans-serif" font-size="14" font-weight="bold" text-anchor="middle" fill="#333">AuthServiceImpl</text>
+  <text x="490" y="275" font-family="Arial, sans-serif" font-size="12" text-anchor="middle" fill="#666">身份认证</text>
+  <text x="490" y="295" font-family="Arial, sans-serif" font-size="12" text-anchor="middle" fill="#666">令牌生成</text>
+  
+  <!-- JwtTokenProvider -->
+  <rect x="230" y="340" width="160" height="70" rx="5" ry="5" fill="#f3e5f5" stroke="#9C27B0" stroke-width="2"/>
+  <text x="310" y="375" font-family="Arial, sans-serif" font-size="14" font-weight="bold" text-anchor="middle" fill="#333">JwtTokenProvider</text>
+  <text x="310" y="395" font-family="Arial, sans-serif" font-size="12" text-anchor="middle" fill="#666">生成JWT令牌</text>
+  
+  <!-- LoginRecordService -->
+  <rect x="490" y="340" width="180" height="70" rx="5" ry="5" fill="#ffebee" stroke="#F44336" stroke-width="2"/>
+  <text x="580" y="375" font-family="Arial, sans-serif" font-size="14" font-weight="bold" text-anchor="middle" fill="#333">LoginRecordService</text>
+  <text x="580" y="395" font-family="Arial, sans-serif" font-size="12" text-anchor="middle" fill="#666">保存登录记录</text>
+  
+  <!-- 数据库 -->
+  <rect x="340" y="450" width="200" height="80" rx="5" ry="5" fill="#e0f2f1" stroke="#009688" stroke-width="2"/>
+  <text x="440" y="490" font-family="Arial, sans-serif" font-size="16" font-weight="bold" text-anchor="middle" fill="#333">数据库</text>
+  <text x="440" y="510" font-family="Arial, sans-serif" font-size="12" text-anchor="middle" fill="#666">user表 / login_record表</text>
+  
+  <!-- 箭头和数据流动 -->
+  <!-- 前端到AuthController -->
+  <path d="M250 140 L400 140" stroke="#2196F3" stroke-width="2" fill="none" marker-end="url(#arrowhead)"/>
+  <text x="325" y="130" font-family="Arial, sans-serif" font-size="12" text-anchor="middle" fill="#2196F3">用户名/密码</text>
+  
+  <!-- AuthController到AuthService -->
+  <path d="M490 180 L490 220" stroke="#4CAF50" stroke-width="2" fill="none" marker-end="url(#arrowhead)"/>
+  
+  <!-- AuthService到JwtTokenProvider -->
+  <path d="M400 260 L230 305" stroke="#9C27B0" stroke-width="2" fill="none" marker-end="url(#arrowhead)"/>
+  <text x="280" y="270" font-family="Arial, sans-serif" font-size="12" text-anchor="middle" fill="#9C27B0" transform="rotate(-30, 280, 270)">生成令牌</text>
+  
+  <!-- AuthService到LoginRecordService -->
+  <path d="M580 260 L580 305" stroke="#F44336" stroke-width="2" fill="none" marker-end="url(#arrowhead)"/>
+  
+  <!-- JwtTokenProvider到AuthService -->
+  <path d="M310 410 L490 410" stroke="#9C27B0" stroke-width="2" fill="none" marker-end="url(#arrowhead)"/>
+  <text x="400" y="400" font-family="Arial, sans-serif" font-size="12" text-anchor="middle" fill="#9C27B0">JWT令牌</text>
+  
+  <!-- LoginRecordService到数据库 -->
+  <path d="M580 410 L580 450 L440 450" stroke="#F44336" stroke-width="2" fill="none" marker-end="url(#arrowhead)"/>
+  <text x="580" y="430" font-family="Arial, sans-serif" font-size="12" text-anchor="end" fill="#F44336">保存记录</text>
+  
+  <!-- 数据库到JwtTokenProvider -->
+  <path d="M340 500 L230 450" stroke="#009688" stroke-width="2" fill="none" marker-end="url(#arrowhead)"/>
+  <text x="270" y="470" font-family="Arial, sans-serif" font-size="12" text-anchor="middle" fill="#009688" transform="rotate(-50, 270, 470)">用户信息</text>
+  
+  <!-- AuthService返回结果 -->
+  <path d="M490 410 L490 220" stroke="#4CAF50" stroke-width="2" fill="none" stroke-dasharray="5,5" marker-end="url(#arrowhead)"/>
+  <path d="M490 180 L250 180" stroke="#2196F3" stroke-width="2" fill="none" stroke-dasharray="5,5" marker-end="url(#arrowhead)"/>
+  <text x="325" y="170" font-family="Arial, sans-serif" font-size="12" text-anchor="middle" fill="#2196F3">JWT令牌</text>
+  
+  <!-- 箭头定义 -->
+  <defs>
+    <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#333"/>
+    </marker>
+  </defs>
+  
+  <!-- 图例 -->
+  <rect x="620" y="100" width="150" height="120" rx="5" ry="5" fill="white" stroke="#ccc" stroke-width="1"/>
+  <text x="695" y="120" font-family="Arial, sans-serif" font-size="14" font-weight="bold" text-anchor="middle" fill="#333">图例</text>
+  
+  <line x1="630" y1="140" x2="650" y2="140" stroke="#333" stroke-width="2"/>
+  <polygon points="650 136.5, 660 140, 650 143.5" fill="#333"/>
+  <text x="705" y="143" font-family="Arial, sans-serif" font-size="12" text-anchor="start" fill="#333">请求</text>
+  
+  <line x1="630" y1="170" x2="650" y2="170" stroke="#333" stroke-width="2" stroke-dasharray="5,5"/>
+  <polygon points="650 166.5, 660 170, 650 173.5" fill="#333"/>
+  <text x="705" y="173" font-family="Arial, sans-serif" font-size="12" text-anchor="start" fill="#333">响应</text>
+  
+  <rect x="630" y="200" width="20" height="15" fill="#e7f3ff" stroke="#2196F3" stroke-width="1"/>
+  <text x="705" y="212" font-family="Arial, sans-serif" font-size="12" text-anchor="start" fill="#333">前端组件</text>
+  
+  <rect x="630" y="230" width="20" height="15" fill="#e8f5e9" stroke="#4CAF50" stroke-width="1"/>
+  <text x="705" y="242" font-family="Arial, sans-serif" font-size="12" text-anchor="start" fill="#333">控制器</text>
+</svg>

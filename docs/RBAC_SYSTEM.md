@@ -10,7 +10,7 @@ RBAC（Role-Based Access Control，基于角色的访问控制）是一种广泛
 
 系统采用用户-角色-权限三层结构，通过关联表实现多对多关系。以下是详细的实体关系图：
 
-![RBAC实体关系图](rbac_relationship.svg)
+![RBAC实体关系图](images/rbac_relationship.svg)
 
 图中展示了以下核心关系：
 - 用户(User)与用户角色关联表(UserRole)是1:n关系：一个用户可以拥有多个角色

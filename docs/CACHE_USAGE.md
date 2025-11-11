@@ -32,7 +32,7 @@ Spring Cache支持多种缓存类型，常用的包括：
 
 Spring Cache的工作流程涉及缓存查询、更新和删除操作。以下是缓存工作的完整流程图：
 
-![缓存工作流程图](cache_workflow.svg)
+![缓存工作流程图](images/cache_workflow.svg)
 
 该流程图展示了：
 1. 客户端向服务层发起请求
