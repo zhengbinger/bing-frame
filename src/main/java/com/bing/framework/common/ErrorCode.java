@@ -41,6 +41,8 @@ public enum ErrorCode {
     FORBIDDEN(5001, "error.forbidden"),
     INVALID_TOKEN(5002, "error.token.invalid"),
     TOKEN_BLACKLISTED(5003, "error.token.blacklisted"),
+    INVALID_REFRESH_TOKEN(5005, "error.refresh_token.invalid"),
+    REFRESH_TOKEN_FAILED(5006, "error.refresh_token.failed"),
     LOGOUT_FAILED(5004, "error.logout.failed"),
     
     // 未知错误

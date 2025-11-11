@@ -13,7 +13,7 @@ import java.util.concurrent.TimeUnit;
 
 /**
  * JWT工具类
- * 提供JWT令牌的生成、解析和验证功能
+ * 提供JWT令牌的生成、解析、验证和刷新功能
  * 
  * @author zhengbing
  * @date 2025-11-05
@@ -32,13 +32,19 @@ public class JwtUtil {
      */
     @Value("${jwt.expiration:24}")
     private Integer expiration;
+    
+    /**
+     * 刷新令牌过期时间（小时）
+     */
+    @Value("${jwt.refresh.expiration:72}")
+    private Integer refreshExpiration;
 
     /**
-     * 生成JWT令牌
+     * 生成访问令牌
      * 
      * @param userId 用户ID
      * @param username 用户名
-     * @return JWT令牌
+     * @return 访问令牌
      */
     public String generateToken(Long userId, String username) {
         // 设置过期时间
@@ -48,8 +54,35 @@ public class JwtUtil {
         Map<String, Object> claims = new HashMap<>();
         claims.put("userId", userId);
         claims.put("username", username);
+        claims.put("type", "access");
         
         // 生成JWT令牌
+        return Jwts.builder()
+                .setClaims(claims)
+                .setIssuedAt(new Date())
+                .setExpiration(expirationDate)
+                .signWith(SignatureAlgorithm.HS512, secret)
+                .compact();
+    }
+    
+    /**
+     * 生成刷新令牌
+     * 
+     * @param userId 用户ID
+     * @param username 用户名
+     * @return 刷新令牌
+     */
+    public String generateRefreshToken(Long userId, String username) {
+        // 设置过期时间
+        Date expirationDate = new Date(System.currentTimeMillis() + TimeUnit.HOURS.toMillis(refreshExpiration));
+        
+        // 设置Claims
+        Map<String, Object> claims = new HashMap<>();
+        claims.put("userId", userId);
+        claims.put("username", username);
+        claims.put("type", "refresh");
+        
+        // 生成JWT刷新令牌
         return Jwts.builder()
                 .setClaims(claims)
                 .setIssuedAt(new Date())
@@ -94,7 +127,7 @@ public class JwtUtil {
     }
 
     /**
-     * 验证JWT令牌是否有效
+     * 验证访问令牌是否有效
      * 
      * @param token JWT令牌
      * @return 是否有效
@@ -103,9 +136,42 @@ public class JwtUtil {
         try {
             Claims claims = parseToken(token);
             // 检查是否过期
-            return !claims.getExpiration().before(new Date());
+            if (claims.getExpiration().before(new Date())) {
+                return false;
+            }
+            // 检查令牌类型
+            return "access".equals(claims.get("type"));
         } catch (Exception e) {
             return false;
         }
+    }
+    
+    /**
+     * 验证刷新令牌是否有效
+     * 
+     * @param refreshToken 刷新令牌
+     * @return 是否有效
+     */
+    public boolean validateRefreshToken(String refreshToken) {
+        try {
+            Claims claims = parseToken(refreshToken);
+            // 检查是否过期
+            if (claims.getExpiration().before(new Date())) {
+                return false;
+            }
+            // 检查令牌类型
+            return "refresh".equals(claims.get("type"));
+        } catch (Exception e) {
+            return false;
+        }
+    }
+    
+    /**
+     * 获取刷新令牌过期时间
+     * 
+     * @return 刷新令牌过期时间（小时）
+     */
+    public Integer getRefreshExpiration() {
+        return refreshExpiration;
     }
 }

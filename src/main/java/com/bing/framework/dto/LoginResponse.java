@@ -6,6 +6,7 @@ import lombok.Data;
 
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 /**
  * 登录响应DTO
@@ -19,16 +20,28 @@ import java.util.List;
 public class LoginResponse {
 
     /**
-     * JWT令牌
+     * JWT访问令牌
      */
     @ApiModelProperty(value = "token", notes = "JWT访问令牌，后续请求需携带此令牌", dataType = "String")
     private String token;
+    
+    /**
+     * 刷新令牌
+     */
+    @ApiModelProperty(value = "refreshToken", notes = "用于刷新访问令牌的刷新令牌", dataType = "String")
+    private String refreshToken;
 
     /**
-     * 过期时间
+     * 访问令牌过期时间
      */
-    @ApiModelProperty(value = "expiration", notes = "令牌过期时间", dataType = "Date")
+    @ApiModelProperty(value = "expiration", notes = "访问令牌过期时间", dataType = "Date")
     private Date expiration;
+    
+    /**
+     * 刷新令牌过期时间
+     */
+    @ApiModelProperty(value = "refreshExpiration", notes = "刷新令牌过期时间", dataType = "Date")
+    private Date refreshExpiration;
 
     /**
      * 用户ID

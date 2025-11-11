@@ -7,14 +7,15 @@ import com.bing.framework.util.JwtUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
-import org.springframework.util.AntPathMatcher;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.concurrent.TimeUnit;
 
 /**
  * JWT拦截器
@@ -36,6 +37,10 @@ public class JwtInterceptor implements HandlerInterceptor {
     private WhiteListService whiteListService;
     
     private static final String TOKEN_BLACKLIST_PREFIX = "token:blacklist:";
+    private static final String USER_TOKEN_PREFIX = "user:token:";
+    
+    @Value("${jwt.expiration:24}")
+    private Integer jwtExpiration;
     
     // 日志记录器
     private static final Logger log = LoggerFactory.getLogger(JwtInterceptor.class);
@@ -61,6 +66,7 @@ public class JwtInterceptor implements HandlerInterceptor {
         
         // 检查Authorization请求头是否存在
         if (authorization == null || !authorization.startsWith("Bearer ")) {
+            log.warn("请求缺少有效的Authorization头");
             throw new BusinessException(ErrorCode.UNAUTHORIZED);
         }
         
@@ -69,20 +75,49 @@ public class JwtInterceptor implements HandlerInterceptor {
         
         // 检查令牌是否在黑名单中
         String blacklistKey = TOKEN_BLACKLIST_PREFIX + token;
-        if (redisTemplate.hasKey(blacklistKey)) {
+        if (Boolean.TRUE.equals(redisTemplate.hasKey(blacklistKey))) {
+            log.warn("Token已被加入黑名单");
             throw new BusinessException(ErrorCode.TOKEN_BLACKLISTED);
         }
         
-        // 验证JWT令牌
-        if (!jwtUtil.validateToken(token)) {
+        try {
+            // 验证JWT令牌是否有效且为access类型
+            if (!jwtUtil.validateToken(token)) {
+                log.warn("Token验证失败或不是有效的访问令牌");
+                throw new BusinessException(ErrorCode.INVALID_TOKEN);
+            }
+            
+            // 从token中获取用户信息
+            Long userId = jwtUtil.getUserIdFromToken(token);
+            String username = jwtUtil.getUsernameFromToken(token);
+            
+            // 检查Redis中是否存在该用户的有效token
+            String userTokenKey = USER_TOKEN_PREFIX + userId;
+            if (Boolean.TRUE.equals(redisTemplate.hasKey(userTokenKey))) {
+                String redisToken = (String) redisTemplate.opsForValue().get(userTokenKey);
+                // 验证请求中的token是否与Redis中保存的token一致
+                if (!token.equals(redisToken)) {
+                    log.warn("Token已失效或被替换");
+                    throw new BusinessException(ErrorCode.INVALID_TOKEN);
+                }
+            } else {
+                log.warn("未找到用户对应的有效Token");
+                throw new BusinessException(ErrorCode.INVALID_TOKEN);
+            }
+            
+            // 将用户信息存储到请求属性中
+            request.setAttribute("userId", userId);
+            request.setAttribute("username", username);
+            
+            log.debug("Token验证通过，用户ID: {}, 用户名: {}", userId, username);
+            
+            return true;
+        } catch (BusinessException e) {
+            throw e;
+        } catch (Exception e) {
+            log.error("Token处理异常: {}", e.getMessage());
             throw new BusinessException(ErrorCode.INVALID_TOKEN);
         }
-        
-        // 将用户信息存储到请求属性中
-        request.setAttribute("userId", jwtUtil.getUserIdFromToken(token));
-        request.setAttribute("username", jwtUtil.getUsernameFromToken(token));
-        
-        return true;
     }
 
     @Override

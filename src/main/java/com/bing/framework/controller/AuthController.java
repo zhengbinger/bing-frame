@@ -5,9 +5,11 @@ import com.bing.framework.common.Result;
 import com.bing.framework.dto.LoginRequest;
 import com.bing.framework.dto.LoginResponse;
 import com.bing.framework.dto.RegisterRequest;
+import com.bing.framework.entity.LoginRecord;
 import com.bing.framework.entity.Role;
 import com.bing.framework.entity.User;
 import com.bing.framework.exception.BusinessException;
+import com.bing.framework.service.LoginRecordService;
 import com.bing.framework.service.RoleService;
 import com.bing.framework.service.UserService;
 import com.bing.framework.util.JwtUtil;
@@ -51,12 +53,17 @@ public class AuthController {
     private static final Logger log = LoggerFactory.getLogger(AuthController.class);
     
     private static final String TOKEN_BLACKLIST_PREFIX = "token:blacklist:";
+    private static final String USER_TOKEN_PREFIX = "user:token:";
+    private static final String REFRESH_TOKEN_PREFIX = "refresh:token:";
 
     @Autowired
     private UserService userService;
 
     @Autowired
     private RoleService roleService;
+
+    @Autowired
+    private LoginRecordService loginRecordService;
 
     @Autowired
     private JwtUtil jwtUtil;
@@ -85,19 +92,23 @@ public class AuthController {
         @ApiResponse(code = 500, message = "登录失败")
     })
     @PostMapping("/login")
-    public Result<LoginResponse> login(@ApiParam(name = "loginRequest", value = "登录请求数据", required = true) @Validated @RequestBody LoginRequest loginRequest) {
+    public Result<LoginResponse> login(@ApiParam(name = "loginRequest", value = "登录请求数据", required = true) @Validated @RequestBody LoginRequest loginRequest, HttpServletRequest request) {
         // 根据用户名查询用户
         User user = userService.getUserByUsername(loginRequest.getUsername());
         
         // 检查用户是否存在
         if (user == null) {
             log.info("Login failed: user not found, username={}", loginRequest.getUsername());
+            // 记录失败的登录日志
+            recordLoginRecord(request, loginRequest.getUsername(), null, 0, "用户不存在");
             throw new BusinessException(ErrorCode.USER_NOT_FOUND);
         }
         
         // 检查用户状态
         if (user.getStatus() == 0) {
             log.info("Login failed: user disabled, username={}", loginRequest.getUsername());
+            // 记录失败的登录日志
+            recordLoginRecord(request, loginRequest.getUsername(), user.getId(), 0, "用户已禁用");
             throw new BusinessException(ErrorCode.USER_DISABLED);
         }
         
@@ -205,13 +216,24 @@ public class AuthController {
         
         if (!passwordMatch) {
             log.info("Password validation failed for user: {}", user.getUsername());
+            // 记录失败的登录日志
+            recordLoginRecord(request, loginRequest.getUsername(), user.getId(), 0, "密码错误");
             throw new BusinessException(ErrorCode.INCORRECT_PASSWORD);
         }
         
         log.info("Password validation successful for user: {}", user.getUsername());
         
-        // 生成JWT令牌
-        String token = jwtUtil.generateToken(user.getId(), user.getUsername());
+        // 生成JWT访问令牌和刷新令牌
+        String accessToken = jwtUtil.generateToken(user.getId(), user.getUsername());
+        String refreshToken = jwtUtil.generateRefreshToken(user.getId(), user.getUsername());
+        
+        // 将访问令牌保存到Redis，设置过期时间
+        String userTokenKey = USER_TOKEN_PREFIX + user.getId();
+        redisTemplate.opsForValue().set(userTokenKey, accessToken, jwtExpiration, TimeUnit.HOURS);
+        
+        // 将刷新令牌保存到Redis，设置过期时间
+        String refreshTokenKey = REFRESH_TOKEN_PREFIX + refreshToken;
+        redisTemplate.opsForValue().set(refreshTokenKey, user.getId(), jwtUtil.getRefreshExpiration(), TimeUnit.HOURS);
         
         // 获取用户角色列表
         List<Role> roles = roleService.getRolesByUserId(user.getId());
@@ -221,12 +243,17 @@ public class AuthController {
         
         // 构建登录响应
         LoginResponse response = new LoginResponse();
-        response.setToken(token);
-        response.setExpiration(new Date(System.currentTimeMillis() + TimeUnit.HOURS.toMillis(24)));
+        response.setToken(accessToken);
+        response.setRefreshToken(refreshToken);
+        response.setExpiration(new Date(System.currentTimeMillis() + TimeUnit.HOURS.toMillis(jwtExpiration)));
+        response.setRefreshExpiration(new Date(System.currentTimeMillis() + TimeUnit.HOURS.toMillis(jwtUtil.getRefreshExpiration())));
         response.setUserId(user.getId());
         response.setUsername(user.getUsername());
         response.setNickname(user.getNickname());
         response.setRoles(roleCodes);
+        
+        // 记录成功的登录日志
+        recordLoginRecord(request, user.getUsername(), user.getId(), 1, "登录成功");
         
         return Result.success(response);
     }
@@ -338,11 +365,144 @@ public class AuthController {
             String blacklistKey = TOKEN_BLACKLIST_PREFIX + token;
             redisTemplate.opsForValue().set(blacklistKey, userId, jwtExpiration, TimeUnit.HOURS);
             
+            // 删除用户的访问令牌缓存
+            String userTokenKey = USER_TOKEN_PREFIX + userId;
+            redisTemplate.delete(userTokenKey);
+            
             log.info("用户注销成功，用户ID: {}, 用户名: {}", userId, username);
             return Result.success("注销成功");
         } catch (Exception e) {
             log.error("用户注销失败", e);
             throw new BusinessException(ErrorCode.LOGOUT_FAILED);
         }
+    }
+    
+    /**
+     * 刷新访问令牌
+     * 
+     * @param refreshToken 刷新令牌
+     * @return 新的访问令牌和刷新令牌
+     */
+    @ApiOperation(value = "刷新访问令牌", notes = "使用刷新令牌获取新的访问令牌")
+    @ApiResponses({
+        @ApiResponse(code = 200, message = "刷新成功"),
+        @ApiResponse(code = 401, message = "刷新令牌无效或已过期"),
+        @ApiResponse(code = 500, message = "刷新失败")
+    })
+    @PostMapping("/refresh")
+    public Result<LoginResponse> refreshToken(@ApiParam(name = "refreshToken", value = "刷新令牌", required = true) @RequestParam String refreshToken) {
+        try {
+            // 验证刷新令牌是否有效
+            if (!jwtUtil.validateRefreshToken(refreshToken)) {
+                log.info("Invalid refresh token");
+                throw new BusinessException(ErrorCode.INVALID_REFRESH_TOKEN);
+            }
+            
+            // 检查刷新令牌是否在Redis中存在
+            String refreshTokenKey = REFRESH_TOKEN_PREFIX + refreshToken;
+            if (!redisTemplate.hasKey(refreshTokenKey)) {
+                log.info("Refresh token not found in Redis");
+                throw new BusinessException(ErrorCode.INVALID_REFRESH_TOKEN);
+            }
+            
+            // 从刷新令牌中获取用户信息
+            Long userId = jwtUtil.getUserIdFromToken(refreshToken);
+            String username = jwtUtil.getUsernameFromToken(refreshToken);
+            
+            // 验证用户是否存在
+            User user = userService.getUserById(userId);
+            if (user == null || user.getStatus() == 0) {
+                log.info("User not found or disabled");
+                // 删除无效的刷新令牌
+                redisTemplate.delete(refreshTokenKey);
+                throw new BusinessException(ErrorCode.USER_NOT_FOUND);
+            }
+            
+            // 生成新的访问令牌
+            String newAccessToken = jwtUtil.generateToken(userId, username);
+            
+            // 更新Redis中的访问令牌
+            String userTokenKey = USER_TOKEN_PREFIX + userId;
+            redisTemplate.opsForValue().set(userTokenKey, newAccessToken, jwtExpiration, TimeUnit.HOURS);
+            
+            // 获取用户角色列表
+            List<Role> roles = roleService.getRolesByUserId(userId);
+            List<String> roleCodes = roles.stream()
+                    .map(Role::getCode)
+                    .collect(Collectors.toList());
+            
+            // 构建响应
+            LoginResponse response = new LoginResponse();
+            response.setToken(newAccessToken);
+            response.setRefreshToken(refreshToken); // 保留原有的刷新令牌
+            response.setExpiration(new Date(System.currentTimeMillis() + TimeUnit.HOURS.toMillis(jwtExpiration)));
+            response.setRefreshExpiration(new Date(System.currentTimeMillis() + TimeUnit.HOURS.toMillis(jwtUtil.getRefreshExpiration())));
+            response.setUserId(userId);
+            response.setUsername(username);
+            response.setNickname(user.getNickname());
+            response.setRoles(roleCodes);
+            
+            log.info("Token refreshed successfully for user: {}", username);
+            return Result.success(response);
+        } catch (BusinessException e) {
+            throw e;
+        } catch (Exception e) {
+            log.error("Failed to refresh token", e);
+            throw new BusinessException(ErrorCode.REFRESH_TOKEN_FAILED);
+        }
+    }
+    
+    /**
+     * 记录登录日志
+     * 
+     * @param request HTTP请求
+     * @param username 用户名
+     * @param userId 用户ID
+     * @param status 登录状态：0-失败，1-成功
+     * @param message 登录结果描述
+     */
+    private void recordLoginRecord(HttpServletRequest request, String username, Long userId, Integer status, String message) {
+        try {
+            LoginRecord loginRecord = new LoginRecord();
+            loginRecord.setUsername(username);
+            if (userId != null) {
+                loginRecord.setUserId(userId);
+            }
+            loginRecord.setStatus(status);
+            loginRecord.setMessage(message);
+            loginRecord.setIpAddress(getClientIp(request));
+            loginRecord.setUserAgent(request.getHeader("User-Agent"));
+            loginRecord.setLoginTime(new Date());
+            
+            // 异步记录登录记录
+            loginRecordService.saveLoginRecord(loginRecord);
+        } catch (Exception e) {
+            // 记录登录日志失败不应影响主流程
+            log.error("Failed to record login log", e);
+        }
+    }
+    
+    /**
+     * 获取客户端真实IP地址
+     * 
+     * @param request HTTP请求
+     * @return 客户端IP地址
+     */
+    private String getClientIp(HttpServletRequest request) {
+        String ip = request.getHeader("X-Forwarded-For");
+        if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
+            ip = request.getHeader("Proxy-Client-IP");
+        }
+        if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
+            ip = request.getHeader("WL-Proxy-Client-IP");
+        }
+        if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
+            ip = request.getRemoteAddr();
+        }
+        // 处理多个代理的情况，取第一个IP
+        if (ip != null && ip.contains(",")) {
+            ip = ip.split(",")[0].trim();
+        }
+        return ip;
     }
 }
