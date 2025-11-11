@@ -68,6 +68,101 @@ CREATE TABLE IF NOT EXISTS audit_log (
 
 通过`@AuditLogLevel`注解，可以灵活控制不同接口的审计日志记录策略：
 
+## 5. 登录记录功能集成
+
+### 5.1 登录记录与审计日志的关系
+
+登录记录功能是审计日志系统的一个重要补充，专门用于记录用户的登录行为，提供更详细的登录信息追踪和安全审计能力。
+
+### 5.2 主要区别
+
+| 特性 | 审计日志 | 登录记录 |
+| :--- | :--- | :--- |
+| **记录范围** | 所有API操作 | 仅登录行为 |
+| **存储方式** | 单一`audit_log`表 | 专用`login_record`表 |
+| **详细程度** | 中等 | 高（包含IP、UserAgent等） |
+| **查询功能** | 通用查询 | 专用查询接口，支持多条件筛选 |
+| **保留策略** | 默认永久保留 | 支持定期清理（默认90天） |
+| **安全审计** | 全面操作审计 | 专注登录安全分析 |
+
+### 5.3 登录记录表结构
+
+```sql
+CREATE TABLE IF NOT EXISTS login_record (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY COMMENT '主键ID',
+    user_id BIGINT COMMENT '用户ID',
+    username VARCHAR(100) NOT NULL COMMENT '用户名',
+    ip_address VARCHAR(50) COMMENT '登录IP地址',
+    user_agent VARCHAR(500) COMMENT '用户代理信息',
+    login_time DATETIME NOT NULL COMMENT '登录时间',
+    status INT DEFAULT 1 COMMENT '登录状态：0-失败，1-成功',
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    INDEX idx_user_id (user_id),
+    INDEX idx_username (username),
+    INDEX idx_login_time (login_time),
+    INDEX idx_status (status)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='登录记录表';
+```
+
+### 5.4 集成方式
+
+#### 5.4.1 自动登录记录
+
+系统在`AuthController`中集成了登录记录功能，当用户执行登录操作时，会自动记录登录信息：
+
+1. 成功登录时记录成功状态和用户ID
+2. 登录失败时记录失败状态和尝试的用户名
+3. 同时记录IP地址、UserAgent等信息
+
+#### 5.4.2 手动记录登录信息
+
+在需要记录登录信息的地方，可以使用以下方式：
+
+```java
+// 创建登录记录
+LoginRecord loginRecord = new LoginRecord();
+loginRecord.setUserId(userId);
+loginRecord.setUsername(username);
+loginRecord.setIpAddress(ipAddress);
+loginRecord.setUserAgent(userAgent);
+loginRecord.setLoginTime(new Date());
+loginRecord.setStatus(status); // 0-失败，1-成功
+
+// 保存登录记录
+loginRecordService.saveLoginRecord(loginRecord);
+```
+
+### 5.5 安全功能
+
+登录记录功能增强了系统的安全审计能力：
+
+1. **异常登录检测**：通过分析登录记录，可以检测到异常的登录行为（如频繁失败、异常IP等）
+2. **登录统计分析**：可以统计登录成功率、活跃用户等信息
+3. **安全事件溯源**：当发生安全事件时，可以通过登录记录进行溯源分析
+4. **自动清理机制**：支持定期清理过期的登录记录，避免数据量过大
+
+### 5.6 配置与使用
+
+#### 5.6.1 清理策略配置
+
+在`LoginRecordController`中提供了清理过期记录的API接口，可以配置默认清理天数：
+
+```java
+// 默认清理90天前的记录
+@DeleteMapping("/clean")
+public Result<Map<String, Integer>> cleanExpiredRecords(@RequestParam(defaultValue = "90") Integer days) {
+    // 实现逻辑
+}
+```
+
+#### 5.6.2 与审计日志的协同工作
+
+登录操作会同时生成：
+1. 审计日志记录（记录操作过程）
+2. 登录记录（记录登录详情）
+
+这样可以从不同角度完整记录用户的登录行为，提供全方位的安全审计支持。
+
 ```java
 // 忽略某个方法的审计日志记录
 @AuditLogLevel(ignore = true)
@@ -98,6 +193,14 @@ public User getUserInfo(@PathVariable Long id) {
 }
 
 // 在类级别设置默认级别
+@RestController
+@RequestMapping("/api/user")
+@AuditLogLevel(AuditLogLevel.Level.BASIC)
+public class UserController {
+    // 类方法...
+}
+
+// 忽略整个控制器的审计日志
 @RestController
 @RequestMapping("/api/public")
 @AuditLogLevel(ignore = true)

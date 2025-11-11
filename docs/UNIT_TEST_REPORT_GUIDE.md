@@ -135,6 +135,48 @@ JaCoCo 报告包含以下关键覆盖率指标：
 3. **集成到 CI/CD**：在持续集成流程中集成测试报告生成和检查
 4. **关注质量而非数量**：覆盖率高不代表测试质量高，应注重测试的有效性
 5. **代码审查时参考**：代码审查过程中参考覆盖率报告，确保新增代码有足够的测试覆盖
+6. **为服务层编写完整测试**：服务层是业务逻辑的核心，应确保有完整的单元测试覆盖
+
+   **示例：LoginRecordServiceImplTest**
+   
+   我们为登录记录服务层创建了完整的单元测试，涵盖了所有主要方法：
+   
+   ```java
+   // 使用Mockito框架模拟依赖
+   @Mock
+   private LoginRecordMapper loginRecordMapper;
+   
+   @InjectMocks
+   private LoginRecordServiceImpl loginRecordService;
+   
+   // 测试保存登录记录方法
+   @Test
+   public void testSaveLoginRecord() {
+       // 准备测试数据
+       LoginRecord loginRecord = new LoginRecord();
+       loginRecord.setUsername("testuser");
+       loginRecord.setIpAddress("127.0.0.1");
+       
+       // 模拟mapper行为
+       when(loginRecordMapper.insert(loginRecord)).thenReturn(1);
+       
+       // 执行测试
+       boolean result = loginRecordService.saveLoginRecord(loginRecord);
+       
+       // 验证结果
+       assertTrue(result);
+       verify(loginRecordMapper).insert(loginRecord);
+   }
+   ```
+
+   **Mockito模拟测试最佳实践**：
+   
+   1. 使用`@Mock`注解模拟依赖对象，避免真实依赖
+   2. 使用`@InjectMocks`自动注入模拟对象到测试类中
+   3. 使用`when().thenReturn()`设置模拟对象的行为
+   4. 使用`verify()`验证方法是否被正确调用
+   5. 为不同场景编写独立的测试方法，确保测试的隔离性
+   6. 测试边界条件和异常情况，提高代码的健壮性
 
 ---
 
