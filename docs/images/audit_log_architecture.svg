@@ -1,0 +1,49 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="600" viewBox="0 0 800 600">
+  <rect width="800" height="600" fill="#f9f9f9" rx="10" ry="10"/>
+  
+  <!-- 标题 -->
+  <text x="400" y="50" font-family="Arial, sans-serif" font-size="24" font-weight="bold" text-anchor="middle" fill="#333">审计日志系统架构</text>
+  
+  <!-- 客户端层 -->
+  <rect x="300" y="100" width="200" height="60" fill="#4285f4" rx="5" ry="5"/>
+  <text x="400" y="135" font-family="Arial, sans-serif" font-size="16" text-anchor="middle" fill="white">应用服务层</text>
+  
+  <!-- AuditLogAspect -->
+  <rect x="100" y="200" width="180" height="50" fill="#34a853" rx="5" ry="5"/>
+  <text x="190" y="232" font-family="Arial, sans-serif" font-size="14" text-anchor="middle" fill="white">AuditLogAspect</text>
+  
+  <!-- AuditLogUtil -->
+  <rect x="310" y="200" width="180" height="50" fill="#34a853" rx="5" ry="5"/>
+  <text x="400" y="232" font-family="Arial, sans-serif" font-size="14" text-anchor="middle" fill="white">AuditLogUtil</text>
+  
+  <!-- AuditLogService -->
+  <rect x="520" y="200" width="180" height="50" fill="#34a853" rx="5" ry="5"/>
+  <text x="610" y="232" font-family="Arial, sans-serif" font-size="14" text-anchor="middle" fill="white">AuditLogService</text>
+  
+  <!-- 中间层 -->
+  <rect x="300" y="300" width="200" height="60" fill="#ea4335" rx="5" ry="5"/>
+  <text x="400" y="335" font-family="Arial, sans-serif" font-size="16" text-anchor="middle" fill="white">AuditLogBufferManager</text>
+  
+  <!-- 存储层 -->
+  <rect x="150" y="400" width="150" height="60" fill="#fbbc05" rx="5" ry="5"/>
+  <text x="225" y="435" font-family="Arial, sans-serif" font-size="14" text-anchor="middle" fill="#333">数据库</text>
+  
+  <rect x="500" y="400" width="150" height="60" fill="#fbbc05" rx="5" ry="5"/>
+  <text x="575" y="435" font-family="Arial, sans-serif" font-size="14" text-anchor="middle" fill="#333">AuditLogAppender</text>
+  
+  <!-- 连接线 -->
+  <line x1="400" y1="160" x2="190" y2="200" stroke="#666" stroke-width="2"/>
+  <line x1="400" y1="160" x2="400" y2="200" stroke="#666" stroke-width="2"/>
+  <line x1="400" y1="160" x2="610" y2="200" stroke="#666" stroke-width="2"/>
+  
+  <line x1="190" y1="250" x2="400" y2="300" stroke="#666" stroke-width="2"/>
+  <line x1="400" y1="250" x2="400" y2="300" stroke="#666" stroke-width="2"/>
+  <line x1="610" y1="250" x2="400" y2="300" stroke="#666" stroke-width="2"/>
+  
+  <line x1="400" y1="360" x2="225" y2="400" stroke="#666" stroke-width="2"/>
+  <line x1="400" y1="360" x2="575" y2="400" stroke="#666" stroke-width="2"/>
+  
+  <!-- 描述文本 -->
+  <text x="400" y="500" font-family="Arial, sans-serif" font-size="14" text-anchor="middle" fill="#666">高性能异步处理 + 批量写入策略</text>
+  <text x="400" y="530" font-family="Arial, sans-serif" font-size="14" text-anchor="middle" fill="#666">双重保障机制：数据库存储 + 日志Appender</text>
+</svg>

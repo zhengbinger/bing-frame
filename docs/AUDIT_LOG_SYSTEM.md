@@ -15,7 +15,7 @@
 
 ## 2. 系统架构
 
-![审计日志系统架构](https://example.com/audit-log-architecture.png)
+![审计日志系统架构](images/audit_log_architecture.svg)
 
 ### 2.1 核心组件
 
