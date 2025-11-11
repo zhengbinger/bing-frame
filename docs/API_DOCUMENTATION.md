@@ -191,3 +191,206 @@ public class User {
 
 - 确保为实体类字段添加了`@ApiModelProperty`注解
 - 检查`dataType`属性是否与实际类型匹配
+
+## 7. 新增功能接口说明
+
+### 7.1 登录记录管理接口
+
+#### 7.1.1 接口概述
+
+`LoginRecordController`提供了登录记录的查询、清理等RESTful API接口，用于管理用户登录历史记录。
+
+#### 7.1.2 接口列表
+
+| 接口路径 | 方法 | 功能描述 | 权限要求 |
+| :--- | :--- | :--- | :--- |
+| `/api/login-records` | `GET` | 获取登录记录列表（分页） | 需要管理员权限 |
+| `/api/login-records/user/{userId}` | `GET` | 获取指定用户的登录记录 | 需要管理员权限或用户本人 |
+| `/api/login-records/recent` | `GET` | 获取最近的登录记录 | 需要登录 |
+| `/api/login-records/failed` | `GET` | 获取失败的登录记录 | 需要管理员权限 |
+| `/api/login-records/clean` | `DELETE` | 清理过期的登录记录 | 需要管理员权限 |
+
+#### 7.1.3 详细接口说明
+
+**1. 获取登录记录列表**
+
+```
+GET /api/login-records
+```
+
+**请求参数**：
+- `page`：页码，从1开始
+- `size`：每页数量
+- `username`：可选，用户名搜索
+- `startTime`：可选，开始时间
+- `endTime`：可选，结束时间
+- `status`：可选，登录状态（0-失败，1-成功）
+
+**响应示例**：
+```json
+{
+  "code": 200,
+  "message": "success",
+  "data": {
+    "total": 100,
+    "records": [
+      {
+        "id": 1,
+        "userId": 1001,
+        "username": "admin",
+        "ipAddress": "192.168.1.100",
+        "userAgent": "Mozilla/5.0...",
+        "loginTime": "2025-11-11 10:30:00",
+        "status": 1
+      }
+    ],
+    "current": 1,
+    "pages": 10
+  }
+}
+```
+
+**2. 获取指定用户的登录记录**
+
+```
+GET /api/login-records/user/{userId}
+```
+
+**请求参数**：
+- `userId`：用户ID（路径参数）
+- `page`：页码
+- `size`：每页数量
+
+**响应示例**：
+```json
+{
+  "code": 200,
+  "message": "success",
+  "data": {
+    "total": 20,
+    "records": [
+      {
+        "id": 2,
+        "userId": 1001,
+        "username": "admin",
+        "ipAddress": "192.168.1.101",
+        "userAgent": "Chrome/90.0...",
+        "loginTime": "2025-11-10 15:45:00",
+        "status": 1
+      }
+    ],
+    "current": 1,
+    "pages": 2
+  }
+}
+```
+
+**3. 获取最近的登录记录**
+
+```
+GET /api/login-records/recent
+```
+
+**请求参数**：
+- `limit`：限制返回数量，默认10条
+
+**响应示例**：
+```json
+{
+  "code": 200,
+  "message": "success",
+  "data": [
+    {
+      "id": 3,
+      "userId": 1002,
+      "username": "user1",
+      "ipAddress": "192.168.1.102",
+      "userAgent": "Safari/14.0...",
+      "loginTime": "2025-11-11 09:20:00",
+      "status": 1
+    }
+  ]
+}
+```
+
+**4. 获取失败的登录记录**
+
+```
+GET /api/login-records/failed
+```
+
+**请求参数**：
+- `days`：查询最近多少天，默认7天
+- `page`：页码
+- `size`：每页数量
+
+**响应示例**：
+```json
+{
+  "code": 200,
+  "message": "success",
+  "data": {
+    "total": 5,
+    "records": [
+      {
+        "id": 4,
+        "userId": null,
+        "username": "admin",
+        "ipAddress": "192.168.1.103",
+        "userAgent": "Mozilla/5.0...",
+        "loginTime": "2025-11-11 08:15:00",
+        "status": 0
+      }
+    ],
+    "current": 1,
+    "pages": 1
+  }
+}
+```
+
+**5. 清理过期的登录记录**
+
+```
+DELETE /api/login-records/clean
+```
+
+**请求参数**：
+- `days`：清理多少天前的记录，默认90天
+
+**响应示例**：
+```json
+{
+  "code": 200,
+  "message": "success",
+  "data": {
+    "deletedCount": 150
+  }
+}
+```
+
+#### 7.1.4 相关实体类
+
+**LoginRecordQueryDTO**
+用于封装登录记录的查询条件：
+
+| 字段名 | 类型 | 描述 |
+| :--- | :--- | :--- |
+| `page` | Integer | 页码 |
+| `size` | Integer | 每页数量 |
+| `username` | String | 用户名 |
+| `startTime` | String | 开始时间 |
+| `endTime` | String | 结束时间 |
+| `status` | Integer | 登录状态 |
+
+**LoginRecord**
+登录记录实体类：
+
+| 字段名 | 类型 | 描述 |
+| :--- | :--- | :--- |
+| `id` | Long | 记录ID |
+| `userId` | Long | 用户ID |
+| `username` | String | 用户名 |
+| `ipAddress` | String | IP地址 |
+| `userAgent` | String | 用户代理信息 |
+| `loginTime` | Date | 登录时间 |
+| `status` | Integer | 登录状态（0-失败，1-成功） |
