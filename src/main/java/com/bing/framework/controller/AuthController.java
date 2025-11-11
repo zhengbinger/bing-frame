@@ -1,7 +1,9 @@
 package com.bing.framework.controller;
 
+import com.bing.framework.annotation.AuditLogLevel;
 import com.bing.framework.common.ErrorCode;
 import com.bing.framework.common.Result;
+import com.bing.framework.context.RequestContext;
 import com.bing.framework.context.UserContext;
 import com.bing.framework.dto.LoginRequest;
 import com.bing.framework.dto.LoginResponse;
@@ -34,6 +36,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Date;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Set;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
@@ -47,6 +50,7 @@ import java.util.stream.Collectors;
 @Api(tags = "认证管理", description = "提供用户登录、注册、注销和获取当前用户信息等认证相关功能")
 @RestController
 @RequestMapping("/api/auth")
+@AuditLogLevel(module="认证管理" ,description = "用户登录、注册、注销和获取当前用户信息等认证相关功能")
 public class AuthController {
     
 
@@ -156,17 +160,47 @@ public class AuthController {
         
         log.info("Password validation successful for user: {}", user.getUsername());
         
-        // 生成JWT访问令牌和刷新令牌
-        String accessToken = jwtUtil.generateToken(user.getId(), user.getUsername());
-        String refreshToken = jwtUtil.generateRefreshToken(user.getId(), user.getUsername());
-        
-        // 将访问令牌保存到Redis，设置过期时间
+        // 优先从缓存中获取token，如果没有则生成新的
         String userTokenKey = USER_TOKEN_PREFIX + user.getId();
-        redisTemplate.opsForValue().set(userTokenKey, accessToken, jwtExpiration, TimeUnit.HOURS);
+        String accessToken = (String) redisTemplate.opsForValue().get(userTokenKey);
+        String refreshToken = null;
         
-        // 将刷新令牌保存到Redis，设置过期时间
-        String refreshTokenKey = REFRESH_TOKEN_PREFIX + refreshToken;
-        redisTemplate.opsForValue().set(refreshTokenKey, user.getId(), jwtUtil.getRefreshExpiration(), TimeUnit.HOURS);
+        // 检查token是否存在且有效
+        if (accessToken != null && jwtUtil.validateToken(accessToken)) {
+            log.info("从缓存获取到有效的访问令牌，用户ID: {}", user.getId());
+            
+            // 查找对应的刷新令牌
+            Set<String> keys = redisTemplate.keys(REFRESH_TOKEN_PREFIX + "*");
+            if (keys != null) {
+                for (String key : keys) {
+                    if (user.getId().equals(redisTemplate.opsForValue().get(key))) {
+                        refreshToken = key.substring(REFRESH_TOKEN_PREFIX.length());
+                        break;
+                    }
+                }
+            }
+            
+            // 如果找不到刷新令牌或刷新令牌无效，重新生成
+            if (refreshToken == null || !jwtUtil.validateRefreshToken(refreshToken)) {
+                refreshToken = jwtUtil.generateRefreshToken(user.getId(), user.getUsername());
+                String refreshTokenKey = REFRESH_TOKEN_PREFIX + refreshToken;
+                redisTemplate.opsForValue().set(refreshTokenKey, user.getId(), jwtUtil.getRefreshExpiration(), TimeUnit.HOURS);
+                log.info("刷新令牌不存在或无效，重新生成，用户ID: {}", user.getId());
+            }
+        } else {
+            // 生成新的JWT访问令牌和刷新令牌
+            accessToken = jwtUtil.generateToken(user.getId(), user.getUsername());
+            refreshToken = jwtUtil.generateRefreshToken(user.getId(), user.getUsername());
+            
+            // 将访问令牌保存到Redis，设置过期时间
+            redisTemplate.opsForValue().set(userTokenKey, accessToken, jwtExpiration, TimeUnit.HOURS);
+            
+            // 将刷新令牌保存到Redis，设置过期时间
+            String refreshTokenKey = REFRESH_TOKEN_PREFIX + refreshToken;
+            redisTemplate.opsForValue().set(refreshTokenKey, user.getId(), jwtUtil.getRefreshExpiration(), TimeUnit.HOURS);
+            
+            log.info("生成新的访问令牌和刷新令牌，用户ID: {}", user.getId());
+        }
         
         // 获取用户角色列表
         List<Role> roles = roleService.getRolesByUserId(user.getId());
@@ -295,8 +329,8 @@ public class AuthController {
             String token = authorization.substring(7);
             
             // 获取用户信息，用于日志记录
-            Long userId = (Long) request.getAttribute("userId");
-            String username = (String) request.getAttribute("username");
+            Long userId = (Long) RequestContext.getRequest().getAttribute("userId");
+            String username = (String) RequestContext.getRequest().getAttribute("username");
             
             // 将令牌加入黑名单，设置与原令牌相同的过期时间
             String blacklistKey = TOKEN_BLACKLIST_PREFIX + token;
