@@ -1,6 +1,7 @@
 package com.bing.framework.config;
 
 import com.bing.framework.interceptor.JwtInterceptor;
+import com.bing.framework.interceptor.UserContextCleanupInterceptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
@@ -25,12 +26,16 @@ public class WebConfig implements WebMvcConfigurer {
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         // 注册JWT拦截器
-       registry.addInterceptor(jwtInterceptor)
+        registry.addInterceptor(jwtInterceptor)
                 // 设置需要拦截的路径
-               .addPathPatterns("/api/**")
+                .addPathPatterns("/api/**")
                 // 设置不需要拦截的路径
                 .excludePathPatterns("/static/**", "/swagger-resources/**", "/webjars/**",
-                       "/v2/api-docs", "/doc.html", "/knife4j/**", "/swagger-ui/**",
-                       "/v3/api-docs/**", "/swagger-ui.html","/favicon.ico","/error");
+                        "/v2/api-docs", "/doc.html", "/knife4j/**", "/swagger-ui/**",
+                        "/v3/api-docs/**", "/swagger-ui.html","/favicon.ico","/error");
+        
+        // 注册用户上下文清理拦截器，应用于所有请求
+        registry.addInterceptor(new UserContextCleanupInterceptor())
+                .addPathPatterns("/**");
     }
 }

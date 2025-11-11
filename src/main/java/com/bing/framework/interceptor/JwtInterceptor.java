@@ -109,6 +109,9 @@ public class JwtInterceptor implements HandlerInterceptor {
             request.setAttribute("userId", userId);
             request.setAttribute("username", username);
             
+            // 设置用户上下文信息
+            com.bing.framework.context.UserContext.setUserInfo(userId, username);
+            
             log.debug("Token验证通过，用户ID: {}, 用户名: {}", userId, username);
             
             return true;

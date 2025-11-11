@@ -252,6 +252,10 @@ public class AuthController {
         response.setNickname(user.getNickname());
         response.setRoles(roleCodes);
         
+        // 设置用户上下文信息
+        com.bing.framework.context.UserContext.setUser(user);
+        com.bing.framework.context.UserContext.setRoles(roleCodes);
+        
         // 记录成功的登录日志
         recordLoginRecord(request, user.getUsername(), user.getId(), 1, "登录成功");
         
@@ -370,6 +374,10 @@ public class AuthController {
             redisTemplate.delete(userTokenKey);
             
             log.info("用户注销成功，用户ID: {}, 用户名: {}", userId, username);
+            
+            // 清理用户上下文信息
+            com.bing.framework.context.UserContext.clear();
+            
             return Result.success("注销成功");
         } catch (Exception e) {
             log.error("用户注销失败", e);
