@@ -1,0 +1,77 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="600" viewBox="0 0 800 600">
+  <!-- 标题 -->
+  <text x="400" y="30" font-family="Arial, sans-serif" font-size="20" font-weight="bold" text-anchor="middle">数据库配置导入导出系统架构图</text>
+  
+  <!-- 表现层 -->
+  <rect x="100" y="80" width="200" height="100" rx="10" fill="#e1f5fe" stroke="#0288d1" stroke-width="2"/>
+  <text x="200" y="120" font-family="Arial, sans-serif" font-size="16" font-weight="bold" text-anchor="middle">配置管理界面</text>
+  <text x="200" y="140" font-family="Arial, sans-serif" font-size="14" text-anchor="middle">(Vue.js)</text>
+  <text x="200" y="160" font-family="Arial, sans-serif" font-size="12" text-anchor="middle">用户交互、数据展示</text>
+  
+  <!-- 控制层 -->
+  <rect x="400" y="80" width="200" height="100" rx="10" fill="#e8f5e8" stroke="#388e3c" stroke-width="2"/>
+  <text x="500" y="120" font-family="Arial, sans-serif" font-size="16" font-weight="bold" text-anchor="middle">统一处理器层</text>
+  <text x="500" y="140" font-family="Arial, sans-serif" font-size="14" text-anchor="middle">(Import/Export)</text>
+  <text x="500" y="160" font-family="Arial, sans-serif" font-size="12" text-anchor="middle">请求路由、流程控制</text>
+  
+  <!-- 服务层 -->
+  <rect x="100" y="230" width="200" height="100" rx="10" fill="#fff3e0" stroke="#f57c00" stroke-width="2"/>
+  <text x="200" y="270" font-family="Arial, sans-serif" font-size="16" font-weight="bold" text-anchor="middle">配置服务层</text>
+  <text x="200" y="290" font-family="Arial, sans-serif" font-size="14" text-anchor="middle">(Config Service)</text>
+  <text x="200" y="310" font-family="Arial, sans-serif" font-size="12" text-anchor="middle">业务逻辑实现</text>
+  
+  <!-- 映射层 -->
+  <rect x="400" y="230" width="200" height="100" rx="10" fill="#f3e5f5" stroke="#7b1fa2" stroke-width="2"/>
+  <text x="500" y="270" font-family="Arial, sans-serif" font-size="16" font-weight="bold" text-anchor="middle">动态实体映射</text>
+  <text x="500" y="290" font-family="Arial, sans-serif" font-size="14" text-anchor="middle">(Dynamic Mapping)</text>
+  <text x="500" y="310" font-family="Arial, sans-serif" font-size="12" text-anchor="middle">数据结构转换</text>
+  
+  <!-- 存储层 -->
+  <rect x="100" y="380" width="200" height="100" rx="10" fill="#ffebee" stroke="#d32f2f" stroke-width="2"/>
+  <text x="200" y="420" font-family="Arial, sans-serif" font-size="16" font-weight="bold" text-anchor="middle">数据存储层</text>
+  <text x="200" y="440" font-family="Arial, sans-serif" font-size="14" text-anchor="middle">(数据库)</text>
+  <text x="200" y="460" font-family="Arial, sans-serif" font-size="12" text-anchor="middle">配置信息持久化</text>
+  
+  <!-- 任务层 -->
+  <rect x="400" y="380" width="200" height="100" rx="10" fill="#e0f2f1" stroke="#00796b" stroke-width="2"/>
+  <text x="500" y="420" font-family="Arial, sans-serif" font-size="16" font-weight="bold" text-anchor="middle">任务管理</text>
+  <text x="500" y="440" font-family="Arial, sans-serif" font-size="14" text-anchor="middle">(Async Tasks)</text>
+  <text x="500" y="460" font-family="Arial, sans-serif" font-size="12" text-anchor="middle">异步任务处理</text>
+  
+  <!-- 连接箭头 -->
+  <defs>
+    <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#666"/>
+    </marker>
+  </defs>
+  
+  <!-- 表现层到控制层 -->
+  <line x1="300" y1="130" x2="400" y2="130" stroke="#666" stroke-width="2" marker-end="url(#arrowhead)"/>
+  <line x1="400" y1="170" x2="300" y2="170" stroke="#666" stroke-width="2" marker-end="url(#arrowhead)"/>
+  <text x="350" y="120" font-family="Arial, sans-serif" font-size="12" text-anchor="middle">请求</text>
+  <text x="350" y="180" font-family="Arial, sans-serif" font-size="12" text-anchor="middle">响应</text>
+  
+  <!-- 控制层到服务层 -->
+  <line x1="500" y1="180" x2="500" y2="230" stroke="#666" stroke-width="2" marker-end="url(#arrowhead)"/>
+  
+  <!-- 服务层到映射层 -->
+  <line x1="300" y1="280" x2="400" y2="280" stroke="#666" stroke-width="2" marker-end="url(#arrowhead)"/>
+  
+  <!-- 映射层到存储层 -->
+  <line x1="400" y1="330" x2="200" y2="380" stroke="#666" stroke-width="2" marker-end="url(#arrowhead)"/>
+  
+  <!-- 存储层到任务层 -->
+  <line x1="300" y1="430" x2="400" y2="430" stroke="#666" stroke-width="2" marker-end="url(#arrowhead)"/>
+  
+  <!-- 任务层到控制层 -->
+  <line x1="500" y1="380" x2="500" y2="180" stroke="#666" stroke-width="2" stroke-dasharray="5,5" marker-end="url(#arrowhead)"/>
+  <text x="520" y="280" font-family="Arial, sans-serif" font-size="12" text-anchor="start">任务状态</text>
+  
+  <!-- 图例 -->
+  <rect x="650" y="150" width="120" height="300" rx="10" fill="#f5f5f5" stroke="#999" stroke-width="1"/>
+  <text x="710" y="180" font-family="Arial, sans-serif" font-size="14" font-weight="bold" text-anchor="middle">图例</text>
+  <line x1="670" y1="210" x2="700" y2="210" stroke="#666" stroke-width="2" marker-end="url(#arrowhead)"/>
+  <text x="750" y="214" font-family="Arial, sans-serif" font-size="12" text-anchor="start">正常数据流</text>
+  <line x1="670" y1="240" x2="700" y2="240" stroke="#666" stroke-width="2" stroke-dasharray="5,5" marker-end="url(#arrowhead)"/>
+  <text x="750" y="244" font-family="Arial, sans-serif" font-size="12" text-anchor="start">状态反馈</text>
+</svg>

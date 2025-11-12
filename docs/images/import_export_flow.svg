@@ -1,0 +1,67 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="600" viewBox="0 0 800 600">
+  <!-- 标题 -->
+  <text x="400" y="30" font-family="Arial, sans-serif" font-size="20" font-weight="bold" text-anchor="middle">数据导入导出流程</text>
+  
+  <!-- 导入流程 -->
+  <text x="200" y="70" font-family="Arial, sans-serif" font-size="18" font-weight="bold" text-anchor="middle" fill="#0288d1">导入流程</text>
+  
+  <!-- 导入流程节点 -->
+  <rect x="50" y="100" width="300" height="60" rx="10" fill="#e1f5fe" stroke="#0288d1" stroke-width="2"/>
+  <text x="200" y="135" font-family="Arial, sans-serif" font-size="16" text-anchor="middle">1. 上传文件/选择数据源</text>
+  
+  <rect x="50" y="190" width="300" height="60" rx="10" fill="#e1f5fe" stroke="#0288d1" stroke-width="2"/>
+  <text x="200" y="225" font-family="Arial, sans-serif" font-size="16" text-anchor="middle">2. 选择配置/映射规则</text>
+  
+  <rect x="50" y="280" width="300" height="60" rx="10" fill="#e1f5fe" stroke="#0288d1" stroke-width="2"/>
+  <text x="200" y="315" font-family="Arial, sans-serif" font-size="16" text-anchor="middle">3. 数据解析与验证</text>
+  
+  <rect x="50" y="370" width="300" height="60" rx="10" fill="#e1f5fe" stroke="#0288d1" stroke-width="2"/>
+  <text x="200" y="405" font-family="Arial, sans-serif" font-size="16" text-anchor="middle">4. 实体映射转换</text>
+  
+  <rect x="50" y="460" width="300" height="60" rx="10" fill="#e1f5fe" stroke="#0288d1" stroke-width="2"/>
+  <text x="200" y="495" font-family="Arial, sans-serif" font-size="16" text-anchor="middle">5. 数据入库/更新</text>
+  
+  <!-- 导出流程 -->
+  <text x="600" y="70" font-family="Arial, sans-serif" font-size="18" font-weight="bold" text-anchor="middle" fill="#388e3c">导出流程</text>
+  
+  <!-- 导出流程节点 -->
+  <rect x="450" y="100" width="300" height="60" rx="10" fill="#e8f5e8" stroke="#388e3c" stroke-width="2"/>
+  <text x="600" y="135" font-family="Arial, sans-serif" font-size="16" text-anchor="middle">1. 选择导出数据范围</text>
+  
+  <rect x="450" y="190" width="300" height="60" rx="10" fill="#e8f5e8" stroke="#388e3c" stroke-width="2"/>
+  <text x="600" y="225" font-family="Arial, sans-serif" font-size="16" text-anchor="middle">2. 选择配置/映射规则</text>
+  
+  <rect x="450" y="280" width="300" height="60" rx="10" fill="#e8f5e8" stroke="#388e3c" stroke-width="2"/>
+  <text x="600" y="315" font-family="Arial, sans-serif" font-size="16" text-anchor="middle">3. 数据查询与过滤</text>
+  
+  <rect x="450" y="370" width="300" height="60" rx="10" fill="#e8f5e8" stroke="#388e3c" stroke-width="2"/>
+  <text x="600" y="405" font-family="Arial, sans-serif" font-size="16" text-anchor="middle">4. 实体映射转换</text>
+  
+  <rect x="450" y="460" width="300" height="60" rx="10" fill="#e8f5e8" stroke="#388e3c" stroke-width="2"/>
+  <text x="600" y="495" font-family="Arial, sans-serif" font-size="16" text-anchor="middle">5. 生成文件/输出结果</text>
+  
+  <!-- 公共流程 -->
+  <rect x="200" y="550" width="400" height="40" rx="10" fill="#f3e5f5" stroke="#7b1fa2" stroke-width="2"/>
+  <text x="400" y="575" font-family="Arial, sans-serif" font-size="16" text-anchor="middle">6. 生成任务日志与统计信息</text>
+  
+  <!-- 连接箭头 -->
+  <defs>
+    <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#666"/>
+    </marker>
+  </defs>
+  
+  <!-- 导入流程箭头 -->
+  <line x1="200" y1="160" x2="200" y2="190" stroke="#0288d1" stroke-width="2" marker-end="url(#arrowhead)"/>
+  <line x1="200" y1="250" x2="200" y2="280" stroke="#0288d1" stroke-width="2" marker-end="url(#arrowhead)"/>
+  <line x1="200" y1="340" x2="200" y2="370" stroke="#0288d1" stroke-width="2" marker-end="url(#arrowhead)"/>
+  <line x1="200" y1="430" x2="200" y2="460" stroke="#0288d1" stroke-width="2" marker-end="url(#arrowhead)"/>
+  <line x1="200" y1="520" x2="200" y2="550" stroke="#0288d1" stroke-width="2" marker-end="url(#arrowhead)"/>
+  
+  <!-- 导出流程箭头 -->
+  <line x1="600" y1="160" x2="600" y2="190" stroke="#388e3c" stroke-width="2" marker-end="url(#arrowhead)"/>
+  <line x1="600" y1="250" x2="600" y2="280" stroke="#388e3c" stroke-width="2" marker-end="url(#arrowhead)"/>
+  <line x1="600" y1="340" x2="600" y2="370" stroke="#388e3c" stroke-width="2" marker-end="url(#arrowhead)"/>
+  <line x1="600" y1="430" x2="600" y2="460" stroke="#388e3c" stroke-width="2" marker-end="url(#arrowhead)"/>
+  <line x1="600" y1="520" x2="600" y2="550" stroke="#388e3c" stroke-width="2" marker-end="url(#arrowhead)"/>
+</svg>
