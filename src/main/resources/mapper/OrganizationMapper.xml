@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bing.framework.mapper.OrganizationMapper">
+
+    <resultMap id="BaseResultMap" type="com.bing.framework.entity.Organization">
+        <id column="id" property="id"/>
+        <result column="name" property="name"/>
+        <result column="code" property="code"/>
+        <result column="parent_id" property="parentId"/>
+        <result column="path" property="path"/>
+        <result column="sort" property="sort"/>
+        <result column="enabled" property="enabled"/>
+        <result column="description" property="description"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_time" property="updateTime"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id, name, code, parent_id, path, sort, enabled, description, create_time, update_time
+    </sql>
+
+    <!-- 根据组织代码查询组织 -->
+    <select id="selectByCode" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM organization
+        WHERE code = #{code}
+    </select>
+
+    <!-- 根据父组织ID查询子组织列表 -->
+    <select id="selectByParentId" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM organization
+        WHERE parent_id = #{parentId}
+        ORDER BY sort ASC, id ASC
+    </select>
+
+    <!-- 查询所有启用的组织 -->
+    <select id="selectEnabledOrganizations" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM organization
+        WHERE enabled = true
+        ORDER BY sort ASC, id ASC
+    </select>
+
+    <!-- 检查组织是否有子组织 -->
+    <select id="hasChildren" resultType="java.lang.Boolean">
+        SELECT COUNT(*) > 0
+        FROM organization
+        WHERE parent_id = #{organizationId}
+    </select>
+
+    <!-- 根据条件分页查询组织 -->
+    <select id="selectPageVo" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM organization
+        <where>
+            <if test="ew.sqlSegment != null and ew.sqlSegment != ''">
+                ${ew.sqlSegment}
+            </if>
+        </where>
+        ORDER BY sort ASC, id ASC
+    </select>
+
+    <!-- 根据路径前缀查询组织 -->
+    <select id="selectByPathLike" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM organization
+        WHERE path LIKE CONCAT(#{path}, '%')
+        ORDER BY path ASC, sort ASC
+    </select>
+
+</mapper>

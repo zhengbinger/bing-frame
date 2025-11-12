@@ -25247,3 +25247,908 @@ java.lang.IllegalArgumentException: Null key returned for cache operation (maybe
 2025-11-11 14:15:56.670 [http-nio-8081-exec-2] INFO  AUDIT_LOG - userId:,username:anonymous,ipAddress:0:0:0:0:0:0:0:1,module:认证管理,operationType:新增,description:用户登录、注册、注销和获取当前用户信息等认证相关功能,requestParams:[LoginRequest(username=admin, password=ybc@8602)],result:成功,executionTime:397
 2025-11-11 14:15:56.734 [http-nio-8081-exec-2] DEBUG com.bing.framework.context.UserContext - 清理用户上下文成功
 2025-11-11 14:15:56.735 [http-nio-8081-exec-2] DEBUG c.b.f.interceptor.UserContextCleanupInterceptor - 请求处理完成，自动清理用户上下文
+2025-11-11 14:53:49.160 [main] INFO  com.bing.framework.BingFrameworkApplication - Starting BingFrameworkApplication using Java 1.8.0_451 on zhengbing with PID 17308 (D:\ai_code\cursor\bing-framework\bing-framework\target\classes started by mydre in D:\ai_code\cursor\bing-framework\bing-framework)
+2025-11-11 14:53:49.163 [main] DEBUG com.bing.framework.BingFrameworkApplication - Running with Spring Boot v2.7.18, Spring v5.3.31
+2025-11-11 14:53:49.163 [main] INFO  com.bing.framework.BingFrameworkApplication - The following 1 profile is active: "dev"
+2025-11-11 14:53:51.913 [main] INFO  org.apache.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-8081"]
+2025-11-11 14:53:51.920 [main] INFO  org.apache.catalina.core.StandardService - Starting service [Tomcat]
+2025-11-11 14:53:51.921 [main] INFO  org.apache.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/9.0.83]
+2025-11-11 14:53:52.127 [main] INFO  o.a.c.core.ContainerBase.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+2025-11-11 14:53:53.518 [main] INFO  com.bing.framework.config.LogConfig - [LOG_CONFIG] ApplicationContext injected via constructor
+2025-11-11 14:53:53.519 [main] INFO  com.bing.framework.config.LogConfig - [LOG_CONFIG] @PostConstruct called, attempting to set ApplicationContext to AuditLogAppender
+2025-11-11 14:53:53.537 [main] INFO  com.bing.framework.config.LogConfig - [LOG_CONFIG] afterPropertiesSet called
+2025-11-11 14:53:53.537 [main] INFO  com.bing.framework.config.LogConfig - [LOG_CONFIG] Creating new AuditLogAppender instance
+2025-11-11 14:53:53.538 [main] INFO  com.bing.framework.config.LogConfig - [LOG_CONFIG] AuditLogAppender started
+2025-11-11 14:53:53.538 [main] INFO  com.bing.framework.config.LogConfig - [LOG_CONFIG] AuditLogAppender registered to AUDIT_LOG logger
+2025-11-11 14:53:56.003 [main] INFO  com.bing.framework.config.CacheConfig - 初始化Redis缓存管理器，前缀: bing:, 过期时间: 3600000ms
+2025-11-11 14:53:56.022 [main] INFO  com.bing.framework.config.CacheConfig - Redis缓存管理器初始化完成，缓存名称: auditLogCache, userCache, whiteListCache
+2025-11-11 14:53:56.036 [main] INFO  org.apache.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-8081"]
+2025-11-11 14:53:56.779 [main] INFO  com.bing.framework.config.LogConfig - [LOG_CONFIG] ContextRefreshedEvent received, ensuring ApplicationContext is set
+2025-11-11 14:53:56.780 [main] INFO  com.bing.framework.config.LogConfig - [LOG_CONFIG] ContextRefreshedEvent: ApplicationContext available: true
+2025-11-11 14:53:56.785 [main] INFO  com.bing.framework.BingFrameworkApplication - Started BingFrameworkApplication in 8.236 seconds (JVM running for 8.897)
+2025-11-11 14:53:56.788 [main] INFO  c.bing.framework.runner.PasswordFormatCheckRunner - 启动密码格式检查...
+2025-11-11 14:53:57.324 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+2025-11-11 14:53:57.955 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+2025-11-11 14:53:57.961 [main] DEBUG com.bing.framework.mapper.UserMapper.selectList - ==>  Preparing: SELECT id,username,password,email,phone,nickname,status,create_time,update_time FROM user
+2025-11-11 14:53:57.980 [main] DEBUG com.bing.framework.mapper.UserMapper.selectList - ==> Parameters: 
+2025-11-11 14:53:58.020 [main] DEBUG com.bing.framework.mapper.UserMapper.selectList - <==      Total: 4
+2025-11-11 14:53:58.069 [main] INFO  com.bing.framework.util.PasswordFormatChecker - 开始检查所有用户密码格式，共 4 个用户
+2025-11-11 14:53:58.069 [main] WARN  com.bing.framework.util.PasswordFormatChecker - 发现非BCrypt格式密码，用户ID: 2, 用户名: user01
+2025-11-11 14:53:58.069 [main] WARN  com.bing.framework.util.PasswordFormatChecker - 发现非BCrypt格式密码，用户ID: 3, 用户名: readonly
+2025-11-11 14:53:58.070 [main] INFO  com.bing.framework.util.PasswordFormatChecker - 密码格式检查完成，共检查 4 个用户，发现 0 个需要修复的密码（已记录但未自动修复）
+2025-11-11 14:53:58.070 [main] INFO  com.bing.framework.util.PasswordFormatChecker - 警告：请联系相关用户重置密码，使用标准BCrypt加密格式
+2025-11-11 14:53:58.070 [main] INFO  c.bing.framework.runner.PasswordFormatCheckRunner - 密码格式检查完成
+2025-11-11 14:54:17.986 [http-nio-8081-exec-2] INFO  o.a.c.core.ContainerBase.[Tomcat].[localhost].[/] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+2025-11-11 14:54:18.056 [http-nio-8081-exec-2] DEBUG com.bing.framework.context.UserContext - 清理用户上下文成功
+2025-11-11 14:54:18.057 [http-nio-8081-exec-2] DEBUG c.b.f.interceptor.UserContextCleanupInterceptor - 请求处理完成，自动清理用户上下文
+2025-11-11 14:54:18.463 [http-nio-8081-exec-1] DEBUG com.bing.framework.context.UserContext - 清理用户上下文成功
+2025-11-11 14:54:18.464 [http-nio-8081-exec-1] DEBUG c.b.f.interceptor.UserContextCleanupInterceptor - 请求处理完成，自动清理用户上下文
+2025-11-11 14:54:18.600 [http-nio-8081-exec-3] DEBUG com.bing.framework.context.UserContext - 清理用户上下文成功
+2025-11-11 14:54:18.602 [http-nio-8081-exec-3] DEBUG c.b.f.interceptor.UserContextCleanupInterceptor - 请求处理完成，自动清理用户上下文
+2025-11-11 14:54:18.613 [http-nio-8081-exec-1] DEBUG com.bing.framework.context.UserContext - 清理用户上下文成功
+2025-11-11 14:54:18.615 [http-nio-8081-exec-1] DEBUG c.b.f.interceptor.UserContextCleanupInterceptor - 请求处理完成，自动清理用户上下文
+2025-11-11 14:54:18.839 [http-nio-8081-exec-4] DEBUG com.bing.framework.context.UserContext - 清理用户上下文成功
+2025-11-11 14:54:18.839 [http-nio-8081-exec-4] DEBUG c.b.f.interceptor.UserContextCleanupInterceptor - 请求处理完成，自动清理用户上下文
+2025-11-11 14:54:31.024 [http-nio-8081-exec-6] DEBUG com.bing.framework.interceptor.JwtInterceptor - 拦截请求: /api/auth/login
+2025-11-11 14:54:31.035 [http-nio-8081-exec-6] DEBUG c.bing.framework.service.impl.WhiteListServiceImpl - [DEBUG] 检查路径 '/api/auth/login' 是否在白名单中
+2025-11-11 14:54:31.035 [http-nio-8081-exec-6] INFO  c.bing.framework.service.impl.WhiteListServiceImpl - 白名单缓存未命中，从数据库查询白名单模式
+2025-11-11 14:54:31.039 [http-nio-8081-exec-6] DEBUG c.b.f.m.WhiteListMapper.selectEnabledWhiteLists - ==>  Preparing: SELECT id, pattern, type, description, enabled, create_time, update_time FROM sys_white_list WHERE enabled = 1 ORDER BY create_time DESC
+2025-11-11 14:54:31.040 [http-nio-8081-exec-6] DEBUG c.b.f.m.WhiteListMapper.selectEnabledWhiteLists - ==> Parameters: 
+2025-11-11 14:54:31.062 [http-nio-8081-exec-6] DEBUG c.b.f.m.WhiteListMapper.selectEnabledWhiteLists - <==      Total: 10
+2025-11-11 14:54:31.063 [http-nio-8081-exec-6] INFO  c.bing.framework.service.impl.WhiteListServiceImpl - 从数据库获取到 10 条白名单记录
+2025-11-11 14:54:31.064 [http-nio-8081-exec-6] INFO  c.bing.framework.service.impl.WhiteListServiceImpl - 添加白名单模式: '/api/auth/login'
+2025-11-11 14:54:31.064 [http-nio-8081-exec-6] INFO  c.bing.framework.service.impl.WhiteListServiceImpl - 添加白名单模式: '/api/auth/register'
+2025-11-11 14:54:31.064 [http-nio-8081-exec-6] INFO  c.bing.framework.service.impl.WhiteListServiceImpl - 添加白名单模式: '/api/auth/logout'
+2025-11-11 14:54:31.065 [http-nio-8081-exec-6] INFO  c.bing.framework.service.impl.WhiteListServiceImpl - 添加白名单模式: '/api/white-list/**'
+2025-11-11 14:54:31.065 [http-nio-8081-exec-6] INFO  c.bing.framework.service.impl.WhiteListServiceImpl - 添加白名单模式: '/doc.html'
+2025-11-11 14:54:31.065 [http-nio-8081-exec-6] INFO  c.bing.framework.service.impl.WhiteListServiceImpl - 添加白名单模式: '/swagger-resources/**'
+2025-11-11 14:54:31.066 [http-nio-8081-exec-6] INFO  c.bing.framework.service.impl.WhiteListServiceImpl - 添加白名单模式: '/v2/api-docs'
+2025-11-11 14:54:31.066 [http-nio-8081-exec-6] INFO  c.bing.framework.service.impl.WhiteListServiceImpl - 添加白名单模式: '/webjars/**'
+2025-11-11 14:54:31.067 [http-nio-8081-exec-6] INFO  c.bing.framework.service.impl.WhiteListServiceImpl - 添加白名单模式: '/knife4j/**'
+2025-11-11 14:54:31.067 [http-nio-8081-exec-6] INFO  c.bing.framework.service.impl.WhiteListServiceImpl - 添加白名单模式: '/swagger-ui/**'
+2025-11-11 14:54:31.067 [http-nio-8081-exec-6] INFO  c.bing.framework.service.impl.WhiteListServiceImpl - 转换后获取到 10 个启用的白名单模式，即将存入Redis缓存
+2025-11-11 14:54:31.067 [http-nio-8081-exec-6] DEBUG c.bing.framework.service.impl.WhiteListServiceImpl - [DEBUG] 当前启用的白名单模式数量: 10
+2025-11-11 14:54:31.068 [http-nio-8081-exec-6] DEBUG c.bing.framework.service.impl.WhiteListServiceImpl - [DEBUG] 路径 '/api/auth/login' 匹配模式 '/api/auth/register': false
+2025-11-11 14:54:31.068 [http-nio-8081-exec-6] DEBUG c.bing.framework.service.impl.WhiteListServiceImpl - [DEBUG] 路径 '/api/auth/login' 匹配模式 '/v2/api-docs': false
+2025-11-11 14:54:31.068 [http-nio-8081-exec-6] DEBUG c.bing.framework.service.impl.WhiteListServiceImpl - [DEBUG] 路径 '/api/auth/login' 匹配模式 '/doc.html': false
+2025-11-11 14:54:31.069 [http-nio-8081-exec-6] DEBUG c.bing.framework.service.impl.WhiteListServiceImpl - [DEBUG] 路径 '/api/auth/login' 匹配模式 '/swagger-ui/**': false
+2025-11-11 14:54:31.070 [http-nio-8081-exec-6] DEBUG c.bing.framework.service.impl.WhiteListServiceImpl - [DEBUG] 路径 '/api/auth/login' 匹配模式 '/api/auth/login': true
+2025-11-11 14:54:31.070 [http-nio-8081-exec-6] DEBUG c.bing.framework.service.impl.WhiteListServiceImpl - [DEBUG] 路径 '/api/auth/login' 在白名单中，匹配成功
+2025-11-11 14:54:31.070 [http-nio-8081-exec-6] DEBUG com.bing.framework.interceptor.JwtInterceptor - 请求路径 '/api/auth/login' 在白名单中，直接通过
+2025-11-11 14:54:31.299 [http-nio-8081-exec-6] DEBUG c.b.framework.mapper.UserMapper.selectByUsername - ==>  Preparing: SELECT id, username, password, email, phone, nickname, status, create_time, update_time FROM user WHERE username = ?
+2025-11-11 14:54:31.301 [http-nio-8081-exec-6] DEBUG c.b.framework.mapper.UserMapper.selectByUsername - ==> Parameters: admin(String)
+2025-11-11 14:54:31.311 [http-nio-8081-exec-6] DEBUG c.b.framework.mapper.UserMapper.selectByUsername - <==      Total: 1
+2025-11-11 14:54:31.315 [http-nio-8081-exec-6] INFO  com.bing.framework.controller.AuthController - ========== Password Validation Diagnostics ==========
+2025-11-11 14:54:31.316 [http-nio-8081-exec-6] INFO  com.bing.framework.controller.AuthController - Username: admin
+2025-11-11 14:54:31.316 [http-nio-8081-exec-6] INFO  com.bing.framework.controller.AuthController - Input password length: 8
+2025-11-11 14:54:31.316 [http-nio-8081-exec-6] INFO  com.bing.framework.controller.AuthController - Database password length: 60
+2025-11-11 14:54:31.317 [http-nio-8081-exec-6] INFO  com.bing.framework.controller.AuthController - Database password format: isBCrypt=true
+2025-11-11 14:54:31.442 [http-nio-8081-exec-6] INFO  com.bing.framework.controller.AuthController - Strategy 1 - BCrypt validation result: true
+2025-11-11 14:54:31.443 [http-nio-8081-exec-6] INFO  com.bing.framework.controller.AuthController - Password validation successful for user: admin
+2025-11-11 14:54:31.539 [http-nio-8081-exec-6] INFO  com.bing.framework.controller.AuthController - 从缓存获取到有效的访问令牌，用户ID: 1
+2025-11-11 14:54:31.579 [http-nio-8081-exec-6] INFO  com.bing.framework.controller.AuthController - 刷新令牌不存在或无效，重新生成，用户ID: 1
+2025-11-11 14:54:31.592 [http-nio-8081-exec-6] DEBUG c.b.framework.mapper.RoleMapper.findRolesByUserId - ==>  Preparing: SELECT r.* FROM role r LEFT JOIN user_role ur ON r.id = ur.role_id WHERE ur.user_id = ? AND r.status = 1 ORDER BY r.id
+2025-11-11 14:54:31.593 [http-nio-8081-exec-6] DEBUG c.b.framework.mapper.RoleMapper.findRolesByUserId - ==> Parameters: 1(Long)
+2025-11-11 14:54:31.608 [http-nio-8081-exec-6] DEBUG c.b.framework.mapper.RoleMapper.findRolesByUserId - <==      Total: 1
+2025-11-11 14:54:31.612 [http-nio-8081-exec-6] DEBUG com.bing.framework.context.UserContext - 设置用户上下文成功，用户ID: 1, 用户名: admin
+2025-11-11 14:54:31.614 [http-nio-8081-exec-6] DEBUG com.bing.framework.context.UserContext - 设置用户角色列表成功，角色数量: 1
+2025-11-11 14:54:31.643 [http-nio-8081-exec-6] DEBUG com.bing.framework.mapper.LoginRecordMapper.insert - ==>  Preparing: INSERT INTO login_record ( user_id, username, ip_address, user_agent, status, login_time, message ) VALUES ( ?, ?, ?, ?, ?, ?, ? )
+2025-11-11 14:54:31.648 [http-nio-8081-exec-6] DEBUG com.bing.framework.mapper.LoginRecordMapper.insert - ==> Parameters: 1(Long), admin(String), 0:0:0:0:0:0:0:1(String), Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36 Edg/142.0.0.0(String), 1(Integer), 2025-11-11 14:54:31.619(Timestamp), 登录成功(String)
+2025-11-11 14:54:31.680 [http-nio-8081-exec-6] DEBUG com.bing.framework.mapper.LoginRecordMapper.insert - <==    Updates: 1
+2025-11-11 14:54:31.684 [http-nio-8081-exec-6] INFO  c.b.framework.service.impl.LoginRecordServiceImpl - 保存登录记录成功：用户=admin, 状态=1
+2025-11-11 14:54:31.706 [http-nio-8081-exec-6] INFO  AUDIT_LOG - userId:,username:anonymous,ipAddress:0:0:0:0:0:0:0:1,module:认证管理,operationType:新增,description:用户登录、注册、注销和获取当前用户信息等认证相关功能,requestParams:[LoginRequest(username=admin, password=ybc@8602)],result:成功,executionTime:438
+2025-11-11 14:54:31.722 [http-nio-8081-exec-6] DEBUG com.bing.framework.context.UserContext - 清理用户上下文成功
+2025-11-11 14:54:31.722 [http-nio-8081-exec-6] DEBUG c.b.f.interceptor.UserContextCleanupInterceptor - 请求处理完成，自动清理用户上下文
+2025-11-11 14:54:35.283 [http-nio-8081-exec-8] DEBUG com.bing.framework.interceptor.JwtInterceptor - 拦截请求: /api/auth/login
+2025-11-11 14:54:35.284 [http-nio-8081-exec-8] DEBUG c.bing.framework.service.impl.WhiteListServiceImpl - [DEBUG] 检查路径 '/api/auth/login' 是否在白名单中
+2025-11-11 14:54:35.286 [http-nio-8081-exec-8] INFO  c.bing.framework.service.impl.WhiteListServiceImpl - 白名单缓存未命中，从数据库查询白名单模式
+2025-11-11 14:54:35.287 [http-nio-8081-exec-8] DEBUG c.b.f.m.WhiteListMapper.selectEnabledWhiteLists - ==>  Preparing: SELECT id, pattern, type, description, enabled, create_time, update_time FROM sys_white_list WHERE enabled = 1 ORDER BY create_time DESC
+2025-11-11 14:54:35.288 [http-nio-8081-exec-8] DEBUG c.b.f.m.WhiteListMapper.selectEnabledWhiteLists - ==> Parameters: 
+2025-11-11 14:54:35.305 [http-nio-8081-exec-8] DEBUG c.b.f.m.WhiteListMapper.selectEnabledWhiteLists - <==      Total: 10
+2025-11-11 14:54:35.307 [http-nio-8081-exec-8] INFO  c.bing.framework.service.impl.WhiteListServiceImpl - 从数据库获取到 10 条白名单记录
+2025-11-11 14:54:35.308 [http-nio-8081-exec-8] INFO  c.bing.framework.service.impl.WhiteListServiceImpl - 添加白名单模式: '/api/auth/login'
+2025-11-11 14:54:35.309 [http-nio-8081-exec-8] INFO  c.bing.framework.service.impl.WhiteListServiceImpl - 添加白名单模式: '/api/auth/register'
+2025-11-11 14:54:35.310 [http-nio-8081-exec-8] INFO  c.bing.framework.service.impl.WhiteListServiceImpl - 添加白名单模式: '/api/auth/logout'
+2025-11-11 14:54:35.310 [http-nio-8081-exec-8] INFO  c.bing.framework.service.impl.WhiteListServiceImpl - 添加白名单模式: '/api/white-list/**'
+2025-11-11 14:54:35.311 [http-nio-8081-exec-8] INFO  c.bing.framework.service.impl.WhiteListServiceImpl - 添加白名单模式: '/doc.html'
+2025-11-11 14:54:35.312 [http-nio-8081-exec-8] INFO  c.bing.framework.service.impl.WhiteListServiceImpl - 添加白名单模式: '/swagger-resources/**'
+2025-11-11 14:54:35.314 [http-nio-8081-exec-8] INFO  c.bing.framework.service.impl.WhiteListServiceImpl - 添加白名单模式: '/v2/api-docs'
+2025-11-11 14:54:35.315 [http-nio-8081-exec-8] INFO  c.bing.framework.service.impl.WhiteListServiceImpl - 添加白名单模式: '/webjars/**'
+2025-11-11 14:54:35.315 [http-nio-8081-exec-8] INFO  c.bing.framework.service.impl.WhiteListServiceImpl - 添加白名单模式: '/knife4j/**'
+2025-11-11 14:54:35.315 [http-nio-8081-exec-8] INFO  c.bing.framework.service.impl.WhiteListServiceImpl - 添加白名单模式: '/swagger-ui/**'
+2025-11-11 14:54:35.315 [http-nio-8081-exec-8] INFO  c.bing.framework.service.impl.WhiteListServiceImpl - 转换后获取到 10 个启用的白名单模式，即将存入Redis缓存
+2025-11-11 14:54:35.316 [http-nio-8081-exec-8] DEBUG c.bing.framework.service.impl.WhiteListServiceImpl - [DEBUG] 当前启用的白名单模式数量: 10
+2025-11-11 14:54:35.316 [http-nio-8081-exec-8] DEBUG c.bing.framework.service.impl.WhiteListServiceImpl - [DEBUG] 路径 '/api/auth/login' 匹配模式 '/api/auth/register': false
+2025-11-11 14:54:35.317 [http-nio-8081-exec-8] DEBUG c.bing.framework.service.impl.WhiteListServiceImpl - [DEBUG] 路径 '/api/auth/login' 匹配模式 '/v2/api-docs': false
+2025-11-11 14:54:35.317 [http-nio-8081-exec-8] DEBUG c.bing.framework.service.impl.WhiteListServiceImpl - [DEBUG] 路径 '/api/auth/login' 匹配模式 '/doc.html': false
+2025-11-11 14:54:35.318 [http-nio-8081-exec-8] DEBUG c.bing.framework.service.impl.WhiteListServiceImpl - [DEBUG] 路径 '/api/auth/login' 匹配模式 '/swagger-ui/**': false
+2025-11-11 14:54:35.318 [http-nio-8081-exec-8] DEBUG c.bing.framework.service.impl.WhiteListServiceImpl - [DEBUG] 路径 '/api/auth/login' 匹配模式 '/api/auth/login': true
+2025-11-11 14:54:35.319 [http-nio-8081-exec-8] DEBUG c.bing.framework.service.impl.WhiteListServiceImpl - [DEBUG] 路径 '/api/auth/login' 在白名单中，匹配成功
+2025-11-11 14:54:35.319 [http-nio-8081-exec-8] DEBUG com.bing.framework.interceptor.JwtInterceptor - 请求路径 '/api/auth/login' 在白名单中，直接通过
+2025-11-11 14:54:35.338 [http-nio-8081-exec-8] INFO  com.bing.framework.controller.AuthController - ========== Password Validation Diagnostics ==========
+2025-11-11 14:54:35.338 [http-nio-8081-exec-8] INFO  com.bing.framework.controller.AuthController - Username: admin
+2025-11-11 14:54:35.339 [http-nio-8081-exec-8] INFO  com.bing.framework.controller.AuthController - Input password length: 8
+2025-11-11 14:54:35.339 [http-nio-8081-exec-8] INFO  com.bing.framework.controller.AuthController - Database password length: 60
+2025-11-11 14:54:35.339 [http-nio-8081-exec-8] INFO  com.bing.framework.controller.AuthController - Database password format: isBCrypt=true
+2025-11-11 14:54:35.447 [http-nio-8081-exec-8] INFO  com.bing.framework.controller.AuthController - Strategy 1 - BCrypt validation result: true
+2025-11-11 14:54:35.448 [http-nio-8081-exec-8] INFO  com.bing.framework.controller.AuthController - Password validation successful for user: admin
+2025-11-11 14:54:35.450 [http-nio-8081-exec-8] INFO  com.bing.framework.controller.AuthController - 从缓存获取到有效的访问令牌，用户ID: 1
+2025-11-11 14:54:35.460 [http-nio-8081-exec-8] INFO  com.bing.framework.controller.AuthController - 刷新令牌不存在或无效，重新生成，用户ID: 1
+2025-11-11 14:54:35.462 [http-nio-8081-exec-8] DEBUG c.b.framework.mapper.RoleMapper.findRolesByUserId - ==>  Preparing: SELECT r.* FROM role r LEFT JOIN user_role ur ON r.id = ur.role_id WHERE ur.user_id = ? AND r.status = 1 ORDER BY r.id
+2025-11-11 14:54:35.464 [http-nio-8081-exec-8] DEBUG c.b.framework.mapper.RoleMapper.findRolesByUserId - ==> Parameters: 1(Long)
+2025-11-11 14:54:35.466 [http-nio-8081-exec-8] DEBUG c.b.framework.mapper.RoleMapper.findRolesByUserId - <==      Total: 1
+2025-11-11 14:54:35.468 [http-nio-8081-exec-8] DEBUG com.bing.framework.context.UserContext - 设置用户上下文成功，用户ID: 1, 用户名: admin
+2025-11-11 14:54:35.468 [http-nio-8081-exec-8] DEBUG com.bing.framework.context.UserContext - 设置用户角色列表成功，角色数量: 1
+2025-11-11 14:54:35.469 [http-nio-8081-exec-8] DEBUG com.bing.framework.mapper.LoginRecordMapper.insert - ==>  Preparing: INSERT INTO login_record ( user_id, username, ip_address, user_agent, status, login_time, message ) VALUES ( ?, ?, ?, ?, ?, ?, ? )
+2025-11-11 14:54:35.470 [http-nio-8081-exec-8] DEBUG com.bing.framework.mapper.LoginRecordMapper.insert - ==> Parameters: 1(Long), admin(String), 0:0:0:0:0:0:0:1(String), Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36 Edg/142.0.0.0(String), 1(Integer), 2025-11-11 14:54:35.468(Timestamp), 登录成功(String)
+2025-11-11 14:54:35.475 [http-nio-8081-exec-8] DEBUG com.bing.framework.mapper.LoginRecordMapper.insert - <==    Updates: 1
+2025-11-11 14:54:35.476 [http-nio-8081-exec-8] INFO  c.b.framework.service.impl.LoginRecordServiceImpl - 保存登录记录成功：用户=admin, 状态=1
+2025-11-11 14:54:35.477 [http-nio-8081-exec-8] INFO  AUDIT_LOG - userId:,username:anonymous,ipAddress:0:0:0:0:0:0:0:1,module:认证管理,operationType:新增,description:用户登录、注册、注销和获取当前用户信息等认证相关功能,requestParams:[LoginRequest(username=admin, password=ybc@8602)],result:成功,executionTime:156
+2025-11-11 14:54:35.480 [http-nio-8081-exec-8] DEBUG com.bing.framework.context.UserContext - 清理用户上下文成功
+2025-11-11 14:54:35.480 [http-nio-8081-exec-8] DEBUG c.b.f.interceptor.UserContextCleanupInterceptor - 请求处理完成，自动清理用户上下文
+2025-11-11 14:54:36.740 [http-nio-8081-exec-7] DEBUG com.bing.framework.interceptor.JwtInterceptor - 拦截请求: /api/auth/login
+2025-11-11 14:54:36.740 [http-nio-8081-exec-7] DEBUG c.bing.framework.service.impl.WhiteListServiceImpl - [DEBUG] 检查路径 '/api/auth/login' 是否在白名单中
+2025-11-11 14:54:36.740 [http-nio-8081-exec-7] INFO  c.bing.framework.service.impl.WhiteListServiceImpl - 白名单缓存未命中，从数据库查询白名单模式
+2025-11-11 14:54:36.742 [http-nio-8081-exec-7] DEBUG c.b.f.m.WhiteListMapper.selectEnabledWhiteLists - ==>  Preparing: SELECT id, pattern, type, description, enabled, create_time, update_time FROM sys_white_list WHERE enabled = 1 ORDER BY create_time DESC
+2025-11-11 14:54:36.743 [http-nio-8081-exec-7] DEBUG c.b.f.m.WhiteListMapper.selectEnabledWhiteLists - ==> Parameters: 
+2025-11-11 14:54:36.750 [http-nio-8081-exec-7] DEBUG c.b.f.m.WhiteListMapper.selectEnabledWhiteLists - <==      Total: 10
+2025-11-11 14:54:36.751 [http-nio-8081-exec-7] INFO  c.bing.framework.service.impl.WhiteListServiceImpl - 从数据库获取到 10 条白名单记录
+2025-11-11 14:54:36.752 [http-nio-8081-exec-7] INFO  c.bing.framework.service.impl.WhiteListServiceImpl - 添加白名单模式: '/api/auth/login'
+2025-11-11 14:54:36.753 [http-nio-8081-exec-7] INFO  c.bing.framework.service.impl.WhiteListServiceImpl - 添加白名单模式: '/api/auth/register'
+2025-11-11 14:54:36.753 [http-nio-8081-exec-7] INFO  c.bing.framework.service.impl.WhiteListServiceImpl - 添加白名单模式: '/api/auth/logout'
+2025-11-11 14:54:36.753 [http-nio-8081-exec-7] INFO  c.bing.framework.service.impl.WhiteListServiceImpl - 添加白名单模式: '/api/white-list/**'
+2025-11-11 14:54:36.753 [http-nio-8081-exec-7] INFO  c.bing.framework.service.impl.WhiteListServiceImpl - 添加白名单模式: '/doc.html'
+2025-11-11 14:54:36.754 [http-nio-8081-exec-7] INFO  c.bing.framework.service.impl.WhiteListServiceImpl - 添加白名单模式: '/swagger-resources/**'
+2025-11-11 14:54:36.754 [http-nio-8081-exec-7] INFO  c.bing.framework.service.impl.WhiteListServiceImpl - 添加白名单模式: '/v2/api-docs'
+2025-11-11 14:54:36.754 [http-nio-8081-exec-7] INFO  c.bing.framework.service.impl.WhiteListServiceImpl - 添加白名单模式: '/webjars/**'
+2025-11-11 14:54:36.754 [http-nio-8081-exec-7] INFO  c.bing.framework.service.impl.WhiteListServiceImpl - 添加白名单模式: '/knife4j/**'
+2025-11-11 14:54:36.754 [http-nio-8081-exec-7] INFO  c.bing.framework.service.impl.WhiteListServiceImpl - 添加白名单模式: '/swagger-ui/**'
+2025-11-11 14:54:36.754 [http-nio-8081-exec-7] INFO  c.bing.framework.service.impl.WhiteListServiceImpl - 转换后获取到 10 个启用的白名单模式，即将存入Redis缓存
+2025-11-11 14:54:36.754 [http-nio-8081-exec-7] DEBUG c.bing.framework.service.impl.WhiteListServiceImpl - [DEBUG] 当前启用的白名单模式数量: 10
+2025-11-11 14:54:36.755 [http-nio-8081-exec-7] DEBUG c.bing.framework.service.impl.WhiteListServiceImpl - [DEBUG] 路径 '/api/auth/login' 匹配模式 '/api/auth/register': false
+2025-11-11 14:54:36.755 [http-nio-8081-exec-7] DEBUG c.bing.framework.service.impl.WhiteListServiceImpl - [DEBUG] 路径 '/api/auth/login' 匹配模式 '/v2/api-docs': false
+2025-11-11 14:54:36.763 [http-nio-8081-exec-7] DEBUG c.bing.framework.service.impl.WhiteListServiceImpl - [DEBUG] 路径 '/api/auth/login' 匹配模式 '/doc.html': false
+2025-11-11 14:54:36.763 [http-nio-8081-exec-7] DEBUG c.bing.framework.service.impl.WhiteListServiceImpl - [DEBUG] 路径 '/api/auth/login' 匹配模式 '/swagger-ui/**': false
+2025-11-11 14:54:36.763 [http-nio-8081-exec-7] DEBUG c.bing.framework.service.impl.WhiteListServiceImpl - [DEBUG] 路径 '/api/auth/login' 匹配模式 '/api/auth/login': true
+2025-11-11 14:54:36.763 [http-nio-8081-exec-7] DEBUG c.bing.framework.service.impl.WhiteListServiceImpl - [DEBUG] 路径 '/api/auth/login' 在白名单中，匹配成功
+2025-11-11 14:54:36.764 [http-nio-8081-exec-7] DEBUG com.bing.framework.interceptor.JwtInterceptor - 请求路径 '/api/auth/login' 在白名单中，直接通过
+2025-11-11 14:54:36.768 [http-nio-8081-exec-7] INFO  com.bing.framework.controller.AuthController - ========== Password Validation Diagnostics ==========
+2025-11-11 14:54:36.768 [http-nio-8081-exec-7] INFO  com.bing.framework.controller.AuthController - Username: admin
+2025-11-11 14:54:36.768 [http-nio-8081-exec-7] INFO  com.bing.framework.controller.AuthController - Input password length: 8
+2025-11-11 14:54:36.768 [http-nio-8081-exec-7] INFO  com.bing.framework.controller.AuthController - Database password length: 60
+2025-11-11 14:54:36.769 [http-nio-8081-exec-7] INFO  com.bing.framework.controller.AuthController - Database password format: isBCrypt=true
+2025-11-11 14:54:36.889 [http-nio-8081-exec-7] INFO  com.bing.framework.controller.AuthController - Strategy 1 - BCrypt validation result: true
+2025-11-11 14:54:36.890 [http-nio-8081-exec-7] INFO  com.bing.framework.controller.AuthController - Password validation successful for user: admin
+2025-11-11 14:54:36.894 [http-nio-8081-exec-7] INFO  com.bing.framework.controller.AuthController - 从缓存获取到有效的访问令牌，用户ID: 1
+2025-11-11 14:54:36.909 [http-nio-8081-exec-7] INFO  com.bing.framework.controller.AuthController - 刷新令牌不存在或无效，重新生成，用户ID: 1
+2025-11-11 14:54:36.912 [http-nio-8081-exec-7] DEBUG c.b.framework.mapper.RoleMapper.findRolesByUserId - ==>  Preparing: SELECT r.* FROM role r LEFT JOIN user_role ur ON r.id = ur.role_id WHERE ur.user_id = ? AND r.status = 1 ORDER BY r.id
+2025-11-11 14:54:36.913 [http-nio-8081-exec-7] DEBUG c.b.framework.mapper.RoleMapper.findRolesByUserId - ==> Parameters: 1(Long)
+2025-11-11 14:54:36.917 [http-nio-8081-exec-7] DEBUG c.b.framework.mapper.RoleMapper.findRolesByUserId - <==      Total: 1
+2025-11-11 14:54:36.918 [http-nio-8081-exec-7] DEBUG com.bing.framework.context.UserContext - 设置用户上下文成功，用户ID: 1, 用户名: admin
+2025-11-11 14:54:36.918 [http-nio-8081-exec-7] DEBUG com.bing.framework.context.UserContext - 设置用户角色列表成功，角色数量: 1
+2025-11-11 14:54:36.919 [http-nio-8081-exec-7] DEBUG com.bing.framework.mapper.LoginRecordMapper.insert - ==>  Preparing: INSERT INTO login_record ( user_id, username, ip_address, user_agent, status, login_time, message ) VALUES ( ?, ?, ?, ?, ?, ?, ? )
+2025-11-11 14:54:36.921 [http-nio-8081-exec-7] DEBUG com.bing.framework.mapper.LoginRecordMapper.insert - ==> Parameters: 1(Long), admin(String), 0:0:0:0:0:0:0:1(String), Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36 Edg/142.0.0.0(String), 1(Integer), 2025-11-11 14:54:36.919(Timestamp), 登录成功(String)
+2025-11-11 14:54:36.929 [http-nio-8081-exec-7] DEBUG com.bing.framework.mapper.LoginRecordMapper.insert - <==    Updates: 1
+2025-11-11 14:54:36.930 [http-nio-8081-exec-7] INFO  c.b.framework.service.impl.LoginRecordServiceImpl - 保存登录记录成功：用户=admin, 状态=1
+2025-11-11 14:54:36.931 [http-nio-8081-exec-7] INFO  AUDIT_LOG - userId:,username:anonymous,ipAddress:0:0:0:0:0:0:0:1,module:认证管理,operationType:新增,description:用户登录、注册、注销和获取当前用户信息等认证相关功能,requestParams:[LoginRequest(username=admin, password=ybc@8602)],result:成功,executionTime:165
+2025-11-11 14:54:36.933 [http-nio-8081-exec-7] DEBUG com.bing.framework.context.UserContext - 清理用户上下文成功
+2025-11-11 14:54:36.933 [http-nio-8081-exec-7] DEBUG c.b.f.interceptor.UserContextCleanupInterceptor - 请求处理完成，自动清理用户上下文
+2025-11-11 14:54:37.493 [http-nio-8081-exec-9] DEBUG com.bing.framework.interceptor.JwtInterceptor - 拦截请求: /api/auth/login
+2025-11-11 14:54:37.494 [http-nio-8081-exec-9] DEBUG c.bing.framework.service.impl.WhiteListServiceImpl - [DEBUG] 检查路径 '/api/auth/login' 是否在白名单中
+2025-11-11 14:54:37.495 [http-nio-8081-exec-9] INFO  c.bing.framework.service.impl.WhiteListServiceImpl - 白名单缓存未命中，从数据库查询白名单模式
+2025-11-11 14:54:37.496 [http-nio-8081-exec-9] DEBUG c.b.f.m.WhiteListMapper.selectEnabledWhiteLists - ==>  Preparing: SELECT id, pattern, type, description, enabled, create_time, update_time FROM sys_white_list WHERE enabled = 1 ORDER BY create_time DESC
+2025-11-11 14:54:37.497 [http-nio-8081-exec-9] DEBUG c.b.f.m.WhiteListMapper.selectEnabledWhiteLists - ==> Parameters: 
+2025-11-11 14:54:37.501 [http-nio-8081-exec-9] DEBUG c.b.f.m.WhiteListMapper.selectEnabledWhiteLists - <==      Total: 10
+2025-11-11 14:54:37.503 [http-nio-8081-exec-9] INFO  c.bing.framework.service.impl.WhiteListServiceImpl - 从数据库获取到 10 条白名单记录
+2025-11-11 14:54:37.503 [http-nio-8081-exec-9] INFO  c.bing.framework.service.impl.WhiteListServiceImpl - 添加白名单模式: '/api/auth/login'
+2025-11-11 14:54:37.505 [http-nio-8081-exec-9] INFO  c.bing.framework.service.impl.WhiteListServiceImpl - 添加白名单模式: '/api/auth/register'
+2025-11-11 14:54:37.505 [http-nio-8081-exec-9] INFO  c.bing.framework.service.impl.WhiteListServiceImpl - 添加白名单模式: '/api/auth/logout'
+2025-11-11 14:54:37.505 [http-nio-8081-exec-9] INFO  c.bing.framework.service.impl.WhiteListServiceImpl - 添加白名单模式: '/api/white-list/**'
+2025-11-11 14:54:37.505 [http-nio-8081-exec-9] INFO  c.bing.framework.service.impl.WhiteListServiceImpl - 添加白名单模式: '/doc.html'
+2025-11-11 14:54:37.506 [http-nio-8081-exec-9] INFO  c.bing.framework.service.impl.WhiteListServiceImpl - 添加白名单模式: '/swagger-resources/**'
+2025-11-11 14:54:37.506 [http-nio-8081-exec-9] INFO  c.bing.framework.service.impl.WhiteListServiceImpl - 添加白名单模式: '/v2/api-docs'
+2025-11-11 14:54:37.506 [http-nio-8081-exec-9] INFO  c.bing.framework.service.impl.WhiteListServiceImpl - 添加白名单模式: '/webjars/**'
+2025-11-11 14:54:37.506 [http-nio-8081-exec-9] INFO  c.bing.framework.service.impl.WhiteListServiceImpl - 添加白名单模式: '/knife4j/**'
+2025-11-11 14:54:37.506 [http-nio-8081-exec-9] INFO  c.bing.framework.service.impl.WhiteListServiceImpl - 添加白名单模式: '/swagger-ui/**'
+2025-11-11 14:54:37.507 [http-nio-8081-exec-9] INFO  c.bing.framework.service.impl.WhiteListServiceImpl - 转换后获取到 10 个启用的白名单模式，即将存入Redis缓存
+2025-11-11 14:54:37.507 [http-nio-8081-exec-9] DEBUG c.bing.framework.service.impl.WhiteListServiceImpl - [DEBUG] 当前启用的白名单模式数量: 10
+2025-11-11 14:54:37.507 [http-nio-8081-exec-9] DEBUG c.bing.framework.service.impl.WhiteListServiceImpl - [DEBUG] 路径 '/api/auth/login' 匹配模式 '/api/auth/register': false
+2025-11-11 14:54:37.507 [http-nio-8081-exec-9] DEBUG c.bing.framework.service.impl.WhiteListServiceImpl - [DEBUG] 路径 '/api/auth/login' 匹配模式 '/v2/api-docs': false
+2025-11-11 14:54:37.508 [http-nio-8081-exec-9] DEBUG c.bing.framework.service.impl.WhiteListServiceImpl - [DEBUG] 路径 '/api/auth/login' 匹配模式 '/doc.html': false
+2025-11-11 14:54:37.508 [http-nio-8081-exec-9] DEBUG c.bing.framework.service.impl.WhiteListServiceImpl - [DEBUG] 路径 '/api/auth/login' 匹配模式 '/swagger-ui/**': false
+2025-11-11 14:54:37.508 [http-nio-8081-exec-9] DEBUG c.bing.framework.service.impl.WhiteListServiceImpl - [DEBUG] 路径 '/api/auth/login' 匹配模式 '/api/auth/login': true
+2025-11-11 14:54:37.508 [http-nio-8081-exec-9] DEBUG c.bing.framework.service.impl.WhiteListServiceImpl - [DEBUG] 路径 '/api/auth/login' 在白名单中，匹配成功
+2025-11-11 14:54:37.509 [http-nio-8081-exec-9] DEBUG com.bing.framework.interceptor.JwtInterceptor - 请求路径 '/api/auth/login' 在白名单中，直接通过
+2025-11-11 14:54:37.511 [http-nio-8081-exec-9] INFO  com.bing.framework.controller.AuthController - ========== Password Validation Diagnostics ==========
+2025-11-11 14:54:37.513 [http-nio-8081-exec-9] INFO  com.bing.framework.controller.AuthController - Username: admin
+2025-11-11 14:54:37.513 [http-nio-8081-exec-9] INFO  com.bing.framework.controller.AuthController - Input password length: 8
+2025-11-11 14:54:37.513 [http-nio-8081-exec-9] INFO  com.bing.framework.controller.AuthController - Database password length: 60
+2025-11-11 14:54:37.513 [http-nio-8081-exec-9] INFO  com.bing.framework.controller.AuthController - Database password format: isBCrypt=true
+2025-11-11 14:54:37.609 [http-nio-8081-exec-9] INFO  com.bing.framework.controller.AuthController - Strategy 1 - BCrypt validation result: true
+2025-11-11 14:54:37.613 [http-nio-8081-exec-9] INFO  com.bing.framework.controller.AuthController - Password validation successful for user: admin
+2025-11-11 14:54:37.618 [http-nio-8081-exec-9] INFO  com.bing.framework.controller.AuthController - 从缓存获取到有效的访问令牌，用户ID: 1
+2025-11-11 14:54:37.659 [http-nio-8081-exec-9] INFO  com.bing.framework.controller.AuthController - 刷新令牌不存在或无效，重新生成，用户ID: 1
+2025-11-11 14:54:37.661 [http-nio-8081-exec-9] DEBUG c.b.framework.mapper.RoleMapper.findRolesByUserId - ==>  Preparing: SELECT r.* FROM role r LEFT JOIN user_role ur ON r.id = ur.role_id WHERE ur.user_id = ? AND r.status = 1 ORDER BY r.id
+2025-11-11 14:54:37.661 [http-nio-8081-exec-9] DEBUG c.b.framework.mapper.RoleMapper.findRolesByUserId - ==> Parameters: 1(Long)
+2025-11-11 14:54:37.665 [http-nio-8081-exec-9] DEBUG c.b.framework.mapper.RoleMapper.findRolesByUserId - <==      Total: 1
+2025-11-11 14:54:37.666 [http-nio-8081-exec-9] DEBUG com.bing.framework.context.UserContext - 设置用户上下文成功，用户ID: 1, 用户名: admin
+2025-11-11 14:54:37.667 [http-nio-8081-exec-9] DEBUG com.bing.framework.context.UserContext - 设置用户角色列表成功，角色数量: 1
+2025-11-11 14:54:37.669 [http-nio-8081-exec-9] DEBUG com.bing.framework.mapper.LoginRecordMapper.insert - ==>  Preparing: INSERT INTO login_record ( user_id, username, ip_address, user_agent, status, login_time, message ) VALUES ( ?, ?, ?, ?, ?, ?, ? )
+2025-11-11 14:54:37.670 [http-nio-8081-exec-9] DEBUG com.bing.framework.mapper.LoginRecordMapper.insert - ==> Parameters: 1(Long), admin(String), 0:0:0:0:0:0:0:1(String), Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36 Edg/142.0.0.0(String), 1(Integer), 2025-11-11 14:54:37.667(Timestamp), 登录成功(String)
+2025-11-11 14:54:37.678 [http-nio-8081-exec-9] DEBUG com.bing.framework.mapper.LoginRecordMapper.insert - <==    Updates: 1
+2025-11-11 14:54:37.679 [http-nio-8081-exec-9] INFO  c.b.framework.service.impl.LoginRecordServiceImpl - 保存登录记录成功：用户=admin, 状态=1
+2025-11-11 14:54:37.682 [http-nio-8081-exec-9] INFO  AUDIT_LOG - userId:,username:anonymous,ipAddress:0:0:0:0:0:0:0:1,module:认证管理,operationType:新增,description:用户登录、注册、注销和获取当前用户信息等认证相关功能,requestParams:[LoginRequest(username=admin, password=ybc@8602)],result:成功,executionTime:170
+2025-11-11 14:54:37.685 [http-nio-8081-exec-9] DEBUG com.bing.framework.context.UserContext - 清理用户上下文成功
+2025-11-11 14:54:37.685 [http-nio-8081-exec-9] DEBUG c.b.f.interceptor.UserContextCleanupInterceptor - 请求处理完成，自动清理用户上下文
+2025-11-11 14:54:38.187 [http-nio-8081-exec-10] DEBUG com.bing.framework.interceptor.JwtInterceptor - 拦截请求: /api/auth/login
+2025-11-11 14:54:38.187 [http-nio-8081-exec-10] DEBUG c.bing.framework.service.impl.WhiteListServiceImpl - [DEBUG] 检查路径 '/api/auth/login' 是否在白名单中
+2025-11-11 14:54:38.187 [http-nio-8081-exec-10] INFO  c.bing.framework.service.impl.WhiteListServiceImpl - 白名单缓存未命中，从数据库查询白名单模式
+2025-11-11 14:54:38.189 [http-nio-8081-exec-10] DEBUG c.b.f.m.WhiteListMapper.selectEnabledWhiteLists - ==>  Preparing: SELECT id, pattern, type, description, enabled, create_time, update_time FROM sys_white_list WHERE enabled = 1 ORDER BY create_time DESC
+2025-11-11 14:54:38.190 [http-nio-8081-exec-10] DEBUG c.b.f.m.WhiteListMapper.selectEnabledWhiteLists - ==> Parameters: 
+2025-11-11 14:54:38.193 [http-nio-8081-exec-10] DEBUG c.b.f.m.WhiteListMapper.selectEnabledWhiteLists - <==      Total: 10
+2025-11-11 14:54:38.194 [http-nio-8081-exec-10] INFO  c.bing.framework.service.impl.WhiteListServiceImpl - 从数据库获取到 10 条白名单记录
+2025-11-11 14:54:38.194 [http-nio-8081-exec-10] INFO  c.bing.framework.service.impl.WhiteListServiceImpl - 添加白名单模式: '/api/auth/login'
+2025-11-11 14:54:38.194 [http-nio-8081-exec-10] INFO  c.bing.framework.service.impl.WhiteListServiceImpl - 添加白名单模式: '/api/auth/register'
+2025-11-11 14:54:38.194 [http-nio-8081-exec-10] INFO  c.bing.framework.service.impl.WhiteListServiceImpl - 添加白名单模式: '/api/auth/logout'
+2025-11-11 14:54:38.196 [http-nio-8081-exec-10] INFO  c.bing.framework.service.impl.WhiteListServiceImpl - 添加白名单模式: '/api/white-list/**'
+2025-11-11 14:54:38.196 [http-nio-8081-exec-10] INFO  c.bing.framework.service.impl.WhiteListServiceImpl - 添加白名单模式: '/doc.html'
+2025-11-11 14:54:38.196 [http-nio-8081-exec-10] INFO  c.bing.framework.service.impl.WhiteListServiceImpl - 添加白名单模式: '/swagger-resources/**'
+2025-11-11 14:54:38.196 [http-nio-8081-exec-10] INFO  c.bing.framework.service.impl.WhiteListServiceImpl - 添加白名单模式: '/v2/api-docs'
+2025-11-11 14:54:38.196 [http-nio-8081-exec-10] INFO  c.bing.framework.service.impl.WhiteListServiceImpl - 添加白名单模式: '/webjars/**'
+2025-11-11 14:54:38.196 [http-nio-8081-exec-10] INFO  c.bing.framework.service.impl.WhiteListServiceImpl - 添加白名单模式: '/knife4j/**'
+2025-11-11 14:54:38.198 [http-nio-8081-exec-10] INFO  c.bing.framework.service.impl.WhiteListServiceImpl - 添加白名单模式: '/swagger-ui/**'
+2025-11-11 14:54:38.198 [http-nio-8081-exec-10] INFO  c.bing.framework.service.impl.WhiteListServiceImpl - 转换后获取到 10 个启用的白名单模式，即将存入Redis缓存
+2025-11-11 14:54:38.199 [http-nio-8081-exec-10] DEBUG c.bing.framework.service.impl.WhiteListServiceImpl - [DEBUG] 当前启用的白名单模式数量: 10
+2025-11-11 14:54:38.199 [http-nio-8081-exec-10] DEBUG c.bing.framework.service.impl.WhiteListServiceImpl - [DEBUG] 路径 '/api/auth/login' 匹配模式 '/api/auth/register': false
+2025-11-11 14:54:38.199 [http-nio-8081-exec-10] DEBUG c.bing.framework.service.impl.WhiteListServiceImpl - [DEBUG] 路径 '/api/auth/login' 匹配模式 '/v2/api-docs': false
+2025-11-11 14:54:38.199 [http-nio-8081-exec-10] DEBUG c.bing.framework.service.impl.WhiteListServiceImpl - [DEBUG] 路径 '/api/auth/login' 匹配模式 '/doc.html': false
+2025-11-11 14:54:38.201 [http-nio-8081-exec-10] DEBUG c.bing.framework.service.impl.WhiteListServiceImpl - [DEBUG] 路径 '/api/auth/login' 匹配模式 '/swagger-ui/**': false
+2025-11-11 14:54:38.201 [http-nio-8081-exec-10] DEBUG c.bing.framework.service.impl.WhiteListServiceImpl - [DEBUG] 路径 '/api/auth/login' 匹配模式 '/api/auth/login': true
+2025-11-11 14:54:38.203 [http-nio-8081-exec-10] DEBUG c.bing.framework.service.impl.WhiteListServiceImpl - [DEBUG] 路径 '/api/auth/login' 在白名单中，匹配成功
+2025-11-11 14:54:38.203 [http-nio-8081-exec-10] DEBUG com.bing.framework.interceptor.JwtInterceptor - 请求路径 '/api/auth/login' 在白名单中，直接通过
+2025-11-11 14:54:38.207 [http-nio-8081-exec-10] INFO  com.bing.framework.controller.AuthController - ========== Password Validation Diagnostics ==========
+2025-11-11 14:54:38.207 [http-nio-8081-exec-10] INFO  com.bing.framework.controller.AuthController - Username: admin
+2025-11-11 14:54:38.207 [http-nio-8081-exec-10] INFO  com.bing.framework.controller.AuthController - Input password length: 8
+2025-11-11 14:54:38.208 [http-nio-8081-exec-10] INFO  com.bing.framework.controller.AuthController - Database password length: 60
+2025-11-11 14:54:38.208 [http-nio-8081-exec-10] INFO  com.bing.framework.controller.AuthController - Database password format: isBCrypt=true
+2025-11-11 14:54:38.304 [http-nio-8081-exec-10] INFO  com.bing.framework.controller.AuthController - Strategy 1 - BCrypt validation result: true
+2025-11-11 14:54:38.304 [http-nio-8081-exec-10] INFO  com.bing.framework.controller.AuthController - Password validation successful for user: admin
+2025-11-11 14:54:38.307 [http-nio-8081-exec-10] INFO  com.bing.framework.controller.AuthController - 从缓存获取到有效的访问令牌，用户ID: 1
+2025-11-11 14:54:38.318 [http-nio-8081-exec-10] INFO  com.bing.framework.controller.AuthController - 刷新令牌不存在或无效，重新生成，用户ID: 1
+2025-11-11 14:54:38.320 [http-nio-8081-exec-10] DEBUG c.b.framework.mapper.RoleMapper.findRolesByUserId - ==>  Preparing: SELECT r.* FROM role r LEFT JOIN user_role ur ON r.id = ur.role_id WHERE ur.user_id = ? AND r.status = 1 ORDER BY r.id
+2025-11-11 14:54:38.321 [http-nio-8081-exec-10] DEBUG c.b.framework.mapper.RoleMapper.findRolesByUserId - ==> Parameters: 1(Long)
+2025-11-11 14:54:38.326 [http-nio-8081-exec-10] DEBUG c.b.framework.mapper.RoleMapper.findRolesByUserId - <==      Total: 1
+2025-11-11 14:54:38.327 [http-nio-8081-exec-10] DEBUG com.bing.framework.context.UserContext - 设置用户上下文成功，用户ID: 1, 用户名: admin
+2025-11-11 14:54:38.328 [http-nio-8081-exec-10] DEBUG com.bing.framework.context.UserContext - 设置用户角色列表成功，角色数量: 1
+2025-11-11 14:54:38.329 [http-nio-8081-exec-10] DEBUG com.bing.framework.mapper.LoginRecordMapper.insert - ==>  Preparing: INSERT INTO login_record ( user_id, username, ip_address, user_agent, status, login_time, message ) VALUES ( ?, ?, ?, ?, ?, ?, ? )
+2025-11-11 14:54:38.330 [http-nio-8081-exec-10] DEBUG com.bing.framework.mapper.LoginRecordMapper.insert - ==> Parameters: 1(Long), admin(String), 0:0:0:0:0:0:0:1(String), Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36 Edg/142.0.0.0(String), 1(Integer), 2025-11-11 14:54:38.328(Timestamp), 登录成功(String)
+2025-11-11 14:54:38.336 [http-nio-8081-exec-10] DEBUG com.bing.framework.mapper.LoginRecordMapper.insert - <==    Updates: 1
+2025-11-11 14:54:38.337 [http-nio-8081-exec-10] INFO  c.b.framework.service.impl.LoginRecordServiceImpl - 保存登录记录成功：用户=admin, 状态=1
+2025-11-11 14:54:38.337 [http-nio-8081-exec-10] INFO  AUDIT_LOG - userId:,username:anonymous,ipAddress:0:0:0:0:0:0:0:1,module:认证管理,operationType:新增,description:用户登录、注册、注销和获取当前用户信息等认证相关功能,requestParams:[LoginRequest(username=admin, password=ybc@8602)],result:成功,executionTime:133
+2025-11-11 14:54:38.339 [http-nio-8081-exec-10] DEBUG com.bing.framework.context.UserContext - 清理用户上下文成功
+2025-11-11 14:54:38.340 [http-nio-8081-exec-10] DEBUG c.b.f.interceptor.UserContextCleanupInterceptor - 请求处理完成，自动清理用户上下文
+2025-11-11 14:54:38.955 [http-nio-8081-exec-2] DEBUG com.bing.framework.interceptor.JwtInterceptor - 拦截请求: /api/auth/login
+2025-11-11 14:54:38.956 [http-nio-8081-exec-2] DEBUG c.bing.framework.service.impl.WhiteListServiceImpl - [DEBUG] 检查路径 '/api/auth/login' 是否在白名单中
+2025-11-11 14:54:38.956 [http-nio-8081-exec-2] INFO  c.bing.framework.service.impl.WhiteListServiceImpl - 白名单缓存未命中，从数据库查询白名单模式
+2025-11-11 14:54:38.957 [http-nio-8081-exec-2] DEBUG c.b.f.m.WhiteListMapper.selectEnabledWhiteLists - ==>  Preparing: SELECT id, pattern, type, description, enabled, create_time, update_time FROM sys_white_list WHERE enabled = 1 ORDER BY create_time DESC
+2025-11-11 14:54:38.957 [http-nio-8081-exec-2] DEBUG c.b.f.m.WhiteListMapper.selectEnabledWhiteLists - ==> Parameters: 
+2025-11-11 14:54:38.961 [http-nio-8081-exec-2] DEBUG c.b.f.m.WhiteListMapper.selectEnabledWhiteLists - <==      Total: 10
+2025-11-11 14:54:38.962 [http-nio-8081-exec-2] INFO  c.bing.framework.service.impl.WhiteListServiceImpl - 从数据库获取到 10 条白名单记录
+2025-11-11 14:54:38.962 [http-nio-8081-exec-2] INFO  c.bing.framework.service.impl.WhiteListServiceImpl - 添加白名单模式: '/api/auth/login'
+2025-11-11 14:54:38.964 [http-nio-8081-exec-2] INFO  c.bing.framework.service.impl.WhiteListServiceImpl - 添加白名单模式: '/api/auth/register'
+2025-11-11 14:54:38.964 [http-nio-8081-exec-2] INFO  c.bing.framework.service.impl.WhiteListServiceImpl - 添加白名单模式: '/api/auth/logout'
+2025-11-11 14:54:38.964 [http-nio-8081-exec-2] INFO  c.bing.framework.service.impl.WhiteListServiceImpl - 添加白名单模式: '/api/white-list/**'
+2025-11-11 14:54:38.964 [http-nio-8081-exec-2] INFO  c.bing.framework.service.impl.WhiteListServiceImpl - 添加白名单模式: '/doc.html'
+2025-11-11 14:54:38.964 [http-nio-8081-exec-2] INFO  c.bing.framework.service.impl.WhiteListServiceImpl - 添加白名单模式: '/swagger-resources/**'
+2025-11-11 14:54:38.964 [http-nio-8081-exec-2] INFO  c.bing.framework.service.impl.WhiteListServiceImpl - 添加白名单模式: '/v2/api-docs'
+2025-11-11 14:54:38.965 [http-nio-8081-exec-2] INFO  c.bing.framework.service.impl.WhiteListServiceImpl - 添加白名单模式: '/webjars/**'
+2025-11-11 14:54:38.965 [http-nio-8081-exec-2] INFO  c.bing.framework.service.impl.WhiteListServiceImpl - 添加白名单模式: '/knife4j/**'
+2025-11-11 14:54:38.965 [http-nio-8081-exec-2] INFO  c.bing.framework.service.impl.WhiteListServiceImpl - 添加白名单模式: '/swagger-ui/**'
+2025-11-11 14:54:38.965 [http-nio-8081-exec-2] INFO  c.bing.framework.service.impl.WhiteListServiceImpl - 转换后获取到 10 个启用的白名单模式，即将存入Redis缓存
+2025-11-11 14:54:38.965 [http-nio-8081-exec-2] DEBUG c.bing.framework.service.impl.WhiteListServiceImpl - [DEBUG] 当前启用的白名单模式数量: 10
+2025-11-11 14:54:38.965 [http-nio-8081-exec-2] DEBUG c.bing.framework.service.impl.WhiteListServiceImpl - [DEBUG] 路径 '/api/auth/login' 匹配模式 '/api/auth/register': false
+2025-11-11 14:54:38.965 [http-nio-8081-exec-2] DEBUG c.bing.framework.service.impl.WhiteListServiceImpl - [DEBUG] 路径 '/api/auth/login' 匹配模式 '/v2/api-docs': false
+2025-11-11 14:54:38.966 [http-nio-8081-exec-2] DEBUG c.bing.framework.service.impl.WhiteListServiceImpl - [DEBUG] 路径 '/api/auth/login' 匹配模式 '/doc.html': false
+2025-11-11 14:54:38.966 [http-nio-8081-exec-2] DEBUG c.bing.framework.service.impl.WhiteListServiceImpl - [DEBUG] 路径 '/api/auth/login' 匹配模式 '/swagger-ui/**': false
+2025-11-11 14:54:38.966 [http-nio-8081-exec-2] DEBUG c.bing.framework.service.impl.WhiteListServiceImpl - [DEBUG] 路径 '/api/auth/login' 匹配模式 '/api/auth/login': true
+2025-11-11 14:54:38.966 [http-nio-8081-exec-2] DEBUG c.bing.framework.service.impl.WhiteListServiceImpl - [DEBUG] 路径 '/api/auth/login' 在白名单中，匹配成功
+2025-11-11 14:54:38.966 [http-nio-8081-exec-2] DEBUG com.bing.framework.interceptor.JwtInterceptor - 请求路径 '/api/auth/login' 在白名单中，直接通过
+2025-11-11 14:54:38.970 [http-nio-8081-exec-2] INFO  com.bing.framework.controller.AuthController - ========== Password Validation Diagnostics ==========
+2025-11-11 14:54:38.970 [http-nio-8081-exec-2] INFO  com.bing.framework.controller.AuthController - Username: admin
+2025-11-11 14:54:38.970 [http-nio-8081-exec-2] INFO  com.bing.framework.controller.AuthController - Input password length: 8
+2025-11-11 14:54:38.970 [http-nio-8081-exec-2] INFO  com.bing.framework.controller.AuthController - Database password length: 60
+2025-11-11 14:54:38.970 [http-nio-8081-exec-2] INFO  com.bing.framework.controller.AuthController - Database password format: isBCrypt=true
+2025-11-11 14:54:39.069 [http-nio-8081-exec-2] INFO  com.bing.framework.controller.AuthController - Strategy 1 - BCrypt validation result: true
+2025-11-11 14:54:39.069 [http-nio-8081-exec-2] INFO  com.bing.framework.controller.AuthController - Password validation successful for user: admin
+2025-11-11 14:54:39.071 [http-nio-8081-exec-2] INFO  com.bing.framework.controller.AuthController - 从缓存获取到有效的访问令牌，用户ID: 1
+2025-11-11 14:54:39.078 [http-nio-8081-exec-2] INFO  com.bing.framework.controller.AuthController - 刷新令牌不存在或无效，重新生成，用户ID: 1
+2025-11-11 14:54:39.078 [http-nio-8081-exec-2] DEBUG c.b.framework.mapper.RoleMapper.findRolesByUserId - ==>  Preparing: SELECT r.* FROM role r LEFT JOIN user_role ur ON r.id = ur.role_id WHERE ur.user_id = ? AND r.status = 1 ORDER BY r.id
+2025-11-11 14:54:39.079 [http-nio-8081-exec-2] DEBUG c.b.framework.mapper.RoleMapper.findRolesByUserId - ==> Parameters: 1(Long)
+2025-11-11 14:54:39.082 [http-nio-8081-exec-2] DEBUG c.b.framework.mapper.RoleMapper.findRolesByUserId - <==      Total: 1
+2025-11-11 14:54:39.082 [http-nio-8081-exec-2] DEBUG com.bing.framework.context.UserContext - 设置用户上下文成功，用户ID: 1, 用户名: admin
+2025-11-11 14:54:39.083 [http-nio-8081-exec-2] DEBUG com.bing.framework.context.UserContext - 设置用户角色列表成功，角色数量: 1
+2025-11-11 14:54:39.087 [http-nio-8081-exec-2] DEBUG com.bing.framework.mapper.LoginRecordMapper.insert - ==>  Preparing: INSERT INTO login_record ( user_id, username, ip_address, user_agent, status, login_time, message ) VALUES ( ?, ?, ?, ?, ?, ?, ? )
+2025-11-11 14:54:39.089 [http-nio-8081-exec-2] DEBUG com.bing.framework.mapper.LoginRecordMapper.insert - ==> Parameters: 1(Long), admin(String), 0:0:0:0:0:0:0:1(String), Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36 Edg/142.0.0.0(String), 1(Integer), 2025-11-11 14:54:39.085(Timestamp), 登录成功(String)
+2025-11-11 14:54:39.094 [http-nio-8081-exec-2] DEBUG com.bing.framework.mapper.LoginRecordMapper.insert - <==    Updates: 1
+2025-11-11 14:54:39.096 [http-nio-8081-exec-2] INFO  c.b.framework.service.impl.LoginRecordServiceImpl - 保存登录记录成功：用户=admin, 状态=1
+2025-11-11 14:54:39.097 [http-nio-8081-exec-2] INFO  AUDIT_LOG - userId:,username:anonymous,ipAddress:0:0:0:0:0:0:0:1,module:认证管理,operationType:新增,description:用户登录、注册、注销和获取当前用户信息等认证相关功能,requestParams:[LoginRequest(username=admin, password=ybc@8602)],result:成功,executionTime:130
+2025-11-11 14:54:39.098 [http-nio-8081-exec-2] DEBUG com.bing.framework.context.UserContext - 清理用户上下文成功
+2025-11-11 14:54:39.101 [http-nio-8081-exec-2] DEBUG c.b.f.interceptor.UserContextCleanupInterceptor - 请求处理完成，自动清理用户上下文
+2025-11-11 14:54:39.748 [http-nio-8081-exec-3] DEBUG com.bing.framework.interceptor.JwtInterceptor - 拦截请求: /api/auth/login
+2025-11-11 14:54:39.748 [http-nio-8081-exec-3] DEBUG c.bing.framework.service.impl.WhiteListServiceImpl - [DEBUG] 检查路径 '/api/auth/login' 是否在白名单中
+2025-11-11 14:54:39.748 [http-nio-8081-exec-3] INFO  c.bing.framework.service.impl.WhiteListServiceImpl - 白名单缓存未命中，从数据库查询白名单模式
+2025-11-11 14:54:39.749 [http-nio-8081-exec-3] DEBUG c.b.f.m.WhiteListMapper.selectEnabledWhiteLists - ==>  Preparing: SELECT id, pattern, type, description, enabled, create_time, update_time FROM sys_white_list WHERE enabled = 1 ORDER BY create_time DESC
+2025-11-11 14:54:39.749 [http-nio-8081-exec-3] DEBUG c.b.f.m.WhiteListMapper.selectEnabledWhiteLists - ==> Parameters: 
+2025-11-11 14:54:39.752 [http-nio-8081-exec-3] DEBUG c.b.f.m.WhiteListMapper.selectEnabledWhiteLists - <==      Total: 10
+2025-11-11 14:54:39.752 [http-nio-8081-exec-3] INFO  c.bing.framework.service.impl.WhiteListServiceImpl - 从数据库获取到 10 条白名单记录
+2025-11-11 14:54:39.753 [http-nio-8081-exec-3] INFO  c.bing.framework.service.impl.WhiteListServiceImpl - 添加白名单模式: '/api/auth/login'
+2025-11-11 14:54:39.753 [http-nio-8081-exec-3] INFO  c.bing.framework.service.impl.WhiteListServiceImpl - 添加白名单模式: '/api/auth/register'
+2025-11-11 14:54:39.753 [http-nio-8081-exec-3] INFO  c.bing.framework.service.impl.WhiteListServiceImpl - 添加白名单模式: '/api/auth/logout'
+2025-11-11 14:54:39.753 [http-nio-8081-exec-3] INFO  c.bing.framework.service.impl.WhiteListServiceImpl - 添加白名单模式: '/api/white-list/**'
+2025-11-11 14:54:39.753 [http-nio-8081-exec-3] INFO  c.bing.framework.service.impl.WhiteListServiceImpl - 添加白名单模式: '/doc.html'
+2025-11-11 14:54:39.753 [http-nio-8081-exec-3] INFO  c.bing.framework.service.impl.WhiteListServiceImpl - 添加白名单模式: '/swagger-resources/**'
+2025-11-11 14:54:39.753 [http-nio-8081-exec-3] INFO  c.bing.framework.service.impl.WhiteListServiceImpl - 添加白名单模式: '/v2/api-docs'
+2025-11-11 14:54:39.754 [http-nio-8081-exec-3] INFO  c.bing.framework.service.impl.WhiteListServiceImpl - 添加白名单模式: '/webjars/**'
+2025-11-11 14:54:39.754 [http-nio-8081-exec-3] INFO  c.bing.framework.service.impl.WhiteListServiceImpl - 添加白名单模式: '/knife4j/**'
+2025-11-11 14:54:39.754 [http-nio-8081-exec-3] INFO  c.bing.framework.service.impl.WhiteListServiceImpl - 添加白名单模式: '/swagger-ui/**'
+2025-11-11 14:54:39.754 [http-nio-8081-exec-3] INFO  c.bing.framework.service.impl.WhiteListServiceImpl - 转换后获取到 10 个启用的白名单模式，即将存入Redis缓存
+2025-11-11 14:54:39.754 [http-nio-8081-exec-3] DEBUG c.bing.framework.service.impl.WhiteListServiceImpl - [DEBUG] 当前启用的白名单模式数量: 10
+2025-11-11 14:54:39.755 [http-nio-8081-exec-3] DEBUG c.bing.framework.service.impl.WhiteListServiceImpl - [DEBUG] 路径 '/api/auth/login' 匹配模式 '/api/auth/register': false
+2025-11-11 14:54:39.756 [http-nio-8081-exec-3] DEBUG c.bing.framework.service.impl.WhiteListServiceImpl - [DEBUG] 路径 '/api/auth/login' 匹配模式 '/v2/api-docs': false
+2025-11-11 14:54:39.756 [http-nio-8081-exec-3] DEBUG c.bing.framework.service.impl.WhiteListServiceImpl - [DEBUG] 路径 '/api/auth/login' 匹配模式 '/doc.html': false
+2025-11-11 14:54:39.756 [http-nio-8081-exec-3] DEBUG c.bing.framework.service.impl.WhiteListServiceImpl - [DEBUG] 路径 '/api/auth/login' 匹配模式 '/swagger-ui/**': false
+2025-11-11 14:54:39.756 [http-nio-8081-exec-3] DEBUG c.bing.framework.service.impl.WhiteListServiceImpl - [DEBUG] 路径 '/api/auth/login' 匹配模式 '/api/auth/login': true
+2025-11-11 14:54:39.756 [http-nio-8081-exec-3] DEBUG c.bing.framework.service.impl.WhiteListServiceImpl - [DEBUG] 路径 '/api/auth/login' 在白名单中，匹配成功
+2025-11-11 14:54:39.758 [http-nio-8081-exec-3] DEBUG com.bing.framework.interceptor.JwtInterceptor - 请求路径 '/api/auth/login' 在白名单中，直接通过
+2025-11-11 14:54:39.761 [http-nio-8081-exec-3] INFO  com.bing.framework.controller.AuthController - ========== Password Validation Diagnostics ==========
+2025-11-11 14:54:39.761 [http-nio-8081-exec-3] INFO  com.bing.framework.controller.AuthController - Username: admin
+2025-11-11 14:54:39.761 [http-nio-8081-exec-3] INFO  com.bing.framework.controller.AuthController - Input password length: 8
+2025-11-11 14:54:39.761 [http-nio-8081-exec-3] INFO  com.bing.framework.controller.AuthController - Database password length: 60
+2025-11-11 14:54:39.761 [http-nio-8081-exec-3] INFO  com.bing.framework.controller.AuthController - Database password format: isBCrypt=true
+2025-11-11 14:54:39.893 [http-nio-8081-exec-3] INFO  com.bing.framework.controller.AuthController - Strategy 1 - BCrypt validation result: true
+2025-11-11 14:54:39.894 [http-nio-8081-exec-3] INFO  com.bing.framework.controller.AuthController - Password validation successful for user: admin
+2025-11-11 14:54:39.898 [http-nio-8081-exec-3] INFO  com.bing.framework.controller.AuthController - 从缓存获取到有效的访问令牌，用户ID: 1
+2025-11-11 14:54:39.917 [http-nio-8081-exec-3] INFO  com.bing.framework.controller.AuthController - 刷新令牌不存在或无效，重新生成，用户ID: 1
+2025-11-11 14:54:39.918 [http-nio-8081-exec-3] DEBUG c.b.framework.mapper.RoleMapper.findRolesByUserId - ==>  Preparing: SELECT r.* FROM role r LEFT JOIN user_role ur ON r.id = ur.role_id WHERE ur.user_id = ? AND r.status = 1 ORDER BY r.id
+2025-11-11 14:54:39.923 [http-nio-8081-exec-3] DEBUG c.b.framework.mapper.RoleMapper.findRolesByUserId - ==> Parameters: 1(Long)
+2025-11-11 14:54:39.930 [http-nio-8081-exec-3] DEBUG c.b.framework.mapper.RoleMapper.findRolesByUserId - <==      Total: 1
+2025-11-11 14:54:39.934 [http-nio-8081-exec-3] DEBUG com.bing.framework.context.UserContext - 设置用户上下文成功，用户ID: 1, 用户名: admin
+2025-11-11 14:54:39.935 [http-nio-8081-exec-3] DEBUG com.bing.framework.context.UserContext - 设置用户角色列表成功，角色数量: 1
+2025-11-11 14:54:39.936 [http-nio-8081-exec-3] DEBUG com.bing.framework.mapper.LoginRecordMapper.insert - ==>  Preparing: INSERT INTO login_record ( user_id, username, ip_address, user_agent, status, login_time, message ) VALUES ( ?, ?, ?, ?, ?, ?, ? )
+2025-11-11 14:54:39.938 [http-nio-8081-exec-3] DEBUG com.bing.framework.mapper.LoginRecordMapper.insert - ==> Parameters: 1(Long), admin(String), 0:0:0:0:0:0:0:1(String), Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36 Edg/142.0.0.0(String), 1(Integer), 2025-11-11 14:54:39.935(Timestamp), 登录成功(String)
+2025-11-11 14:54:39.942 [http-nio-8081-exec-3] DEBUG com.bing.framework.mapper.LoginRecordMapper.insert - <==    Updates: 1
+2025-11-11 14:54:39.945 [http-nio-8081-exec-3] INFO  c.b.framework.service.impl.LoginRecordServiceImpl - 保存登录记录成功：用户=admin, 状态=1
+2025-11-11 14:54:39.945 [http-nio-8081-exec-3] INFO  AUDIT_LOG - userId:,username:anonymous,ipAddress:0:0:0:0:0:0:0:1,module:认证管理,operationType:新增,description:用户登录、注册、注销和获取当前用户信息等认证相关功能,requestParams:[LoginRequest(username=admin, password=ybc@8602)],result:成功,executionTime:185
+2025-11-11 14:54:39.947 [http-nio-8081-exec-3] DEBUG com.bing.framework.context.UserContext - 清理用户上下文成功
+2025-11-11 14:54:39.948 [http-nio-8081-exec-3] DEBUG c.b.f.interceptor.UserContextCleanupInterceptor - 请求处理完成，自动清理用户上下文
+2025-11-11 14:54:40.445 [http-nio-8081-exec-1] DEBUG com.bing.framework.interceptor.JwtInterceptor - 拦截请求: /api/auth/login
+2025-11-11 14:54:40.446 [http-nio-8081-exec-1] DEBUG c.bing.framework.service.impl.WhiteListServiceImpl - [DEBUG] 检查路径 '/api/auth/login' 是否在白名单中
+2025-11-11 14:54:40.446 [http-nio-8081-exec-1] INFO  c.bing.framework.service.impl.WhiteListServiceImpl - 白名单缓存未命中，从数据库查询白名单模式
+2025-11-11 14:54:40.447 [http-nio-8081-exec-1] DEBUG c.b.f.m.WhiteListMapper.selectEnabledWhiteLists - ==>  Preparing: SELECT id, pattern, type, description, enabled, create_time, update_time FROM sys_white_list WHERE enabled = 1 ORDER BY create_time DESC
+2025-11-11 14:54:40.448 [http-nio-8081-exec-1] DEBUG c.b.f.m.WhiteListMapper.selectEnabledWhiteLists - ==> Parameters: 
+2025-11-11 14:54:40.451 [http-nio-8081-exec-1] DEBUG c.b.f.m.WhiteListMapper.selectEnabledWhiteLists - <==      Total: 10
+2025-11-11 14:54:40.452 [http-nio-8081-exec-1] INFO  c.bing.framework.service.impl.WhiteListServiceImpl - 从数据库获取到 10 条白名单记录
+2025-11-11 14:54:40.453 [http-nio-8081-exec-1] INFO  c.bing.framework.service.impl.WhiteListServiceImpl - 添加白名单模式: '/api/auth/login'
+2025-11-11 14:54:40.453 [http-nio-8081-exec-1] INFO  c.bing.framework.service.impl.WhiteListServiceImpl - 添加白名单模式: '/api/auth/register'
+2025-11-11 14:54:40.453 [http-nio-8081-exec-1] INFO  c.bing.framework.service.impl.WhiteListServiceImpl - 添加白名单模式: '/api/auth/logout'
+2025-11-11 14:54:40.454 [http-nio-8081-exec-1] INFO  c.bing.framework.service.impl.WhiteListServiceImpl - 添加白名单模式: '/api/white-list/**'
+2025-11-11 14:54:40.454 [http-nio-8081-exec-1] INFO  c.bing.framework.service.impl.WhiteListServiceImpl - 添加白名单模式: '/doc.html'
+2025-11-11 14:54:40.455 [http-nio-8081-exec-1] INFO  c.bing.framework.service.impl.WhiteListServiceImpl - 添加白名单模式: '/swagger-resources/**'
+2025-11-11 14:54:40.455 [http-nio-8081-exec-1] INFO  c.bing.framework.service.impl.WhiteListServiceImpl - 添加白名单模式: '/v2/api-docs'
+2025-11-11 14:54:40.456 [http-nio-8081-exec-1] INFO  c.bing.framework.service.impl.WhiteListServiceImpl - 添加白名单模式: '/webjars/**'
+2025-11-11 14:54:40.458 [http-nio-8081-exec-1] INFO  c.bing.framework.service.impl.WhiteListServiceImpl - 添加白名单模式: '/knife4j/**'
+2025-11-11 14:54:40.458 [http-nio-8081-exec-1] INFO  c.bing.framework.service.impl.WhiteListServiceImpl - 添加白名单模式: '/swagger-ui/**'
+2025-11-11 14:54:40.459 [http-nio-8081-exec-1] INFO  c.bing.framework.service.impl.WhiteListServiceImpl - 转换后获取到 10 个启用的白名单模式，即将存入Redis缓存
+2025-11-11 14:54:40.459 [http-nio-8081-exec-1] DEBUG c.bing.framework.service.impl.WhiteListServiceImpl - [DEBUG] 当前启用的白名单模式数量: 10
+2025-11-11 14:54:40.460 [http-nio-8081-exec-1] DEBUG c.bing.framework.service.impl.WhiteListServiceImpl - [DEBUG] 路径 '/api/auth/login' 匹配模式 '/api/auth/register': false
+2025-11-11 14:54:40.460 [http-nio-8081-exec-1] DEBUG c.bing.framework.service.impl.WhiteListServiceImpl - [DEBUG] 路径 '/api/auth/login' 匹配模式 '/v2/api-docs': false
+2025-11-11 14:54:40.461 [http-nio-8081-exec-1] DEBUG c.bing.framework.service.impl.WhiteListServiceImpl - [DEBUG] 路径 '/api/auth/login' 匹配模式 '/doc.html': false
+2025-11-11 14:54:40.461 [http-nio-8081-exec-1] DEBUG c.bing.framework.service.impl.WhiteListServiceImpl - [DEBUG] 路径 '/api/auth/login' 匹配模式 '/swagger-ui/**': false
+2025-11-11 14:54:40.464 [http-nio-8081-exec-1] DEBUG c.bing.framework.service.impl.WhiteListServiceImpl - [DEBUG] 路径 '/api/auth/login' 匹配模式 '/api/auth/login': true
+2025-11-11 14:54:40.466 [http-nio-8081-exec-1] DEBUG c.bing.framework.service.impl.WhiteListServiceImpl - [DEBUG] 路径 '/api/auth/login' 在白名单中，匹配成功
+2025-11-11 14:54:40.466 [http-nio-8081-exec-1] DEBUG com.bing.framework.interceptor.JwtInterceptor - 请求路径 '/api/auth/login' 在白名单中，直接通过
+2025-11-11 14:54:40.468 [http-nio-8081-exec-1] INFO  com.bing.framework.controller.AuthController - ========== Password Validation Diagnostics ==========
+2025-11-11 14:54:40.470 [http-nio-8081-exec-1] INFO  com.bing.framework.controller.AuthController - Username: admin
+2025-11-11 14:54:40.470 [http-nio-8081-exec-1] INFO  com.bing.framework.controller.AuthController - Input password length: 8
+2025-11-11 14:54:40.470 [http-nio-8081-exec-1] INFO  com.bing.framework.controller.AuthController - Database password length: 60
+2025-11-11 14:54:40.470 [http-nio-8081-exec-1] INFO  com.bing.framework.controller.AuthController - Database password format: isBCrypt=true
+2025-11-11 14:54:40.568 [http-nio-8081-exec-1] INFO  com.bing.framework.controller.AuthController - Strategy 1 - BCrypt validation result: true
+2025-11-11 14:54:40.569 [http-nio-8081-exec-1] INFO  com.bing.framework.controller.AuthController - Password validation successful for user: admin
+2025-11-11 14:54:40.571 [http-nio-8081-exec-1] INFO  com.bing.framework.controller.AuthController - 从缓存获取到有效的访问令牌，用户ID: 1
+2025-11-11 14:54:40.591 [http-nio-8081-exec-1] INFO  com.bing.framework.controller.AuthController - 刷新令牌不存在或无效，重新生成，用户ID: 1
+2025-11-11 14:54:40.593 [http-nio-8081-exec-1] DEBUG c.b.framework.mapper.RoleMapper.findRolesByUserId - ==>  Preparing: SELECT r.* FROM role r LEFT JOIN user_role ur ON r.id = ur.role_id WHERE ur.user_id = ? AND r.status = 1 ORDER BY r.id
+2025-11-11 14:54:40.593 [http-nio-8081-exec-1] DEBUG c.b.framework.mapper.RoleMapper.findRolesByUserId - ==> Parameters: 1(Long)
+2025-11-11 14:54:40.597 [http-nio-8081-exec-1] DEBUG c.b.framework.mapper.RoleMapper.findRolesByUserId - <==      Total: 1
+2025-11-11 14:54:40.597 [http-nio-8081-exec-1] DEBUG com.bing.framework.context.UserContext - 设置用户上下文成功，用户ID: 1, 用户名: admin
+2025-11-11 14:54:40.597 [http-nio-8081-exec-1] DEBUG com.bing.framework.context.UserContext - 设置用户角色列表成功，角色数量: 1
+2025-11-11 14:54:40.601 [http-nio-8081-exec-1] DEBUG com.bing.framework.mapper.LoginRecordMapper.insert - ==>  Preparing: INSERT INTO login_record ( user_id, username, ip_address, user_agent, status, login_time, message ) VALUES ( ?, ?, ?, ?, ?, ?, ? )
+2025-11-11 14:54:40.603 [http-nio-8081-exec-1] DEBUG com.bing.framework.mapper.LoginRecordMapper.insert - ==> Parameters: 1(Long), admin(String), 0:0:0:0:0:0:0:1(String), Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36 Edg/142.0.0.0(String), 1(Integer), 2025-11-11 14:54:40.598(Timestamp), 登录成功(String)
+2025-11-11 14:54:40.613 [http-nio-8081-exec-1] DEBUG com.bing.framework.mapper.LoginRecordMapper.insert - <==    Updates: 1
+2025-11-11 14:54:40.614 [http-nio-8081-exec-1] INFO  c.b.framework.service.impl.LoginRecordServiceImpl - 保存登录记录成功：用户=admin, 状态=1
+2025-11-11 14:54:40.615 [http-nio-8081-exec-1] INFO  AUDIT_LOG - userId:,username:anonymous,ipAddress:0:0:0:0:0:0:0:1,module:认证管理,operationType:新增,description:用户登录、注册、注销和获取当前用户信息等认证相关功能,requestParams:[LoginRequest(username=admin, password=ybc@8602)],result:成功,executionTime:148
+2025-11-11 14:54:40.617 [http-nio-8081-exec-1] DEBUG com.bing.framework.context.UserContext - 清理用户上下文成功
+2025-11-11 14:54:40.618 [http-nio-8081-exec-1] DEBUG c.b.f.interceptor.UserContextCleanupInterceptor - 请求处理完成，自动清理用户上下文
+2025-11-11 14:54:40.942 [http-nio-8081-exec-4] DEBUG com.bing.framework.interceptor.JwtInterceptor - 拦截请求: /api/auth/login
+2025-11-11 14:54:40.943 [http-nio-8081-exec-4] DEBUG c.bing.framework.service.impl.WhiteListServiceImpl - [DEBUG] 检查路径 '/api/auth/login' 是否在白名单中
+2025-11-11 14:54:40.943 [http-nio-8081-exec-4] INFO  c.bing.framework.service.impl.WhiteListServiceImpl - 白名单缓存未命中，从数据库查询白名单模式
+2025-11-11 14:54:40.943 [http-nio-8081-exec-4] DEBUG c.b.f.m.WhiteListMapper.selectEnabledWhiteLists - ==>  Preparing: SELECT id, pattern, type, description, enabled, create_time, update_time FROM sys_white_list WHERE enabled = 1 ORDER BY create_time DESC
+2025-11-11 14:54:40.944 [http-nio-8081-exec-4] DEBUG c.b.f.m.WhiteListMapper.selectEnabledWhiteLists - ==> Parameters: 
+2025-11-11 14:54:40.946 [http-nio-8081-exec-4] DEBUG c.b.f.m.WhiteListMapper.selectEnabledWhiteLists - <==      Total: 10
+2025-11-11 14:54:40.947 [http-nio-8081-exec-4] INFO  c.bing.framework.service.impl.WhiteListServiceImpl - 从数据库获取到 10 条白名单记录
+2025-11-11 14:54:40.947 [http-nio-8081-exec-4] INFO  c.bing.framework.service.impl.WhiteListServiceImpl - 添加白名单模式: '/api/auth/login'
+2025-11-11 14:54:40.947 [http-nio-8081-exec-4] INFO  c.bing.framework.service.impl.WhiteListServiceImpl - 添加白名单模式: '/api/auth/register'
+2025-11-11 14:54:40.947 [http-nio-8081-exec-4] INFO  c.bing.framework.service.impl.WhiteListServiceImpl - 添加白名单模式: '/api/auth/logout'
+2025-11-11 14:54:40.949 [http-nio-8081-exec-4] INFO  c.bing.framework.service.impl.WhiteListServiceImpl - 添加白名单模式: '/api/white-list/**'
+2025-11-11 14:54:40.949 [http-nio-8081-exec-4] INFO  c.bing.framework.service.impl.WhiteListServiceImpl - 添加白名单模式: '/doc.html'
+2025-11-11 14:54:40.949 [http-nio-8081-exec-4] INFO  c.bing.framework.service.impl.WhiteListServiceImpl - 添加白名单模式: '/swagger-resources/**'
+2025-11-11 14:54:40.950 [http-nio-8081-exec-4] INFO  c.bing.framework.service.impl.WhiteListServiceImpl - 添加白名单模式: '/v2/api-docs'
+2025-11-11 14:54:40.950 [http-nio-8081-exec-4] INFO  c.bing.framework.service.impl.WhiteListServiceImpl - 添加白名单模式: '/webjars/**'
+2025-11-11 14:54:40.950 [http-nio-8081-exec-4] INFO  c.bing.framework.service.impl.WhiteListServiceImpl - 添加白名单模式: '/knife4j/**'
+2025-11-11 14:54:40.950 [http-nio-8081-exec-4] INFO  c.bing.framework.service.impl.WhiteListServiceImpl - 添加白名单模式: '/swagger-ui/**'
+2025-11-11 14:54:40.951 [http-nio-8081-exec-4] INFO  c.bing.framework.service.impl.WhiteListServiceImpl - 转换后获取到 10 个启用的白名单模式，即将存入Redis缓存
+2025-11-11 14:54:40.952 [http-nio-8081-exec-4] DEBUG c.bing.framework.service.impl.WhiteListServiceImpl - [DEBUG] 当前启用的白名单模式数量: 10
+2025-11-11 14:54:40.953 [http-nio-8081-exec-4] DEBUG c.bing.framework.service.impl.WhiteListServiceImpl - [DEBUG] 路径 '/api/auth/login' 匹配模式 '/api/auth/register': false
+2025-11-11 14:54:40.955 [http-nio-8081-exec-4] DEBUG c.bing.framework.service.impl.WhiteListServiceImpl - [DEBUG] 路径 '/api/auth/login' 匹配模式 '/v2/api-docs': false
+2025-11-11 14:54:40.955 [http-nio-8081-exec-4] DEBUG c.bing.framework.service.impl.WhiteListServiceImpl - [DEBUG] 路径 '/api/auth/login' 匹配模式 '/doc.html': false
+2025-11-11 14:54:40.955 [http-nio-8081-exec-4] DEBUG c.bing.framework.service.impl.WhiteListServiceImpl - [DEBUG] 路径 '/api/auth/login' 匹配模式 '/swagger-ui/**': false
+2025-11-11 14:54:40.955 [http-nio-8081-exec-4] DEBUG c.bing.framework.service.impl.WhiteListServiceImpl - [DEBUG] 路径 '/api/auth/login' 匹配模式 '/api/auth/login': true
+2025-11-11 14:54:40.955 [http-nio-8081-exec-4] DEBUG c.bing.framework.service.impl.WhiteListServiceImpl - [DEBUG] 路径 '/api/auth/login' 在白名单中，匹配成功
+2025-11-11 14:54:40.955 [http-nio-8081-exec-4] DEBUG com.bing.framework.interceptor.JwtInterceptor - 请求路径 '/api/auth/login' 在白名单中，直接通过
+2025-11-11 14:54:40.958 [http-nio-8081-exec-4] INFO  com.bing.framework.controller.AuthController - ========== Password Validation Diagnostics ==========
+2025-11-11 14:54:40.959 [http-nio-8081-exec-4] INFO  com.bing.framework.controller.AuthController - Username: admin
+2025-11-11 14:54:40.959 [http-nio-8081-exec-4] INFO  com.bing.framework.controller.AuthController - Input password length: 8
+2025-11-11 14:54:40.960 [http-nio-8081-exec-4] INFO  com.bing.framework.controller.AuthController - Database password length: 60
+2025-11-11 14:54:40.960 [http-nio-8081-exec-4] INFO  com.bing.framework.controller.AuthController - Database password format: isBCrypt=true
+2025-11-11 14:54:41.073 [http-nio-8081-exec-4] INFO  com.bing.framework.controller.AuthController - Strategy 1 - BCrypt validation result: true
+2025-11-11 14:54:41.074 [http-nio-8081-exec-4] INFO  com.bing.framework.controller.AuthController - Password validation successful for user: admin
+2025-11-11 14:54:41.078 [http-nio-8081-exec-4] INFO  com.bing.framework.controller.AuthController - 从缓存获取到有效的访问令牌，用户ID: 1
+2025-11-11 14:54:41.091 [http-nio-8081-exec-4] INFO  com.bing.framework.controller.AuthController - 刷新令牌不存在或无效，重新生成，用户ID: 1
+2025-11-11 14:54:41.093 [http-nio-8081-exec-4] DEBUG c.b.framework.mapper.RoleMapper.findRolesByUserId - ==>  Preparing: SELECT r.* FROM role r LEFT JOIN user_role ur ON r.id = ur.role_id WHERE ur.user_id = ? AND r.status = 1 ORDER BY r.id
+2025-11-11 14:54:41.095 [http-nio-8081-exec-4] DEBUG c.b.framework.mapper.RoleMapper.findRolesByUserId - ==> Parameters: 1(Long)
+2025-11-11 14:54:41.097 [http-nio-8081-exec-4] DEBUG c.b.framework.mapper.RoleMapper.findRolesByUserId - <==      Total: 1
+2025-11-11 14:54:41.098 [http-nio-8081-exec-4] DEBUG com.bing.framework.context.UserContext - 设置用户上下文成功，用户ID: 1, 用户名: admin
+2025-11-11 14:54:41.099 [http-nio-8081-exec-4] DEBUG com.bing.framework.context.UserContext - 设置用户角色列表成功，角色数量: 1
+2025-11-11 14:54:41.101 [http-nio-8081-exec-4] DEBUG com.bing.framework.mapper.LoginRecordMapper.insert - ==>  Preparing: INSERT INTO login_record ( user_id, username, ip_address, user_agent, status, login_time, message ) VALUES ( ?, ?, ?, ?, ?, ?, ? )
+2025-11-11 14:54:41.103 [http-nio-8081-exec-4] DEBUG com.bing.framework.mapper.LoginRecordMapper.insert - ==> Parameters: 1(Long), admin(String), 0:0:0:0:0:0:0:1(String), Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36 Edg/142.0.0.0(String), 1(Integer), 2025-11-11 14:54:41.1(Timestamp), 登录成功(String)
+2025-11-11 14:54:41.110 [http-nio-8081-exec-4] DEBUG com.bing.framework.mapper.LoginRecordMapper.insert - <==    Updates: 1
+2025-11-11 14:54:41.111 [http-nio-8081-exec-4] INFO  c.b.framework.service.impl.LoginRecordServiceImpl - 保存登录记录成功：用户=admin, 状态=1
+2025-11-11 14:54:41.111 [http-nio-8081-exec-4] INFO  AUDIT_LOG - userId:,username:anonymous,ipAddress:0:0:0:0:0:0:0:1,module:认证管理,operationType:新增,description:用户登录、注册、注销和获取当前用户信息等认证相关功能,requestParams:[LoginRequest(username=admin, password=ybc@8602)],result:成功,executionTime:154
+2025-11-11 14:54:41.113 [http-nio-8081-exec-4] DEBUG com.bing.framework.context.UserContext - 清理用户上下文成功
+2025-11-11 14:54:41.114 [http-nio-8081-exec-4] DEBUG c.b.f.interceptor.UserContextCleanupInterceptor - 请求处理完成，自动清理用户上下文
+2025-11-11 14:54:41.382 [http-nio-8081-exec-5] DEBUG com.bing.framework.interceptor.JwtInterceptor - 拦截请求: /api/auth/login
+2025-11-11 14:54:41.382 [http-nio-8081-exec-5] DEBUG c.bing.framework.service.impl.WhiteListServiceImpl - [DEBUG] 检查路径 '/api/auth/login' 是否在白名单中
+2025-11-11 14:54:41.383 [http-nio-8081-exec-5] INFO  c.bing.framework.service.impl.WhiteListServiceImpl - 白名单缓存未命中，从数据库查询白名单模式
+2025-11-11 14:54:41.383 [http-nio-8081-exec-5] DEBUG c.b.f.m.WhiteListMapper.selectEnabledWhiteLists - ==>  Preparing: SELECT id, pattern, type, description, enabled, create_time, update_time FROM sys_white_list WHERE enabled = 1 ORDER BY create_time DESC
+2025-11-11 14:54:41.384 [http-nio-8081-exec-5] DEBUG c.b.f.m.WhiteListMapper.selectEnabledWhiteLists - ==> Parameters: 
+2025-11-11 14:54:41.388 [http-nio-8081-exec-5] DEBUG c.b.f.m.WhiteListMapper.selectEnabledWhiteLists - <==      Total: 10
+2025-11-11 14:54:41.389 [http-nio-8081-exec-5] INFO  c.bing.framework.service.impl.WhiteListServiceImpl - 从数据库获取到 10 条白名单记录
+2025-11-11 14:54:41.391 [http-nio-8081-exec-5] INFO  c.bing.framework.service.impl.WhiteListServiceImpl - 添加白名单模式: '/api/auth/login'
+2025-11-11 14:54:41.392 [http-nio-8081-exec-5] INFO  c.bing.framework.service.impl.WhiteListServiceImpl - 添加白名单模式: '/api/auth/register'
+2025-11-11 14:54:41.392 [http-nio-8081-exec-5] INFO  c.bing.framework.service.impl.WhiteListServiceImpl - 添加白名单模式: '/api/auth/logout'
+2025-11-11 14:54:41.392 [http-nio-8081-exec-5] INFO  c.bing.framework.service.impl.WhiteListServiceImpl - 添加白名单模式: '/api/white-list/**'
+2025-11-11 14:54:41.394 [http-nio-8081-exec-5] INFO  c.bing.framework.service.impl.WhiteListServiceImpl - 添加白名单模式: '/doc.html'
+2025-11-11 14:54:41.396 [http-nio-8081-exec-5] INFO  c.bing.framework.service.impl.WhiteListServiceImpl - 添加白名单模式: '/swagger-resources/**'
+2025-11-11 14:54:41.397 [http-nio-8081-exec-5] INFO  c.bing.framework.service.impl.WhiteListServiceImpl - 添加白名单模式: '/v2/api-docs'
+2025-11-11 14:54:41.397 [http-nio-8081-exec-5] INFO  c.bing.framework.service.impl.WhiteListServiceImpl - 添加白名单模式: '/webjars/**'
+2025-11-11 14:54:41.398 [http-nio-8081-exec-5] INFO  c.bing.framework.service.impl.WhiteListServiceImpl - 添加白名单模式: '/knife4j/**'
+2025-11-11 14:54:41.398 [http-nio-8081-exec-5] INFO  c.bing.framework.service.impl.WhiteListServiceImpl - 添加白名单模式: '/swagger-ui/**'
+2025-11-11 14:54:41.398 [http-nio-8081-exec-5] INFO  c.bing.framework.service.impl.WhiteListServiceImpl - 转换后获取到 10 个启用的白名单模式，即将存入Redis缓存
+2025-11-11 14:54:41.398 [http-nio-8081-exec-5] DEBUG c.bing.framework.service.impl.WhiteListServiceImpl - [DEBUG] 当前启用的白名单模式数量: 10
+2025-11-11 14:54:41.399 [http-nio-8081-exec-5] DEBUG c.bing.framework.service.impl.WhiteListServiceImpl - [DEBUG] 路径 '/api/auth/login' 匹配模式 '/api/auth/register': false
+2025-11-11 14:54:41.399 [http-nio-8081-exec-5] DEBUG c.bing.framework.service.impl.WhiteListServiceImpl - [DEBUG] 路径 '/api/auth/login' 匹配模式 '/v2/api-docs': false
+2025-11-11 14:54:41.400 [http-nio-8081-exec-5] DEBUG c.bing.framework.service.impl.WhiteListServiceImpl - [DEBUG] 路径 '/api/auth/login' 匹配模式 '/doc.html': false
+2025-11-11 14:54:41.401 [http-nio-8081-exec-5] DEBUG c.bing.framework.service.impl.WhiteListServiceImpl - [DEBUG] 路径 '/api/auth/login' 匹配模式 '/swagger-ui/**': false
+2025-11-11 14:54:41.401 [http-nio-8081-exec-5] DEBUG c.bing.framework.service.impl.WhiteListServiceImpl - [DEBUG] 路径 '/api/auth/login' 匹配模式 '/api/auth/login': true
+2025-11-11 14:54:41.401 [http-nio-8081-exec-5] DEBUG c.bing.framework.service.impl.WhiteListServiceImpl - [DEBUG] 路径 '/api/auth/login' 在白名单中，匹配成功
+2025-11-11 14:54:41.402 [http-nio-8081-exec-5] DEBUG com.bing.framework.interceptor.JwtInterceptor - 请求路径 '/api/auth/login' 在白名单中，直接通过
+2025-11-11 14:54:41.406 [http-nio-8081-exec-5] INFO  com.bing.framework.controller.AuthController - ========== Password Validation Diagnostics ==========
+2025-11-11 14:54:41.407 [http-nio-8081-exec-5] INFO  com.bing.framework.controller.AuthController - Username: admin
+2025-11-11 14:54:41.407 [http-nio-8081-exec-5] INFO  com.bing.framework.controller.AuthController - Input password length: 8
+2025-11-11 14:54:41.408 [http-nio-8081-exec-5] INFO  com.bing.framework.controller.AuthController - Database password length: 60
+2025-11-11 14:54:41.408 [http-nio-8081-exec-5] INFO  com.bing.framework.controller.AuthController - Database password format: isBCrypt=true
+2025-11-11 14:54:41.517 [http-nio-8081-exec-5] INFO  com.bing.framework.controller.AuthController - Strategy 1 - BCrypt validation result: true
+2025-11-11 14:54:41.519 [http-nio-8081-exec-5] INFO  com.bing.framework.controller.AuthController - Password validation successful for user: admin
+2025-11-11 14:54:41.522 [http-nio-8081-exec-5] INFO  com.bing.framework.controller.AuthController - 从缓存获取到有效的访问令牌，用户ID: 1
+2025-11-11 14:54:41.536 [http-nio-8081-exec-5] INFO  com.bing.framework.controller.AuthController - 刷新令牌不存在或无效，重新生成，用户ID: 1
+2025-11-11 14:54:41.538 [http-nio-8081-exec-5] DEBUG c.b.framework.mapper.RoleMapper.findRolesByUserId - ==>  Preparing: SELECT r.* FROM role r LEFT JOIN user_role ur ON r.id = ur.role_id WHERE ur.user_id = ? AND r.status = 1 ORDER BY r.id
+2025-11-11 14:54:41.540 [http-nio-8081-exec-5] DEBUG c.b.framework.mapper.RoleMapper.findRolesByUserId - ==> Parameters: 1(Long)
+2025-11-11 14:54:41.543 [http-nio-8081-exec-5] DEBUG c.b.framework.mapper.RoleMapper.findRolesByUserId - <==      Total: 1
+2025-11-11 14:54:41.544 [http-nio-8081-exec-5] DEBUG com.bing.framework.context.UserContext - 设置用户上下文成功，用户ID: 1, 用户名: admin
+2025-11-11 14:54:41.544 [http-nio-8081-exec-5] DEBUG com.bing.framework.context.UserContext - 设置用户角色列表成功，角色数量: 1
+2025-11-11 14:54:41.545 [http-nio-8081-exec-5] DEBUG com.bing.framework.mapper.LoginRecordMapper.insert - ==>  Preparing: INSERT INTO login_record ( user_id, username, ip_address, user_agent, status, login_time, message ) VALUES ( ?, ?, ?, ?, ?, ?, ? )
+2025-11-11 14:54:41.547 [http-nio-8081-exec-5] DEBUG com.bing.framework.mapper.LoginRecordMapper.insert - ==> Parameters: 1(Long), admin(String), 0:0:0:0:0:0:0:1(String), Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36 Edg/142.0.0.0(String), 1(Integer), 2025-11-11 14:54:41.544(Timestamp), 登录成功(String)
+2025-11-11 14:54:41.553 [http-nio-8081-exec-5] DEBUG com.bing.framework.mapper.LoginRecordMapper.insert - <==    Updates: 1
+2025-11-11 14:54:41.555 [http-nio-8081-exec-5] INFO  c.b.framework.service.impl.LoginRecordServiceImpl - 保存登录记录成功：用户=admin, 状态=1
+2025-11-11 14:54:41.556 [http-nio-8081-exec-5] INFO  AUDIT_LOG - userId:,username:anonymous,ipAddress:0:0:0:0:0:0:0:1,module:认证管理,operationType:新增,description:用户登录、注册、注销和获取当前用户信息等认证相关功能,requestParams:[LoginRequest(username=admin, password=ybc@8602)],result:成功,executionTime:152
+2025-11-11 14:54:41.557 [http-nio-8081-exec-5] DEBUG com.bing.framework.context.UserContext - 清理用户上下文成功
+2025-11-11 14:54:41.558 [http-nio-8081-exec-5] DEBUG c.b.f.interceptor.UserContextCleanupInterceptor - 请求处理完成，自动清理用户上下文
+2025-11-11 14:54:41.799 [http-nio-8081-exec-6] DEBUG com.bing.framework.interceptor.JwtInterceptor - 拦截请求: /api/auth/login
+2025-11-11 14:54:41.800 [http-nio-8081-exec-6] DEBUG c.bing.framework.service.impl.WhiteListServiceImpl - [DEBUG] 检查路径 '/api/auth/login' 是否在白名单中
+2025-11-11 14:54:41.800 [http-nio-8081-exec-6] INFO  c.bing.framework.service.impl.WhiteListServiceImpl - 白名单缓存未命中，从数据库查询白名单模式
+2025-11-11 14:54:41.801 [http-nio-8081-exec-6] DEBUG c.b.f.m.WhiteListMapper.selectEnabledWhiteLists - ==>  Preparing: SELECT id, pattern, type, description, enabled, create_time, update_time FROM sys_white_list WHERE enabled = 1 ORDER BY create_time DESC
+2025-11-11 14:54:41.801 [http-nio-8081-exec-6] DEBUG c.b.f.m.WhiteListMapper.selectEnabledWhiteLists - ==> Parameters: 
+2025-11-11 14:54:41.804 [http-nio-8081-exec-6] DEBUG c.b.f.m.WhiteListMapper.selectEnabledWhiteLists - <==      Total: 10
+2025-11-11 14:54:41.805 [http-nio-8081-exec-6] INFO  c.bing.framework.service.impl.WhiteListServiceImpl - 从数据库获取到 10 条白名单记录
+2025-11-11 14:54:41.806 [http-nio-8081-exec-6] INFO  c.bing.framework.service.impl.WhiteListServiceImpl - 添加白名单模式: '/api/auth/login'
+2025-11-11 14:54:41.808 [http-nio-8081-exec-6] INFO  c.bing.framework.service.impl.WhiteListServiceImpl - 添加白名单模式: '/api/auth/register'
+2025-11-11 14:54:41.808 [http-nio-8081-exec-6] INFO  c.bing.framework.service.impl.WhiteListServiceImpl - 添加白名单模式: '/api/auth/logout'
+2025-11-11 14:54:41.808 [http-nio-8081-exec-6] INFO  c.bing.framework.service.impl.WhiteListServiceImpl - 添加白名单模式: '/api/white-list/**'
+2025-11-11 14:54:41.809 [http-nio-8081-exec-6] INFO  c.bing.framework.service.impl.WhiteListServiceImpl - 添加白名单模式: '/doc.html'
+2025-11-11 14:54:41.809 [http-nio-8081-exec-6] INFO  c.bing.framework.service.impl.WhiteListServiceImpl - 添加白名单模式: '/swagger-resources/**'
+2025-11-11 14:54:41.809 [http-nio-8081-exec-6] INFO  c.bing.framework.service.impl.WhiteListServiceImpl - 添加白名单模式: '/v2/api-docs'
+2025-11-11 14:54:41.810 [http-nio-8081-exec-6] INFO  c.bing.framework.service.impl.WhiteListServiceImpl - 添加白名单模式: '/webjars/**'
+2025-11-11 14:54:41.810 [http-nio-8081-exec-6] INFO  c.bing.framework.service.impl.WhiteListServiceImpl - 添加白名单模式: '/knife4j/**'
+2025-11-11 14:54:41.810 [http-nio-8081-exec-6] INFO  c.bing.framework.service.impl.WhiteListServiceImpl - 添加白名单模式: '/swagger-ui/**'
+2025-11-11 14:54:41.810 [http-nio-8081-exec-6] INFO  c.bing.framework.service.impl.WhiteListServiceImpl - 转换后获取到 10 个启用的白名单模式，即将存入Redis缓存
+2025-11-11 14:54:41.811 [http-nio-8081-exec-6] DEBUG c.bing.framework.service.impl.WhiteListServiceImpl - [DEBUG] 当前启用的白名单模式数量: 10
+2025-11-11 14:54:41.811 [http-nio-8081-exec-6] DEBUG c.bing.framework.service.impl.WhiteListServiceImpl - [DEBUG] 路径 '/api/auth/login' 匹配模式 '/api/auth/register': false
+2025-11-11 14:54:41.811 [http-nio-8081-exec-6] DEBUG c.bing.framework.service.impl.WhiteListServiceImpl - [DEBUG] 路径 '/api/auth/login' 匹配模式 '/v2/api-docs': false
+2025-11-11 14:54:41.812 [http-nio-8081-exec-6] DEBUG c.bing.framework.service.impl.WhiteListServiceImpl - [DEBUG] 路径 '/api/auth/login' 匹配模式 '/doc.html': false
+2025-11-11 14:54:41.812 [http-nio-8081-exec-6] DEBUG c.bing.framework.service.impl.WhiteListServiceImpl - [DEBUG] 路径 '/api/auth/login' 匹配模式 '/swagger-ui/**': false
+2025-11-11 14:54:41.812 [http-nio-8081-exec-6] DEBUG c.bing.framework.service.impl.WhiteListServiceImpl - [DEBUG] 路径 '/api/auth/login' 匹配模式 '/api/auth/login': true
+2025-11-11 14:54:41.812 [http-nio-8081-exec-6] DEBUG c.bing.framework.service.impl.WhiteListServiceImpl - [DEBUG] 路径 '/api/auth/login' 在白名单中，匹配成功
+2025-11-11 14:54:41.812 [http-nio-8081-exec-6] DEBUG com.bing.framework.interceptor.JwtInterceptor - 请求路径 '/api/auth/login' 在白名单中，直接通过
+2025-11-11 14:54:41.818 [http-nio-8081-exec-6] INFO  com.bing.framework.controller.AuthController - ========== Password Validation Diagnostics ==========
+2025-11-11 14:54:41.818 [http-nio-8081-exec-6] INFO  com.bing.framework.controller.AuthController - Username: admin
+2025-11-11 14:54:41.818 [http-nio-8081-exec-6] INFO  com.bing.framework.controller.AuthController - Input password length: 8
+2025-11-11 14:54:41.819 [http-nio-8081-exec-6] INFO  com.bing.framework.controller.AuthController - Database password length: 60
+2025-11-11 14:54:41.820 [http-nio-8081-exec-6] INFO  com.bing.framework.controller.AuthController - Database password format: isBCrypt=true
+2025-11-11 14:54:41.929 [http-nio-8081-exec-6] INFO  com.bing.framework.controller.AuthController - Strategy 1 - BCrypt validation result: true
+2025-11-11 14:54:41.932 [http-nio-8081-exec-6] INFO  com.bing.framework.controller.AuthController - Password validation successful for user: admin
+2025-11-11 14:54:41.936 [http-nio-8081-exec-6] INFO  com.bing.framework.controller.AuthController - 从缓存获取到有效的访问令牌，用户ID: 1
+2025-11-11 14:54:41.983 [http-nio-8081-exec-6] INFO  com.bing.framework.controller.AuthController - 刷新令牌不存在或无效，重新生成，用户ID: 1
+2025-11-11 14:54:41.984 [http-nio-8081-exec-6] DEBUG c.b.framework.mapper.RoleMapper.findRolesByUserId - ==>  Preparing: SELECT r.* FROM role r LEFT JOIN user_role ur ON r.id = ur.role_id WHERE ur.user_id = ? AND r.status = 1 ORDER BY r.id
+2025-11-11 14:54:41.985 [http-nio-8081-exec-6] DEBUG c.b.framework.mapper.RoleMapper.findRolesByUserId - ==> Parameters: 1(Long)
+2025-11-11 14:54:41.988 [http-nio-8081-exec-6] DEBUG c.b.framework.mapper.RoleMapper.findRolesByUserId - <==      Total: 1
+2025-11-11 14:54:41.989 [http-nio-8081-exec-6] DEBUG com.bing.framework.context.UserContext - 设置用户上下文成功，用户ID: 1, 用户名: admin
+2025-11-11 14:54:41.989 [http-nio-8081-exec-6] DEBUG com.bing.framework.context.UserContext - 设置用户角色列表成功，角色数量: 1
+2025-11-11 14:54:41.990 [http-nio-8081-exec-6] DEBUG com.bing.framework.mapper.LoginRecordMapper.insert - ==>  Preparing: INSERT INTO login_record ( user_id, username, ip_address, user_agent, status, login_time, message ) VALUES ( ?, ?, ?, ?, ?, ?, ? )
+2025-11-11 14:54:41.992 [http-nio-8081-exec-6] DEBUG com.bing.framework.mapper.LoginRecordMapper.insert - ==> Parameters: 1(Long), admin(String), 0:0:0:0:0:0:0:1(String), Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36 Edg/142.0.0.0(String), 1(Integer), 2025-11-11 14:54:41.989(Timestamp), 登录成功(String)
+2025-11-11 14:54:41.998 [http-nio-8081-exec-6] DEBUG com.bing.framework.mapper.LoginRecordMapper.insert - <==    Updates: 1
+2025-11-11 14:54:41.999 [http-nio-8081-exec-6] INFO  c.b.framework.service.impl.LoginRecordServiceImpl - 保存登录记录成功：用户=admin, 状态=1
+2025-11-11 14:54:41.999 [http-nio-8081-exec-6] INFO  AUDIT_LOG - userId:,username:anonymous,ipAddress:0:0:0:0:0:0:0:1,module:认证管理,operationType:新增,description:用户登录、注册、注销和获取当前用户信息等认证相关功能,requestParams:[LoginRequest(username=admin, password=ybc@8602)],result:成功,executionTime:185
+2025-11-11 14:54:42.001 [http-nio-8081-exec-6] DEBUG com.bing.framework.context.UserContext - 清理用户上下文成功
+2025-11-11 14:54:42.001 [http-nio-8081-exec-6] DEBUG c.b.f.interceptor.UserContextCleanupInterceptor - 请求处理完成，自动清理用户上下文
+2025-11-11 14:54:42.197 [http-nio-8081-exec-8] DEBUG com.bing.framework.interceptor.JwtInterceptor - 拦截请求: /api/auth/login
+2025-11-11 14:54:42.198 [http-nio-8081-exec-8] DEBUG c.bing.framework.service.impl.WhiteListServiceImpl - [DEBUG] 检查路径 '/api/auth/login' 是否在白名单中
+2025-11-11 14:54:42.198 [http-nio-8081-exec-8] INFO  c.bing.framework.service.impl.WhiteListServiceImpl - 白名单缓存未命中，从数据库查询白名单模式
+2025-11-11 14:54:42.198 [http-nio-8081-exec-8] DEBUG c.b.f.m.WhiteListMapper.selectEnabledWhiteLists - ==>  Preparing: SELECT id, pattern, type, description, enabled, create_time, update_time FROM sys_white_list WHERE enabled = 1 ORDER BY create_time DESC
+2025-11-11 14:54:42.199 [http-nio-8081-exec-8] DEBUG c.b.f.m.WhiteListMapper.selectEnabledWhiteLists - ==> Parameters: 
+2025-11-11 14:54:42.203 [http-nio-8081-exec-8] DEBUG c.b.f.m.WhiteListMapper.selectEnabledWhiteLists - <==      Total: 10
+2025-11-11 14:54:42.204 [http-nio-8081-exec-8] INFO  c.bing.framework.service.impl.WhiteListServiceImpl - 从数据库获取到 10 条白名单记录
+2025-11-11 14:54:42.204 [http-nio-8081-exec-8] INFO  c.bing.framework.service.impl.WhiteListServiceImpl - 添加白名单模式: '/api/auth/login'
+2025-11-11 14:54:42.204 [http-nio-8081-exec-8] INFO  c.bing.framework.service.impl.WhiteListServiceImpl - 添加白名单模式: '/api/auth/register'
+2025-11-11 14:54:42.204 [http-nio-8081-exec-8] INFO  c.bing.framework.service.impl.WhiteListServiceImpl - 添加白名单模式: '/api/auth/logout'
+2025-11-11 14:54:42.204 [http-nio-8081-exec-8] INFO  c.bing.framework.service.impl.WhiteListServiceImpl - 添加白名单模式: '/api/white-list/**'
+2025-11-11 14:54:42.205 [http-nio-8081-exec-8] INFO  c.bing.framework.service.impl.WhiteListServiceImpl - 添加白名单模式: '/doc.html'
+2025-11-11 14:54:42.205 [http-nio-8081-exec-8] INFO  c.bing.framework.service.impl.WhiteListServiceImpl - 添加白名单模式: '/swagger-resources/**'
+2025-11-11 14:54:42.205 [http-nio-8081-exec-8] INFO  c.bing.framework.service.impl.WhiteListServiceImpl - 添加白名单模式: '/v2/api-docs'
+2025-11-11 14:54:42.205 [http-nio-8081-exec-8] INFO  c.bing.framework.service.impl.WhiteListServiceImpl - 添加白名单模式: '/webjars/**'
+2025-11-11 14:54:42.207 [http-nio-8081-exec-8] INFO  c.bing.framework.service.impl.WhiteListServiceImpl - 添加白名单模式: '/knife4j/**'
+2025-11-11 14:54:42.207 [http-nio-8081-exec-8] INFO  c.bing.framework.service.impl.WhiteListServiceImpl - 添加白名单模式: '/swagger-ui/**'
+2025-11-11 14:54:42.207 [http-nio-8081-exec-8] INFO  c.bing.framework.service.impl.WhiteListServiceImpl - 转换后获取到 10 个启用的白名单模式，即将存入Redis缓存
+2025-11-11 14:54:42.208 [http-nio-8081-exec-8] DEBUG c.bing.framework.service.impl.WhiteListServiceImpl - [DEBUG] 当前启用的白名单模式数量: 10
+2025-11-11 14:54:42.208 [http-nio-8081-exec-8] DEBUG c.bing.framework.service.impl.WhiteListServiceImpl - [DEBUG] 路径 '/api/auth/login' 匹配模式 '/api/auth/register': false
+2025-11-11 14:54:42.208 [http-nio-8081-exec-8] DEBUG c.bing.framework.service.impl.WhiteListServiceImpl - [DEBUG] 路径 '/api/auth/login' 匹配模式 '/v2/api-docs': false
+2025-11-11 14:54:42.209 [http-nio-8081-exec-8] DEBUG c.bing.framework.service.impl.WhiteListServiceImpl - [DEBUG] 路径 '/api/auth/login' 匹配模式 '/doc.html': false
+2025-11-11 14:54:42.211 [http-nio-8081-exec-8] DEBUG c.bing.framework.service.impl.WhiteListServiceImpl - [DEBUG] 路径 '/api/auth/login' 匹配模式 '/swagger-ui/**': false
+2025-11-11 14:54:42.212 [http-nio-8081-exec-8] DEBUG c.bing.framework.service.impl.WhiteListServiceImpl - [DEBUG] 路径 '/api/auth/login' 匹配模式 '/api/auth/login': true
+2025-11-11 14:54:42.212 [http-nio-8081-exec-8] DEBUG c.bing.framework.service.impl.WhiteListServiceImpl - [DEBUG] 路径 '/api/auth/login' 在白名单中，匹配成功
+2025-11-11 14:54:42.212 [http-nio-8081-exec-8] DEBUG com.bing.framework.interceptor.JwtInterceptor - 请求路径 '/api/auth/login' 在白名单中，直接通过
+2025-11-11 14:54:42.217 [http-nio-8081-exec-8] INFO  com.bing.framework.controller.AuthController - ========== Password Validation Diagnostics ==========
+2025-11-11 14:54:42.217 [http-nio-8081-exec-8] INFO  com.bing.framework.controller.AuthController - Username: admin
+2025-11-11 14:54:42.218 [http-nio-8081-exec-8] INFO  com.bing.framework.controller.AuthController - Input password length: 8
+2025-11-11 14:54:42.218 [http-nio-8081-exec-8] INFO  com.bing.framework.controller.AuthController - Database password length: 60
+2025-11-11 14:54:42.219 [http-nio-8081-exec-8] INFO  com.bing.framework.controller.AuthController - Database password format: isBCrypt=true
+2025-11-11 14:54:42.335 [http-nio-8081-exec-8] INFO  com.bing.framework.controller.AuthController - Strategy 1 - BCrypt validation result: true
+2025-11-11 14:54:42.335 [http-nio-8081-exec-8] INFO  com.bing.framework.controller.AuthController - Password validation successful for user: admin
+2025-11-11 14:54:42.337 [http-nio-8081-exec-8] INFO  com.bing.framework.controller.AuthController - 从缓存获取到有效的访问令牌，用户ID: 1
+2025-11-11 14:54:42.345 [http-nio-8081-exec-8] INFO  com.bing.framework.controller.AuthController - 刷新令牌不存在或无效，重新生成，用户ID: 1
+2025-11-11 14:54:42.347 [http-nio-8081-exec-8] DEBUG c.b.framework.mapper.RoleMapper.findRolesByUserId - ==>  Preparing: SELECT r.* FROM role r LEFT JOIN user_role ur ON r.id = ur.role_id WHERE ur.user_id = ? AND r.status = 1 ORDER BY r.id
+2025-11-11 14:54:42.348 [http-nio-8081-exec-8] DEBUG c.b.framework.mapper.RoleMapper.findRolesByUserId - ==> Parameters: 1(Long)
+2025-11-11 14:54:42.350 [http-nio-8081-exec-8] DEBUG c.b.framework.mapper.RoleMapper.findRolesByUserId - <==      Total: 1
+2025-11-11 14:54:42.350 [http-nio-8081-exec-8] DEBUG com.bing.framework.context.UserContext - 设置用户上下文成功，用户ID: 1, 用户名: admin
+2025-11-11 14:54:42.351 [http-nio-8081-exec-8] DEBUG com.bing.framework.context.UserContext - 设置用户角色列表成功，角色数量: 1
+2025-11-11 14:54:42.355 [http-nio-8081-exec-8] DEBUG com.bing.framework.mapper.LoginRecordMapper.insert - ==>  Preparing: INSERT INTO login_record ( user_id, username, ip_address, user_agent, status, login_time, message ) VALUES ( ?, ?, ?, ?, ?, ?, ? )
+2025-11-11 14:54:42.356 [http-nio-8081-exec-8] DEBUG com.bing.framework.mapper.LoginRecordMapper.insert - ==> Parameters: 1(Long), admin(String), 0:0:0:0:0:0:0:1(String), Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36 Edg/142.0.0.0(String), 1(Integer), 2025-11-11 14:54:42.351(Timestamp), 登录成功(String)
+2025-11-11 14:54:42.361 [http-nio-8081-exec-8] DEBUG com.bing.framework.mapper.LoginRecordMapper.insert - <==    Updates: 1
+2025-11-11 14:54:42.361 [http-nio-8081-exec-8] INFO  c.b.framework.service.impl.LoginRecordServiceImpl - 保存登录记录成功：用户=admin, 状态=1
+2025-11-11 14:54:42.362 [http-nio-8081-exec-8] INFO  AUDIT_LOG - userId:,username:anonymous,ipAddress:0:0:0:0:0:0:0:1,module:认证管理,operationType:新增,description:用户登录、注册、注销和获取当前用户信息等认证相关功能,requestParams:[LoginRequest(username=admin, password=ybc@8602)],result:成功,executionTime:148
+2025-11-11 14:54:42.364 [http-nio-8081-exec-8] DEBUG com.bing.framework.context.UserContext - 清理用户上下文成功
+2025-11-11 14:54:42.367 [http-nio-8081-exec-8] DEBUG c.b.f.interceptor.UserContextCleanupInterceptor - 请求处理完成，自动清理用户上下文
+2025-11-11 14:54:42.599 [http-nio-8081-exec-7] DEBUG com.bing.framework.interceptor.JwtInterceptor - 拦截请求: /api/auth/login
+2025-11-11 14:54:42.600 [http-nio-8081-exec-7] DEBUG c.bing.framework.service.impl.WhiteListServiceImpl - [DEBUG] 检查路径 '/api/auth/login' 是否在白名单中
+2025-11-11 14:54:42.600 [http-nio-8081-exec-7] INFO  c.bing.framework.service.impl.WhiteListServiceImpl - 白名单缓存未命中，从数据库查询白名单模式
+2025-11-11 14:54:42.601 [http-nio-8081-exec-7] DEBUG c.b.f.m.WhiteListMapper.selectEnabledWhiteLists - ==>  Preparing: SELECT id, pattern, type, description, enabled, create_time, update_time FROM sys_white_list WHERE enabled = 1 ORDER BY create_time DESC
+2025-11-11 14:54:42.601 [http-nio-8081-exec-7] DEBUG c.b.f.m.WhiteListMapper.selectEnabledWhiteLists - ==> Parameters: 
+2025-11-11 14:54:42.604 [http-nio-8081-exec-7] DEBUG c.b.f.m.WhiteListMapper.selectEnabledWhiteLists - <==      Total: 10
+2025-11-11 14:54:42.605 [http-nio-8081-exec-7] INFO  c.bing.framework.service.impl.WhiteListServiceImpl - 从数据库获取到 10 条白名单记录
+2025-11-11 14:54:42.605 [http-nio-8081-exec-7] INFO  c.bing.framework.service.impl.WhiteListServiceImpl - 添加白名单模式: '/api/auth/login'
+2025-11-11 14:54:42.606 [http-nio-8081-exec-7] INFO  c.bing.framework.service.impl.WhiteListServiceImpl - 添加白名单模式: '/api/auth/register'
+2025-11-11 14:54:42.606 [http-nio-8081-exec-7] INFO  c.bing.framework.service.impl.WhiteListServiceImpl - 添加白名单模式: '/api/auth/logout'
+2025-11-11 14:54:42.607 [http-nio-8081-exec-7] INFO  c.bing.framework.service.impl.WhiteListServiceImpl - 添加白名单模式: '/api/white-list/**'
+2025-11-11 14:54:42.607 [http-nio-8081-exec-7] INFO  c.bing.framework.service.impl.WhiteListServiceImpl - 添加白名单模式: '/doc.html'
+2025-11-11 14:54:42.607 [http-nio-8081-exec-7] INFO  c.bing.framework.service.impl.WhiteListServiceImpl - 添加白名单模式: '/swagger-resources/**'
+2025-11-11 14:54:42.607 [http-nio-8081-exec-7] INFO  c.bing.framework.service.impl.WhiteListServiceImpl - 添加白名单模式: '/v2/api-docs'
+2025-11-11 14:54:42.607 [http-nio-8081-exec-7] INFO  c.bing.framework.service.impl.WhiteListServiceImpl - 添加白名单模式: '/webjars/**'
+2025-11-11 14:54:42.607 [http-nio-8081-exec-7] INFO  c.bing.framework.service.impl.WhiteListServiceImpl - 添加白名单模式: '/knife4j/**'
+2025-11-11 14:54:42.608 [http-nio-8081-exec-7] INFO  c.bing.framework.service.impl.WhiteListServiceImpl - 添加白名单模式: '/swagger-ui/**'
+2025-11-11 14:54:42.608 [http-nio-8081-exec-7] INFO  c.bing.framework.service.impl.WhiteListServiceImpl - 转换后获取到 10 个启用的白名单模式，即将存入Redis缓存
+2025-11-11 14:54:42.608 [http-nio-8081-exec-7] DEBUG c.bing.framework.service.impl.WhiteListServiceImpl - [DEBUG] 当前启用的白名单模式数量: 10
+2025-11-11 14:54:42.608 [http-nio-8081-exec-7] DEBUG c.bing.framework.service.impl.WhiteListServiceImpl - [DEBUG] 路径 '/api/auth/login' 匹配模式 '/api/auth/register': false
+2025-11-11 14:54:42.609 [http-nio-8081-exec-7] DEBUG c.bing.framework.service.impl.WhiteListServiceImpl - [DEBUG] 路径 '/api/auth/login' 匹配模式 '/v2/api-docs': false
+2025-11-11 14:54:42.609 [http-nio-8081-exec-7] DEBUG c.bing.framework.service.impl.WhiteListServiceImpl - [DEBUG] 路径 '/api/auth/login' 匹配模式 '/doc.html': false
+2025-11-11 14:54:42.610 [http-nio-8081-exec-7] DEBUG c.bing.framework.service.impl.WhiteListServiceImpl - [DEBUG] 路径 '/api/auth/login' 匹配模式 '/swagger-ui/**': false
+2025-11-11 14:54:42.610 [http-nio-8081-exec-7] DEBUG c.bing.framework.service.impl.WhiteListServiceImpl - [DEBUG] 路径 '/api/auth/login' 匹配模式 '/api/auth/login': true
+2025-11-11 14:54:42.610 [http-nio-8081-exec-7] DEBUG c.bing.framework.service.impl.WhiteListServiceImpl - [DEBUG] 路径 '/api/auth/login' 在白名单中，匹配成功
+2025-11-11 14:54:42.610 [http-nio-8081-exec-7] DEBUG com.bing.framework.interceptor.JwtInterceptor - 请求路径 '/api/auth/login' 在白名单中，直接通过
+2025-11-11 14:54:42.613 [http-nio-8081-exec-7] INFO  com.bing.framework.controller.AuthController - ========== Password Validation Diagnostics ==========
+2025-11-11 14:54:42.614 [http-nio-8081-exec-7] INFO  com.bing.framework.controller.AuthController - Username: admin
+2025-11-11 14:54:42.614 [http-nio-8081-exec-7] INFO  com.bing.framework.controller.AuthController - Input password length: 8
+2025-11-11 14:54:42.614 [http-nio-8081-exec-7] INFO  com.bing.framework.controller.AuthController - Database password length: 60
+2025-11-11 14:54:42.614 [http-nio-8081-exec-7] INFO  com.bing.framework.controller.AuthController - Database password format: isBCrypt=true
+2025-11-11 14:54:42.716 [http-nio-8081-exec-7] INFO  com.bing.framework.controller.AuthController - Strategy 1 - BCrypt validation result: true
+2025-11-11 14:54:42.716 [http-nio-8081-exec-7] INFO  com.bing.framework.controller.AuthController - Password validation successful for user: admin
+2025-11-11 14:54:42.719 [http-nio-8081-exec-7] INFO  com.bing.framework.controller.AuthController - 从缓存获取到有效的访问令牌，用户ID: 1
+2025-11-11 14:54:42.745 [http-nio-8081-exec-7] INFO  com.bing.framework.controller.AuthController - 刷新令牌不存在或无效，重新生成，用户ID: 1
+2025-11-11 14:54:42.746 [http-nio-8081-exec-7] DEBUG c.b.framework.mapper.RoleMapper.findRolesByUserId - ==>  Preparing: SELECT r.* FROM role r LEFT JOIN user_role ur ON r.id = ur.role_id WHERE ur.user_id = ? AND r.status = 1 ORDER BY r.id
+2025-11-11 14:54:42.747 [http-nio-8081-exec-7] DEBUG c.b.framework.mapper.RoleMapper.findRolesByUserId - ==> Parameters: 1(Long)
+2025-11-11 14:54:42.750 [http-nio-8081-exec-7] DEBUG c.b.framework.mapper.RoleMapper.findRolesByUserId - <==      Total: 1
+2025-11-11 14:54:42.752 [http-nio-8081-exec-7] DEBUG com.bing.framework.context.UserContext - 设置用户上下文成功，用户ID: 1, 用户名: admin
+2025-11-11 14:54:42.752 [http-nio-8081-exec-7] DEBUG com.bing.framework.context.UserContext - 设置用户角色列表成功，角色数量: 1
+2025-11-11 14:54:42.754 [http-nio-8081-exec-7] DEBUG com.bing.framework.mapper.LoginRecordMapper.insert - ==>  Preparing: INSERT INTO login_record ( user_id, username, ip_address, user_agent, status, login_time, message ) VALUES ( ?, ?, ?, ?, ?, ?, ? )
+2025-11-11 14:54:42.754 [http-nio-8081-exec-7] DEBUG com.bing.framework.mapper.LoginRecordMapper.insert - ==> Parameters: 1(Long), admin(String), 0:0:0:0:0:0:0:1(String), Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36 Edg/142.0.0.0(String), 1(Integer), 2025-11-11 14:54:42.752(Timestamp), 登录成功(String)
+2025-11-11 14:54:42.761 [http-nio-8081-exec-7] DEBUG com.bing.framework.mapper.LoginRecordMapper.insert - <==    Updates: 1
+2025-11-11 14:54:42.761 [http-nio-8081-exec-7] INFO  c.b.framework.service.impl.LoginRecordServiceImpl - 保存登录记录成功：用户=admin, 状态=1
+2025-11-11 14:54:42.763 [http-nio-8081-exec-7] INFO  AUDIT_LOG - userId:,username:anonymous,ipAddress:0:0:0:0:0:0:0:1,module:认证管理,operationType:新增,description:用户登录、注册、注销和获取当前用户信息等认证相关功能,requestParams:[LoginRequest(username=admin, password=ybc@8602)],result:成功,executionTime:152
+2025-11-11 14:54:42.763 [http-nio-8081-exec-7] DEBUG com.bing.framework.context.UserContext - 清理用户上下文成功
+2025-11-11 14:54:42.764 [http-nio-8081-exec-7] DEBUG c.b.f.interceptor.UserContextCleanupInterceptor - 请求处理完成，自动清理用户上下文
+2025-11-11 14:54:42.985 [http-nio-8081-exec-9] DEBUG com.bing.framework.interceptor.JwtInterceptor - 拦截请求: /api/auth/login
+2025-11-11 14:54:42.985 [http-nio-8081-exec-9] DEBUG c.bing.framework.service.impl.WhiteListServiceImpl - [DEBUG] 检查路径 '/api/auth/login' 是否在白名单中
+2025-11-11 14:54:42.986 [http-nio-8081-exec-9] INFO  c.bing.framework.service.impl.WhiteListServiceImpl - 白名单缓存未命中，从数据库查询白名单模式
+2025-11-11 14:54:42.986 [http-nio-8081-exec-9] DEBUG c.b.f.m.WhiteListMapper.selectEnabledWhiteLists - ==>  Preparing: SELECT id, pattern, type, description, enabled, create_time, update_time FROM sys_white_list WHERE enabled = 1 ORDER BY create_time DESC
+2025-11-11 14:54:42.987 [http-nio-8081-exec-9] DEBUG c.b.f.m.WhiteListMapper.selectEnabledWhiteLists - ==> Parameters: 
+2025-11-11 14:54:42.989 [http-nio-8081-exec-9] DEBUG c.b.f.m.WhiteListMapper.selectEnabledWhiteLists - <==      Total: 10
+2025-11-11 14:54:42.990 [http-nio-8081-exec-9] INFO  c.bing.framework.service.impl.WhiteListServiceImpl - 从数据库获取到 10 条白名单记录
+2025-11-11 14:54:42.990 [http-nio-8081-exec-9] INFO  c.bing.framework.service.impl.WhiteListServiceImpl - 添加白名单模式: '/api/auth/login'
+2025-11-11 14:54:42.990 [http-nio-8081-exec-9] INFO  c.bing.framework.service.impl.WhiteListServiceImpl - 添加白名单模式: '/api/auth/register'
+2025-11-11 14:54:42.990 [http-nio-8081-exec-9] INFO  c.bing.framework.service.impl.WhiteListServiceImpl - 添加白名单模式: '/api/auth/logout'
+2025-11-11 14:54:42.990 [http-nio-8081-exec-9] INFO  c.bing.framework.service.impl.WhiteListServiceImpl - 添加白名单模式: '/api/white-list/**'
+2025-11-11 14:54:42.991 [http-nio-8081-exec-9] INFO  c.bing.framework.service.impl.WhiteListServiceImpl - 添加白名单模式: '/doc.html'
+2025-11-11 14:54:42.991 [http-nio-8081-exec-9] INFO  c.bing.framework.service.impl.WhiteListServiceImpl - 添加白名单模式: '/swagger-resources/**'
+2025-11-11 14:54:42.991 [http-nio-8081-exec-9] INFO  c.bing.framework.service.impl.WhiteListServiceImpl - 添加白名单模式: '/v2/api-docs'
+2025-11-11 14:54:42.991 [http-nio-8081-exec-9] INFO  c.bing.framework.service.impl.WhiteListServiceImpl - 添加白名单模式: '/webjars/**'
+2025-11-11 14:54:42.992 [http-nio-8081-exec-9] INFO  c.bing.framework.service.impl.WhiteListServiceImpl - 添加白名单模式: '/knife4j/**'
+2025-11-11 14:54:42.992 [http-nio-8081-exec-9] INFO  c.bing.framework.service.impl.WhiteListServiceImpl - 添加白名单模式: '/swagger-ui/**'
+2025-11-11 14:54:42.993 [http-nio-8081-exec-9] INFO  c.bing.framework.service.impl.WhiteListServiceImpl - 转换后获取到 10 个启用的白名单模式，即将存入Redis缓存
+2025-11-11 14:54:42.993 [http-nio-8081-exec-9] DEBUG c.bing.framework.service.impl.WhiteListServiceImpl - [DEBUG] 当前启用的白名单模式数量: 10
+2025-11-11 14:54:42.994 [http-nio-8081-exec-9] DEBUG c.bing.framework.service.impl.WhiteListServiceImpl - [DEBUG] 路径 '/api/auth/login' 匹配模式 '/api/auth/register': false
+2025-11-11 14:54:42.994 [http-nio-8081-exec-9] DEBUG c.bing.framework.service.impl.WhiteListServiceImpl - [DEBUG] 路径 '/api/auth/login' 匹配模式 '/v2/api-docs': false
+2025-11-11 14:54:42.994 [http-nio-8081-exec-9] DEBUG c.bing.framework.service.impl.WhiteListServiceImpl - [DEBUG] 路径 '/api/auth/login' 匹配模式 '/doc.html': false
+2025-11-11 14:54:42.995 [http-nio-8081-exec-9] DEBUG c.bing.framework.service.impl.WhiteListServiceImpl - [DEBUG] 路径 '/api/auth/login' 匹配模式 '/swagger-ui/**': false
+2025-11-11 14:54:42.997 [http-nio-8081-exec-9] DEBUG c.bing.framework.service.impl.WhiteListServiceImpl - [DEBUG] 路径 '/api/auth/login' 匹配模式 '/api/auth/login': true
+2025-11-11 14:54:42.997 [http-nio-8081-exec-9] DEBUG c.bing.framework.service.impl.WhiteListServiceImpl - [DEBUG] 路径 '/api/auth/login' 在白名单中，匹配成功
+2025-11-11 14:54:42.998 [http-nio-8081-exec-9] DEBUG com.bing.framework.interceptor.JwtInterceptor - 请求路径 '/api/auth/login' 在白名单中，直接通过
+2025-11-11 14:54:43.003 [http-nio-8081-exec-9] INFO  com.bing.framework.controller.AuthController - ========== Password Validation Diagnostics ==========
+2025-11-11 14:54:43.003 [http-nio-8081-exec-9] INFO  com.bing.framework.controller.AuthController - Username: admin
+2025-11-11 14:54:43.003 [http-nio-8081-exec-9] INFO  com.bing.framework.controller.AuthController - Input password length: 8
+2025-11-11 14:54:43.003 [http-nio-8081-exec-9] INFO  com.bing.framework.controller.AuthController - Database password length: 60
+2025-11-11 14:54:43.004 [http-nio-8081-exec-9] INFO  com.bing.framework.controller.AuthController - Database password format: isBCrypt=true
+2025-11-11 14:54:43.133 [http-nio-8081-exec-9] INFO  com.bing.framework.controller.AuthController - Strategy 1 - BCrypt validation result: true
+2025-11-11 14:54:43.134 [http-nio-8081-exec-9] INFO  com.bing.framework.controller.AuthController - Password validation successful for user: admin
+2025-11-11 14:54:43.136 [http-nio-8081-exec-9] INFO  com.bing.framework.controller.AuthController - 从缓存获取到有效的访问令牌，用户ID: 1
+2025-11-11 14:54:43.153 [http-nio-8081-exec-9] INFO  com.bing.framework.controller.AuthController - 刷新令牌不存在或无效，重新生成，用户ID: 1
+2025-11-11 14:54:43.154 [http-nio-8081-exec-9] DEBUG c.b.framework.mapper.RoleMapper.findRolesByUserId - ==>  Preparing: SELECT r.* FROM role r LEFT JOIN user_role ur ON r.id = ur.role_id WHERE ur.user_id = ? AND r.status = 1 ORDER BY r.id
+2025-11-11 14:54:43.156 [http-nio-8081-exec-9] DEBUG c.b.framework.mapper.RoleMapper.findRolesByUserId - ==> Parameters: 1(Long)
+2025-11-11 14:54:43.159 [http-nio-8081-exec-9] DEBUG c.b.framework.mapper.RoleMapper.findRolesByUserId - <==      Total: 1
+2025-11-11 14:54:43.160 [http-nio-8081-exec-9] DEBUG com.bing.framework.context.UserContext - 设置用户上下文成功，用户ID: 1, 用户名: admin
+2025-11-11 14:54:43.161 [http-nio-8081-exec-9] DEBUG com.bing.framework.context.UserContext - 设置用户角色列表成功，角色数量: 1
+2025-11-11 14:54:43.164 [http-nio-8081-exec-9] DEBUG com.bing.framework.mapper.LoginRecordMapper.insert - ==>  Preparing: INSERT INTO login_record ( user_id, username, ip_address, user_agent, status, login_time, message ) VALUES ( ?, ?, ?, ?, ?, ?, ? )
+2025-11-11 14:54:43.165 [http-nio-8081-exec-9] DEBUG com.bing.framework.mapper.LoginRecordMapper.insert - ==> Parameters: 1(Long), admin(String), 0:0:0:0:0:0:0:1(String), Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36 Edg/142.0.0.0(String), 1(Integer), 2025-11-11 14:54:43.161(Timestamp), 登录成功(String)
+2025-11-11 14:54:43.170 [http-nio-8081-exec-9] DEBUG com.bing.framework.mapper.LoginRecordMapper.insert - <==    Updates: 1
+2025-11-11 14:54:43.171 [http-nio-8081-exec-9] INFO  c.b.framework.service.impl.LoginRecordServiceImpl - 保存登录记录成功：用户=admin, 状态=1
+2025-11-11 14:54:43.171 [http-nio-8081-exec-9] INFO  AUDIT_LOG - userId:,username:anonymous,ipAddress:0:0:0:0:0:0:0:1,module:认证管理,operationType:新增,description:用户登录、注册、注销和获取当前用户信息等认证相关功能,requestParams:[LoginRequest(username=admin, password=ybc@8602)],result:成功,executionTime:170
+2025-11-11 14:54:43.173 [http-nio-8081-exec-9] DEBUG com.bing.framework.context.UserContext - 清理用户上下文成功
+2025-11-11 14:54:43.174 [http-nio-8081-exec-9] DEBUG c.b.f.interceptor.UserContextCleanupInterceptor - 请求处理完成，自动清理用户上下文
+2025-11-11 14:54:43.343 [http-nio-8081-exec-10] DEBUG com.bing.framework.interceptor.JwtInterceptor - 拦截请求: /api/auth/login
+2025-11-11 14:54:43.345 [http-nio-8081-exec-10] DEBUG c.bing.framework.service.impl.WhiteListServiceImpl - [DEBUG] 检查路径 '/api/auth/login' 是否在白名单中
+2025-11-11 14:54:43.347 [http-nio-8081-exec-10] INFO  c.bing.framework.service.impl.WhiteListServiceImpl - 白名单缓存未命中，从数据库查询白名单模式
+2025-11-11 14:54:43.351 [http-nio-8081-exec-10] DEBUG c.b.f.m.WhiteListMapper.selectEnabledWhiteLists - ==>  Preparing: SELECT id, pattern, type, description, enabled, create_time, update_time FROM sys_white_list WHERE enabled = 1 ORDER BY create_time DESC
+2025-11-11 14:54:43.353 [http-nio-8081-exec-10] DEBUG c.b.f.m.WhiteListMapper.selectEnabledWhiteLists - ==> Parameters: 
+2025-11-11 14:54:43.358 [http-nio-8081-exec-10] DEBUG c.b.f.m.WhiteListMapper.selectEnabledWhiteLists - <==      Total: 10
+2025-11-11 14:54:43.365 [http-nio-8081-exec-10] INFO  c.bing.framework.service.impl.WhiteListServiceImpl - 从数据库获取到 10 条白名单记录
+2025-11-11 14:54:43.366 [http-nio-8081-exec-10] INFO  c.bing.framework.service.impl.WhiteListServiceImpl - 添加白名单模式: '/api/auth/login'
+2025-11-11 14:54:43.367 [http-nio-8081-exec-10] INFO  c.bing.framework.service.impl.WhiteListServiceImpl - 添加白名单模式: '/api/auth/register'
+2025-11-11 14:54:43.367 [http-nio-8081-exec-10] INFO  c.bing.framework.service.impl.WhiteListServiceImpl - 添加白名单模式: '/api/auth/logout'
+2025-11-11 14:54:43.368 [http-nio-8081-exec-10] INFO  c.bing.framework.service.impl.WhiteListServiceImpl - 添加白名单模式: '/api/white-list/**'
+2025-11-11 14:54:43.368 [http-nio-8081-exec-10] INFO  c.bing.framework.service.impl.WhiteListServiceImpl - 添加白名单模式: '/doc.html'
+2025-11-11 14:54:43.368 [http-nio-8081-exec-10] INFO  c.bing.framework.service.impl.WhiteListServiceImpl - 添加白名单模式: '/swagger-resources/**'
+2025-11-11 14:54:43.369 [http-nio-8081-exec-10] INFO  c.bing.framework.service.impl.WhiteListServiceImpl - 添加白名单模式: '/v2/api-docs'
+2025-11-11 14:54:43.369 [http-nio-8081-exec-10] INFO  c.bing.framework.service.impl.WhiteListServiceImpl - 添加白名单模式: '/webjars/**'
+2025-11-11 14:54:43.369 [http-nio-8081-exec-10] INFO  c.bing.framework.service.impl.WhiteListServiceImpl - 添加白名单模式: '/knife4j/**'
+2025-11-11 14:54:43.369 [http-nio-8081-exec-10] INFO  c.bing.framework.service.impl.WhiteListServiceImpl - 添加白名单模式: '/swagger-ui/**'
+2025-11-11 14:54:43.369 [http-nio-8081-exec-10] INFO  c.bing.framework.service.impl.WhiteListServiceImpl - 转换后获取到 10 个启用的白名单模式，即将存入Redis缓存
+2025-11-11 14:54:43.370 [http-nio-8081-exec-10] DEBUG c.bing.framework.service.impl.WhiteListServiceImpl - [DEBUG] 当前启用的白名单模式数量: 10
+2025-11-11 14:54:43.370 [http-nio-8081-exec-10] DEBUG c.bing.framework.service.impl.WhiteListServiceImpl - [DEBUG] 路径 '/api/auth/login' 匹配模式 '/api/auth/register': false
+2025-11-11 14:54:43.370 [http-nio-8081-exec-10] DEBUG c.bing.framework.service.impl.WhiteListServiceImpl - [DEBUG] 路径 '/api/auth/login' 匹配模式 '/v2/api-docs': false
+2025-11-11 14:54:43.370 [http-nio-8081-exec-10] DEBUG c.bing.framework.service.impl.WhiteListServiceImpl - [DEBUG] 路径 '/api/auth/login' 匹配模式 '/doc.html': false
+2025-11-11 14:54:43.371 [http-nio-8081-exec-10] DEBUG c.bing.framework.service.impl.WhiteListServiceImpl - [DEBUG] 路径 '/api/auth/login' 匹配模式 '/swagger-ui/**': false
+2025-11-11 14:54:43.371 [http-nio-8081-exec-10] DEBUG c.bing.framework.service.impl.WhiteListServiceImpl - [DEBUG] 路径 '/api/auth/login' 匹配模式 '/api/auth/login': true
+2025-11-11 14:54:43.371 [http-nio-8081-exec-10] DEBUG c.bing.framework.service.impl.WhiteListServiceImpl - [DEBUG] 路径 '/api/auth/login' 在白名单中，匹配成功
+2025-11-11 14:54:43.371 [http-nio-8081-exec-10] DEBUG com.bing.framework.interceptor.JwtInterceptor - 请求路径 '/api/auth/login' 在白名单中，直接通过
+2025-11-11 14:54:43.374 [http-nio-8081-exec-10] INFO  com.bing.framework.controller.AuthController - ========== Password Validation Diagnostics ==========
+2025-11-11 14:54:43.374 [http-nio-8081-exec-10] INFO  com.bing.framework.controller.AuthController - Username: admin
+2025-11-11 14:54:43.374 [http-nio-8081-exec-10] INFO  com.bing.framework.controller.AuthController - Input password length: 8
+2025-11-11 14:54:43.374 [http-nio-8081-exec-10] INFO  com.bing.framework.controller.AuthController - Database password length: 60
+2025-11-11 14:54:43.375 [http-nio-8081-exec-10] INFO  com.bing.framework.controller.AuthController - Database password format: isBCrypt=true
+2025-11-11 14:54:43.479 [http-nio-8081-exec-10] INFO  com.bing.framework.controller.AuthController - Strategy 1 - BCrypt validation result: true
+2025-11-11 14:54:43.479 [http-nio-8081-exec-10] INFO  com.bing.framework.controller.AuthController - Password validation successful for user: admin
+2025-11-11 14:54:43.482 [http-nio-8081-exec-10] INFO  com.bing.framework.controller.AuthController - 从缓存获取到有效的访问令牌，用户ID: 1
+2025-11-11 14:54:43.492 [http-nio-8081-exec-10] INFO  com.bing.framework.controller.AuthController - 刷新令牌不存在或无效，重新生成，用户ID: 1
+2025-11-11 14:54:43.493 [http-nio-8081-exec-10] DEBUG c.b.framework.mapper.RoleMapper.findRolesByUserId - ==>  Preparing: SELECT r.* FROM role r LEFT JOIN user_role ur ON r.id = ur.role_id WHERE ur.user_id = ? AND r.status = 1 ORDER BY r.id
+2025-11-11 14:54:43.493 [http-nio-8081-exec-10] DEBUG c.b.framework.mapper.RoleMapper.findRolesByUserId - ==> Parameters: 1(Long)
+2025-11-11 14:54:43.497 [http-nio-8081-exec-10] DEBUG c.b.framework.mapper.RoleMapper.findRolesByUserId - <==      Total: 1
+2025-11-11 14:54:43.497 [http-nio-8081-exec-10] DEBUG com.bing.framework.context.UserContext - 设置用户上下文成功，用户ID: 1, 用户名: admin
+2025-11-11 14:54:43.498 [http-nio-8081-exec-10] DEBUG com.bing.framework.context.UserContext - 设置用户角色列表成功，角色数量: 1
+2025-11-11 14:54:43.498 [http-nio-8081-exec-10] DEBUG com.bing.framework.mapper.LoginRecordMapper.insert - ==>  Preparing: INSERT INTO login_record ( user_id, username, ip_address, user_agent, status, login_time, message ) VALUES ( ?, ?, ?, ?, ?, ?, ? )
+2025-11-11 14:54:43.499 [http-nio-8081-exec-10] DEBUG com.bing.framework.mapper.LoginRecordMapper.insert - ==> Parameters: 1(Long), admin(String), 0:0:0:0:0:0:0:1(String), Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36 Edg/142.0.0.0(String), 1(Integer), 2025-11-11 14:54:43.498(Timestamp), 登录成功(String)
+2025-11-11 14:54:43.503 [http-nio-8081-exec-10] DEBUG com.bing.framework.mapper.LoginRecordMapper.insert - <==    Updates: 1
+2025-11-11 14:54:43.504 [http-nio-8081-exec-10] INFO  c.b.framework.service.impl.LoginRecordServiceImpl - 保存登录记录成功：用户=admin, 状态=1
+2025-11-11 14:54:43.504 [http-nio-8081-exec-10] INFO  AUDIT_LOG - userId:,username:anonymous,ipAddress:0:0:0:0:0:0:0:1,module:认证管理,operationType:新增,description:用户登录、注册、注销和获取当前用户信息等认证相关功能,requestParams:[LoginRequest(username=admin, password=ybc@8602)],result:成功,executionTime:132
+2025-11-11 14:54:43.505 [http-nio-8081-exec-10] DEBUG com.bing.framework.context.UserContext - 清理用户上下文成功
+2025-11-11 14:54:43.505 [http-nio-8081-exec-10] DEBUG c.b.f.interceptor.UserContextCleanupInterceptor - 请求处理完成，自动清理用户上下文
+2025-11-11 15:20:04.786 [main] INFO  com.bing.framework.BingFrameworkApplication - Starting BingFrameworkApplication using Java 1.8.0_451 on zhengbing with PID 10504 (D:\ai_code\cursor\bing-framework\bing-framework\target\classes started by mydre in D:\ai_code\cursor\bing-framework\bing-framework)
+2025-11-11 15:20:04.819 [main] DEBUG com.bing.framework.BingFrameworkApplication - Running with Spring Boot v2.7.18, Spring v5.3.31
+2025-11-11 15:20:04.834 [main] INFO  com.bing.framework.BingFrameworkApplication - The following 1 profile is active: "dev"
+2025-11-11 15:20:26.141 [main] INFO  org.apache.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-8081"]
+2025-11-11 15:20:26.151 [main] INFO  org.apache.catalina.core.StandardService - Starting service [Tomcat]
+2025-11-11 15:20:26.152 [main] INFO  org.apache.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/9.0.83]
+2025-11-11 15:20:26.685 [main] INFO  o.a.c.core.ContainerBase.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+2025-11-11 15:20:31.859 [main] INFO  com.bing.framework.config.LogConfig - [LOG_CONFIG] ApplicationContext injected via constructor
+2025-11-11 15:20:31.866 [main] INFO  com.bing.framework.config.LogConfig - [LOG_CONFIG] @PostConstruct called, attempting to set ApplicationContext to AuditLogAppender
+2025-11-11 15:20:31.942 [main] INFO  com.bing.framework.config.LogConfig - [LOG_CONFIG] afterPropertiesSet called
+2025-11-11 15:20:31.945 [main] INFO  com.bing.framework.config.LogConfig - [LOG_CONFIG] Creating new AuditLogAppender instance
+2025-11-11 15:20:31.947 [main] INFO  com.bing.framework.config.LogConfig - [LOG_CONFIG] AuditLogAppender started
+2025-11-11 15:20:31.952 [main] INFO  com.bing.framework.config.LogConfig - [LOG_CONFIG] AuditLogAppender registered to AUDIT_LOG logger
+2025-11-11 15:20:44.322 [main] INFO  com.bing.framework.config.CacheConfig - 初始化Redis缓存管理器，前缀: bing:, 过期时间: 3600000ms
+2025-11-11 15:20:44.363 [main] INFO  com.bing.framework.config.CacheConfig - Redis缓存管理器初始化完成，缓存名称: auditLogCache, userCache, whiteListCache
+2025-11-11 15:20:44.432 [main] INFO  org.apache.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-8081"]
+2025-11-11 15:20:45.937 [main] INFO  com.bing.framework.config.LogConfig - [LOG_CONFIG] ContextRefreshedEvent received, ensuring ApplicationContext is set
+2025-11-11 15:20:45.939 [main] INFO  com.bing.framework.config.LogConfig - [LOG_CONFIG] ContextRefreshedEvent: ApplicationContext available: true
+2025-11-11 15:20:45.946 [main] INFO  com.bing.framework.BingFrameworkApplication - Started BingFrameworkApplication in 54.829 seconds (JVM running for 94.351)
+2025-11-11 15:20:45.950 [main] INFO  c.bing.framework.runner.PasswordFormatCheckRunner - 启动密码格式检查...
+2025-11-11 15:20:48.995 [main] ERROR com.bing.framework.config.CacheConfig - Redis缓存操作异常 - 缓存名称: userList, 键: com.bing.framework.service.impl.UserServiceImpl.getAllUsers
+org.springframework.data.redis.RedisConnectionFailureException: Unable to connect to Redis; nested exception is io.lettuce.core.RedisConnectionException: Unable to connect to localhost:6379
+	at org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory$ExceptionTranslatingConnectionProvider.translateException(LettuceConnectionFactory.java:1689)
+	at org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory$ExceptionTranslatingConnectionProvider.getConnection(LettuceConnectionFactory.java:1597)
+	at org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory$SharedConnection.getNativeConnection(LettuceConnectionFactory.java:1383)
+	at org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory$SharedConnection.getConnection(LettuceConnectionFactory.java:1366)
+	at org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory.getSharedConnection(LettuceConnectionFactory.java:1093)
+	at org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory.getConnection(LettuceConnectionFactory.java:421)
+	at org.springframework.data.redis.cache.DefaultRedisCacheWriter.execute(DefaultRedisCacheWriter.java:304)
+	at org.springframework.data.redis.cache.DefaultRedisCacheWriter.get(DefaultRedisCacheWriter.java:130)
+	at org.springframework.data.redis.cache.RedisCache.lookup(RedisCache.java:91)
+	at org.springframework.cache.support.AbstractValueAdaptingCache.get(AbstractValueAdaptingCache.java:58)
+	at org.springframework.cache.interceptor.AbstractCacheInvoker.doGet(AbstractCacheInvoker.java:73)
+	at org.springframework.cache.interceptor.CacheAspectSupport.findInCaches(CacheAspectSupport.java:570)
+	at org.springframework.cache.interceptor.CacheAspectSupport.findCachedItem(CacheAspectSupport.java:535)
+	at org.springframework.cache.interceptor.CacheAspectSupport.execute(CacheAspectSupport.java:401)
+	at org.springframework.cache.interceptor.CacheAspectSupport.execute(CacheAspectSupport.java:345)
+	at org.springframework.cache.interceptor.CacheInterceptor.invoke(CacheInterceptor.java:64)
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:186)
+	at org.springframework.aop.framework.CglibAopProxy$CglibMethodInvocation.proceed(CglibAopProxy.java:762)
+	at org.springframework.aop.framework.CglibAopProxy$DynamicAdvisedInterceptor.intercept(CglibAopProxy.java:707)
+	at com.bing.framework.service.impl.UserServiceImpl$$EnhancerBySpringCGLIB$$41d717d1.getAllUsers(<generated>)
+	at com.bing.framework.util.PasswordFormatChecker.checkAndFixAllPasswords(PasswordFormatChecker.java:40)
+	at com.bing.framework.runner.PasswordFormatCheckRunner.run(PasswordFormatCheckRunner.java:29)
+	at org.springframework.boot.SpringApplication.callRunner(SpringApplication.java:765)
+	at org.springframework.boot.SpringApplication.lambda$callRunners$2(SpringApplication.java:749)
+	at java.util.stream.ForEachOps$ForEachOp$OfRef.accept(ForEachOps.java:184)
+	at java.util.stream.SortedOps$SizedRefSortingSink.end(SortedOps.java:352)
+	at java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:483)
+	at java.util.stream.AbstractPipeline.wrapAndCopyInto(AbstractPipeline.java:472)
+	at java.util.stream.ForEachOps$ForEachOp.evaluateSequential(ForEachOps.java:151)
+	at java.util.stream.ForEachOps$ForEachOp$OfRef.evaluateSequential(ForEachOps.java:174)
+	at java.util.stream.AbstractPipeline.evaluate(AbstractPipeline.java:234)
+	at java.util.stream.ReferencePipeline.forEach(ReferencePipeline.java:418)
+	at org.springframework.boot.SpringApplication.callRunners(SpringApplication.java:744)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:315)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1300)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1289)
+	at com.bing.framework.BingFrameworkApplication.main(BingFrameworkApplication.java:37)
+Caused by: io.lettuce.core.RedisConnectionException: Unable to connect to localhost:6379
+	at io.lettuce.core.RedisConnectionException.create(RedisConnectionException.java:78)
+	at io.lettuce.core.RedisConnectionException.create(RedisConnectionException.java:56)
+	at io.lettuce.core.AbstractRedisClient.getConnection(AbstractRedisClient.java:330)
+	at io.lettuce.core.RedisClient.connect(RedisClient.java:216)
+	at org.springframework.data.redis.connection.lettuce.StandaloneConnectionProvider.lambda$getConnection$1(StandaloneConnectionProvider.java:115)
+	at java.util.Optional.orElseGet(Optional.java:267)
+	at org.springframework.data.redis.connection.lettuce.StandaloneConnectionProvider.getConnection(StandaloneConnectionProvider.java:115)
+	at org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory$ExceptionTranslatingConnectionProvider.getConnection(LettuceConnectionFactory.java:1595)
+	... 35 common frames omitted
+Caused by: io.netty.channel.AbstractChannel$AnnotatedConnectException: Connection refused: no further information: localhost/127.0.0.1:6379
+Caused by: java.net.ConnectException: Connection refused: no further information
+	at sun.nio.ch.SocketChannelImpl.checkConnect(Native Method)
+	at sun.nio.ch.SocketChannelImpl.finishConnect(SocketChannelImpl.java:715)
+	at io.netty.channel.socket.nio.NioSocketChannel.doFinishConnect(NioSocketChannel.java:337)
+	at io.netty.channel.nio.AbstractNioChannel$AbstractNioUnsafe.finishConnect(AbstractNioChannel.java:334)
+	at io.netty.channel.nio.NioEventLoop.processSelectedKey(NioEventLoop.java:776)
+	at io.netty.channel.nio.NioEventLoop.processSelectedKeysOptimized(NioEventLoop.java:724)
+	at io.netty.channel.nio.NioEventLoop.processSelectedKeys(NioEventLoop.java:650)
+	at io.netty.channel.nio.NioEventLoop.run(NioEventLoop.java:562)
+	at io.netty.util.concurrent.SingleThreadEventExecutor$4.run(SingleThreadEventExecutor.java:997)
+	at io.netty.util.internal.ThreadExecutorMap$2.run(ThreadExecutorMap.java:74)
+	at io.netty.util.concurrent.FastThreadLocalRunnable.run(FastThreadLocalRunnable.java:30)
+	at java.lang.Thread.run(Thread.java:750)
+2025-11-11 15:20:49.114 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+2025-11-11 15:20:50.997 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+2025-11-11 15:20:51.021 [main] DEBUG com.bing.framework.mapper.UserMapper.selectList - ==>  Preparing: SELECT id,username,password,email,phone,nickname,status,create_time,update_time FROM user
+2025-11-11 15:20:51.115 [main] DEBUG com.bing.framework.mapper.UserMapper.selectList - ==> Parameters: 
+2025-11-11 15:20:51.279 [main] DEBUG com.bing.framework.mapper.UserMapper.selectList - <==      Total: 4
+2025-11-11 15:20:53.519 [main] ERROR com.bing.framework.config.CacheConfig - Redis缓存操作异常 - 缓存名称: userList, 键: com.bing.framework.service.impl.UserServiceImpl.getAllUsers
+org.springframework.data.redis.RedisConnectionFailureException: Unable to connect to Redis; nested exception is io.lettuce.core.RedisConnectionException: Unable to connect to localhost:6379
+	at org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory$ExceptionTranslatingConnectionProvider.translateException(LettuceConnectionFactory.java:1689)
+	at org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory$ExceptionTranslatingConnectionProvider.getConnection(LettuceConnectionFactory.java:1597)
+	at org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory$SharedConnection.getNativeConnection(LettuceConnectionFactory.java:1383)
+	at org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory$SharedConnection.getConnection(LettuceConnectionFactory.java:1366)
+	at org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory.getSharedConnection(LettuceConnectionFactory.java:1093)
+	at org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory.getConnection(LettuceConnectionFactory.java:421)
+	at org.springframework.data.redis.cache.DefaultRedisCacheWriter.execute(DefaultRedisCacheWriter.java:304)
+	at org.springframework.data.redis.cache.DefaultRedisCacheWriter.put(DefaultRedisCacheWriter.java:106)
+	at org.springframework.data.redis.cache.RedisCache.put(RedisCache.java:171)
+	at org.springframework.cache.interceptor.AbstractCacheInvoker.doPut(AbstractCacheInvoker.java:87)
+	at org.springframework.cache.interceptor.CacheAspectSupport$CachePutRequest.apply(CacheAspectSupport.java:837)
+	at org.springframework.cache.interceptor.CacheAspectSupport.execute(CacheAspectSupport.java:429)
+	at org.springframework.cache.interceptor.CacheAspectSupport.execute(CacheAspectSupport.java:345)
+	at org.springframework.cache.interceptor.CacheInterceptor.invoke(CacheInterceptor.java:64)
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:186)
+	at org.springframework.aop.framework.CglibAopProxy$CglibMethodInvocation.proceed(CglibAopProxy.java:762)
+	at org.springframework.aop.framework.CglibAopProxy$DynamicAdvisedInterceptor.intercept(CglibAopProxy.java:707)
+	at com.bing.framework.service.impl.UserServiceImpl$$EnhancerBySpringCGLIB$$41d717d1.getAllUsers(<generated>)
+	at com.bing.framework.util.PasswordFormatChecker.checkAndFixAllPasswords(PasswordFormatChecker.java:40)
+	at com.bing.framework.runner.PasswordFormatCheckRunner.run(PasswordFormatCheckRunner.java:29)
+	at org.springframework.boot.SpringApplication.callRunner(SpringApplication.java:765)
+	at org.springframework.boot.SpringApplication.lambda$callRunners$2(SpringApplication.java:749)
+	at java.util.stream.ForEachOps$ForEachOp$OfRef.accept(ForEachOps.java:184)
+	at java.util.stream.SortedOps$SizedRefSortingSink.end(SortedOps.java:352)
+	at java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:483)
+	at java.util.stream.AbstractPipeline.wrapAndCopyInto(AbstractPipeline.java:472)
+	at java.util.stream.ForEachOps$ForEachOp.evaluateSequential(ForEachOps.java:151)
+	at java.util.stream.ForEachOps$ForEachOp$OfRef.evaluateSequential(ForEachOps.java:174)
+	at java.util.stream.AbstractPipeline.evaluate(AbstractPipeline.java:234)
+	at java.util.stream.ReferencePipeline.forEach(ReferencePipeline.java:418)
+	at org.springframework.boot.SpringApplication.callRunners(SpringApplication.java:744)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:315)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1300)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1289)
+	at com.bing.framework.BingFrameworkApplication.main(BingFrameworkApplication.java:37)
+Caused by: io.lettuce.core.RedisConnectionException: Unable to connect to localhost:6379
+	at io.lettuce.core.RedisConnectionException.create(RedisConnectionException.java:78)
+	at io.lettuce.core.RedisConnectionException.create(RedisConnectionException.java:56)
+	at io.lettuce.core.AbstractRedisClient.getConnection(AbstractRedisClient.java:330)
+	at io.lettuce.core.RedisClient.connect(RedisClient.java:216)
+	at org.springframework.data.redis.connection.lettuce.StandaloneConnectionProvider.lambda$getConnection$1(StandaloneConnectionProvider.java:115)
+	at java.util.Optional.orElseGet(Optional.java:267)
+	at org.springframework.data.redis.connection.lettuce.StandaloneConnectionProvider.getConnection(StandaloneConnectionProvider.java:115)
+	at org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory$ExceptionTranslatingConnectionProvider.getConnection(LettuceConnectionFactory.java:1595)
+	... 33 common frames omitted
+Caused by: io.netty.channel.AbstractChannel$AnnotatedConnectException: Connection refused: no further information: localhost/127.0.0.1:6379
+Caused by: java.net.ConnectException: Connection refused: no further information
+	at sun.nio.ch.SocketChannelImpl.checkConnect(Native Method)
+	at sun.nio.ch.SocketChannelImpl.finishConnect(SocketChannelImpl.java:715)
+	at io.netty.channel.socket.nio.NioSocketChannel.doFinishConnect(NioSocketChannel.java:337)
+	at io.netty.channel.nio.AbstractNioChannel$AbstractNioUnsafe.finishConnect(AbstractNioChannel.java:334)
+	at io.netty.channel.nio.NioEventLoop.processSelectedKey(NioEventLoop.java:776)
+	at io.netty.channel.nio.NioEventLoop.processSelectedKeysOptimized(NioEventLoop.java:724)
+	at io.netty.channel.nio.NioEventLoop.processSelectedKeys(NioEventLoop.java:650)
+	at io.netty.channel.nio.NioEventLoop.run(NioEventLoop.java:562)
+	at io.netty.util.concurrent.SingleThreadEventExecutor$4.run(SingleThreadEventExecutor.java:997)
+	at io.netty.util.internal.ThreadExecutorMap$2.run(ThreadExecutorMap.java:74)
+	at io.netty.util.concurrent.FastThreadLocalRunnable.run(FastThreadLocalRunnable.java:30)
+	at java.lang.Thread.run(Thread.java:750)
+2025-11-11 15:20:53.593 [main] INFO  com.bing.framework.util.PasswordFormatChecker - 开始检查所有用户密码格式，共 4 个用户
+2025-11-11 15:20:53.617 [main] WARN  com.bing.framework.util.PasswordFormatChecker - 发现非BCrypt格式密码，用户ID: 2, 用户名: user01
+2025-11-11 15:20:53.622 [main] WARN  com.bing.framework.util.PasswordFormatChecker - 发现非BCrypt格式密码，用户ID: 3, 用户名: readonly
+2025-11-11 15:20:53.630 [main] INFO  com.bing.framework.util.PasswordFormatChecker - 密码格式检查完成，共检查 4 个用户，发现 0 个需要修复的密码（已记录但未自动修复）
+2025-11-11 15:20:53.633 [main] INFO  com.bing.framework.util.PasswordFormatChecker - 警告：请联系相关用户重置密码，使用标准BCrypt加密格式
+2025-11-11 15:20:53.636 [main] INFO  c.bing.framework.runner.PasswordFormatCheckRunner - 密码格式检查完成
