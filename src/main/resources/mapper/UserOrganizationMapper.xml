@@ -59,7 +59,7 @@
     </select>
 
     <!-- 清除用户的主组织标识 -->
-    <update id="clearMainOrganizationByUserId" resultType="java.lang.Integer">
+    <update id="clearMainOrganizationByUserId">
         UPDATE user_organization
         SET is_main = false
         WHERE user_id = #{userId}
