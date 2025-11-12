@@ -1,0 +1,100 @@
+<svg width="800" height="600" xmlns="http://www.w3.org/2000/svg">
+  <!-- 样式定义 -->
+  <defs>
+    <style type="text/css">
+      .header { font-family: Arial, sans-serif; font-size: 20px; font-weight: bold; fill: #333; }
+      .section { font-family: Arial, sans-serif; font-size: 16px; font-weight: bold; fill: #666; }
+      .border { fill: none; stroke: #ccc; stroke-width: 1; }
+      .form-bg { fill: #f9f9f9; }
+      .permission-group { font-family: Arial, sans-serif; font-size: 14px; font-weight: bold; fill: #1890ff; }
+      .radio-label { font-family: Arial, sans-serif; font-size: 13px; fill: #333; }
+      .button { fill: #1890ff; stroke: #1890ff; }
+      .button-text { font-family: Arial, sans-serif; font-size: 14px; font-weight: bold; fill: white; }
+      .button-secondary { fill: white; stroke: #d9d9d9; }
+      .button-secondary-text { font-family: Arial, sans-serif; font-size: 14px; font-weight: bold; fill: #666; }
+      .radio-border { fill: white; stroke: #ccc; stroke-width: 1; }
+      .radio-selected { fill: #1890ff; }
+    </style>
+  </defs>
+  
+  <!-- 页面标题 -->
+  <text class="header" x="20" y="40">分配数据权限 - 角色：部门经理</text>
+  
+  <!-- 表单区域 -->
+  <rect x="20" y="60" width="760" height="500" class="border form-bg" rx="4" ry="4"/>
+  
+  <!-- 用户管理权限组 -->
+  <text class="permission-group" x="40" y="100">[用户管理] 数据类型</text>
+  <rect x="40" y="110" width="720" height="100" class="border"/>
+  
+  <!-- 用户管理权限选项 -->
+  <circle cx="60" cy="135" r="6" class="radio-border"/>
+  <text class="radio-label" x="75" y="138">全部数据权限</text>
+  
+  <circle cx="60" cy="165" r="6" class="radio-border"/>
+  <text class="radio-label" x="75" y="168">本人数据权限</text>
+  
+  <circle cx="60" cy="195" r="6" class="radio-border"/>
+  <text class="radio-label" x="75" y="198">本部门数据权限</text>
+  
+  <circle cx="60" cy="225" r="6" class="radio-border"/>
+  <circle cx="60" cy="225" r="3" class="radio-selected"/>
+  <text class="radio-label" x="75" y="228">本部门及以下数据权限</text>
+  
+  <circle cx="60" cy="255" r="6" class="radio-border"/>
+  <text class="radio-label" x="75" y="258">自定义数据权限</text>
+  
+  <!-- 订单管理权限组 -->
+  <text class="permission-group" x="40" y="290">[订单管理] 数据类型</text>
+  <rect x="40" y="300" width="720" height="100" class="border"/>
+  
+  <!-- 订单管理权限选项 -->
+  <circle cx="60" cy="325" r="6" class="radio-border"/>
+  <text class="radio-label" x="75" y="328">全部数据权限</text>
+  
+  <circle cx="60" cy="355" r="6" class="radio-border"/>
+  <text class="radio-label" x="75" y="358">本人数据权限</text>
+  
+  <circle cx="60" cy="385" r="6" class="radio-border"/>
+  <text class="radio-label" x="75" y="388">本部门数据权限</text>
+  
+  <circle cx="60" cy="415" r="6" class="radio-border"/>
+  <circle cx="60" cy="415" r="3" class="radio-selected"/>
+  <text class="radio-label" x="75" y="418">本部门及以下数据权限</text>
+  
+  <circle cx="60" cy="445" r="6" class="radio-border"/>
+  <text class="radio-label" x="75" y="448">自定义数据权限</text>
+  
+  <circle cx="170" cy="445" r="6" class="radio-border"/>
+  <text class="radio-label" x="185" y="448">自定义金额权限</text>
+  
+  <!-- 客户管理权限组 -->
+  <text class="permission-group" x="40" y="480">[客户管理] 数据类型</text>
+  <rect x="40" y="490" width="720" height="50" class="border"/>
+  
+  <!-- 客户管理权限选项 -->
+  <circle cx="60" cy="515" r="6" class="radio-border"/>
+  <text class="radio-label" x="75" y="518">全部数据权限</text>
+  
+  <circle cx="60" cy="545" r="6" class="radio-border"/>
+  <text class="radio-label" x="75" y="548">本人数据权限</text>
+  
+  <circle cx="170" cy="515" r="6" class="radio-border"/>
+  <text class="radio-label" x="185" y="518">本部门数据权限</text>
+  
+  <circle cx="170" cy="545" r="6" class="radio-border"/>
+  <circle cx="170" cy="545" r="3" class="radio-selected"/>
+  <text class="radio-label" x="185" y="548">本部门及以下数据权限</text>
+  
+  <!-- 按钮区域 -->
+  <rect x="300" y="550" width="200" height="40"/>
+  
+  <rect x="320" y="550" width="100" height="36" class="button" rx="4" ry="4"/>
+  <text class="button-text" x="335" y="573">确认分配</text>
+  
+  <rect x="440" y="550" width="80" height="36" class="button-secondary" rx="4" ry="4"/>
+  <text class="button-secondary-text" x="460" y="573">取消</text>
+  
+  <!-- 图表标题 -->
+  <text class="header" x="300" y="590">图3：角色数据权限分配页面示例</text>
+</svg>

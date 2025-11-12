@@ -1,0 +1,149 @@
+<svg width="800" height="650" xmlns="http://www.w3.org/2000/svg">
+  <!-- 样式定义 -->
+  <defs>
+    <style type="text/css">
+      .header { font-family: Arial, sans-serif; font-size: 16px; font-weight: bold; fill: #333; }
+      .subheader { font-family: Arial, sans-serif; font-size: 14px; font-weight: bold; fill: #1890ff; }
+      .border { fill: none; stroke: #ccc; stroke-width: 1; }
+      .table-header { font-family: Arial, sans-serif; font-size: 12px; font-weight: bold; fill: #666; }
+      .cell { font-family: Arial, sans-serif; font-size: 12px; fill: #333; }
+      .checkbox { fill: white; stroke: #ccc; stroke-width: 1; }
+      .pagination { fill: none; stroke: none; }
+    </style>
+  </defs>
+  
+  <!-- 管理员视角标题 -->
+  <text class="subheader" x="20" y="30">系统管理员视角：</text>
+  
+  <!-- 管理员表格 -->
+  <text class="header" x="20" y="60">用户管理 - 共250条记录</text>
+  
+  <!-- 搜索栏 -->
+  <rect x="20" y="70" width="300" height="25" class="border" rx="2" ry="2"/>
+  <text class="cell" x="30" y="88">搜索框：_______________</text>
+  
+  <rect x="340" y="70" width="120" height="25" class="border" rx="2" ry="2"/>
+  <text class="cell" x="350" y="88">[状态]</text>
+  
+  <rect x="480" y="70" width="120" height="25" class="border" rx="2" ry="2"/>
+  <text class="cell" x="490" y="88">[部门]</text>
+  
+  <!-- 管理员表格头部 -->
+  <rect x="20" y="110" width="760" height="30" class="border"/>
+  <text class="table-header" x="30" y="130">复选框</text>
+  <text class="table-header" x="100" y="130">用户名</text>
+  <text class="table-header" x="200" y="130">部门</text>
+  <text class="table-header" x="300" y="130">职位</text>
+  <text class="table-header" x="380" y="130">状态</text>
+  <text class="table-header" x="450" y="130">创建者</text>
+  <text class="table-header" x="550" y="130">操作</text>
+  
+  <!-- 管理员表格内容 -->
+  <rect x="20" y="140" width="760" height="35" class="border"/>
+  <circle cx="35" cy="158" r="5" class="checkbox"/>
+  <text class="cell" x="100" y="160">admin</text>
+  <text class="cell" x="200" y="160">系统管理部</text>
+  <text class="cell" x="300" y="160">管理员</text>
+  <text class="cell" x="380" y="160">启用</text>
+  <text class="cell" x="450" y="160">system</text>
+  <text class="cell" x="550" y="160">编辑 删除</text>
+  
+  <rect x="20" y="175" width="760" height="35" class="border"/>
+  <circle cx="35" cy="193" r="5" class="checkbox"/>
+  <text class="cell" x="100" y="195">ZhangSan</text>
+  <text class="cell" x="200" y="195">技术部</text>
+  <text class="cell" x="300" y="195">部门经理</text>
+  <text class="cell" x="380" y="195">启用</text>
+  <text class="cell" x="450" y="195">admin</text>
+  <text class="cell" x="550" y="195">编辑 删除</text>
+  
+  <rect x="20" y="210" width="760" height="35" class="border"/>
+  <circle cx="35" cy="228" r="5" class="checkbox"/>
+  <text class="cell" x="100" y="230">LiSi</text>
+  <text class="cell" x="200" y="230">市场部</text>
+  <text class="cell" x="300" y="230">销售人员</text>
+  <text class="cell" x="380" y="230">启用</text>
+  <text class="cell" x="450" y="230">WangWu</text>
+  <text class="cell" x="550" y="230">编辑 删除</text>
+  
+  <!-- 分页 -->
+  <rect x="20" y="245" width="760" height="30" class="border"/>
+  <text class="cell" x="30" y="265">分页：上一页 1 2 3 ... 25 下一页 共250条 每页10条</text>
+  
+  <!-- 部门经理视角标题 -->
+  <text class="subheader" x="20" y="295">技术部经理视角：</text>
+  
+  <!-- 部门经理表格 -->
+  <text class="header" x="20" y="325">用户管理 - 共45条记录</text>
+  
+  <!-- 部门经理表格头部 -->
+  <rect x="20" y="335" width="760" height="30" class="border"/>
+  <text class="table-header" x="30" y="355">复选框</text>
+  <text class="table-header" x="100" y="355">用户名</text>
+  <text class="table-header" x="200" y="355">部门</text>
+  <text class="table-header" x="300" y="355">职位</text>
+  <text class="table-header" x="380" y="355">状态</text>
+  <text class="table-header" x="450" y="355">创建者</text>
+  <text class="table-header" x="550" y="355">操作</text>
+  
+  <!-- 部门经理表格内容 -->
+  <rect x="20" y="365" width="760" height="35" class="border"/>
+  <circle cx="35" cy="383" r="5" class="checkbox"/>
+  <text class="cell" x="100" y="385">ZhangSan</text>
+  <text class="cell" x="200" y="385">技术部</text>
+  <text class="cell" x="300" y="385">部门经理</text>
+  <text class="cell" x="380" y="385">启用</text>
+  <text class="cell" x="450" y="385">admin</text>
+  <text class="cell" x="550" y="385">编辑 删除</text>
+  
+  <rect x="20" y="400" width="760" height="35" class="border"/>
+  <circle cx="35" cy="418" r="5" class="checkbox"/>
+  <text class="cell" x="100" y="420">ZhaoLiu</text>
+  <text class="cell" x="200" y="420">技术部-前端组</text>
+  <text class="cell" x="300" y="420">开发工程师</text>
+  <text class="cell" x="380" y="420">启用</text>
+  <text class="cell" x="450" y="420">ZhangSan</text>
+  <text class="cell" x="550" y="420">编辑 删除</text>
+  
+  <rect x="20" y="435" width="760" height="35" class="border"/>
+  <circle cx="35" cy="453" r="5" class="checkbox"/>
+  <text class="cell" x="100" y="455">SunQi</text>
+  <text class="cell" x="200" y="455">技术部-后端组</text>
+  <text class="cell" x="300" y="455">开发工程师</text>
+  <text class="cell" x="380" y="455">启用</text>
+  <text class="cell" x="450" y="455">ZhangSan</text>
+  <text class="cell" x="550" y="455">编辑 删除</text>
+  
+  <!-- 分页 -->
+  <rect x="20" y="470" width="760" height="30" class="border"/>
+  <text class="cell" x="30" y="490">分页：上一页 1 2 3 4 5 下一页 共45条 每页10条</text>
+  
+  <!-- 普通员工视角标题 -->
+  <text class="subheader" x="20" y="520">普通员工视角：</text>
+  
+  <!-- 普通员工表格 -->
+  <text class="header" x="20" y="550">用户管理 - 共3条记录</text>
+  
+  <!-- 普通员工表格头部 -->
+  <rect x="20" y="560" width="760" height="30" class="border"/>
+  <text class="table-header" x="30" y="580">复选框</text>
+  <text class="table-header" x="100" y="580">用户名</text>
+  <text class="table-header" x="200" y="580">部门</text>
+  <text class="table-header" x="300" y="580">职位</text>
+  <text class="table-header" x="380" y="580">状态</text>
+  <text class="table-header" x="450" y="580">创建者</text>
+  <text class="table-header" x="550" y="580">操作</text>
+  
+  <!-- 普通员工表格内容 -->
+  <rect x="20" y="590" width="760" height="35" class="border"/>
+  <circle cx="35" cy="608" r="5" class="checkbox"/>
+  <text class="cell" x="100" y="610">WuJiu</text>
+  <text class="cell" x="200" y="610">技术部-前端组</text>
+  <text class="cell" x="300" y="610">前端开发</text>
+  <text class="cell" x="380" y="610">启用</text>
+  <text class="cell" x="450" y="610">ZhaoLiu</text>
+  <text class="cell" x="550" y="610">编辑 删除</text>
+  
+  <!-- 图表标题 -->
+  <text class="header" x="300" y="640">图4：不同权限视角下的用户数据列表对比</text>
+</svg>

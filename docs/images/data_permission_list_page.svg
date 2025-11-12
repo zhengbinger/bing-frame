@@ -1,0 +1,113 @@
+<svg width="800" height="500" xmlns="http://www.w3.org/2000/svg">
+  <!-- 样式定义 -->
+  <defs>
+    <style type="text/css">
+      .header { font-family: Arial, sans-serif; font-size: 20px; font-weight: bold; fill: #333; }
+      .section { font-family: Arial, sans-serif; font-size: 14px; }
+      .border { fill: none; stroke: #ccc; stroke-width: 1; }
+      .header-bg { fill: #f5f5f5; }
+      .cell { font-family: Arial, sans-serif; font-size: 12px; }
+      .button { fill: #1890ff; stroke: #1890ff; }
+      .button-text { font-family: Arial, sans-serif; font-size: 12px; font-weight: bold; fill: white; }
+      .checkbox { fill: white; stroke: #ccc; stroke-width: 1; }
+      .checkbox-checked { fill: #1890ff; }
+      .pagination { fill: none; stroke: none; }
+    </style>
+  </defs>
+  
+  <!-- 页面标题 -->
+  <text class="header" x="20" y="40">数据权限管理</text>
+  
+  <!-- 搜索栏 -->
+  <rect x="20" y="60" width="300" height="30" class="border" rx="2" ry="2"/>
+  <text class="cell" x="30" y="80">搜索框：_______________</text>
+  
+  <!-- 筛选条件 -->
+  <rect x="340" y="60" width="120" height="30" class="border" rx="2" ry="2"/>
+  <text class="cell" x="350" y="80">[数据类型]</text>
+  
+  <rect x="480" y="60" width="120" height="30" class="border" rx="2" ry="2"/>
+  <text class="cell" x="490" y="80">[权限类型]</text>
+  
+  <rect x="620" y="60" width="80" height="30" class="border" rx="2" ry="2"/>
+  <text class="cell" x="630" y="80">[状态]</text>
+  
+  <!-- 操作按钮区 -->
+  <rect x="20" y="110" width="760" height="40" class="border"/>
+  <text class="cell" x="30" y="135">操作：</text>
+  
+  <rect x="80" y="115" width="100" height="30" class="button" rx="4" ry="4"/>
+  <text class="button-text" x="100" y="135">创建数据权限</text>
+  
+  <rect x="190" y="115" width="80" height="30" class="button" rx="4" ry="4"/>
+  <text class="button-text" x="195" y="135">批量启用</text>
+  
+  <rect x="280" y="115" width="80" height="30" class="button" rx="4" ry="4"/>
+  <text class="button-text" x="285" y="135">批量禁用</text>
+  
+  <rect x="370" y="115" width="80" height="30" class="button" rx="4" ry="4"/>
+  <text class="button-text" x="375" y="135">批量删除</text>
+  
+  <!-- 表格头部 -->
+  <rect x="20" y="160" width="760" height="35" class="border header-bg"/>
+  <text class="cell" x="30" y="180">复选框</text>
+  <text class="cell" x="100" y="180">权限名称</text>
+  <text class="cell" x="250" y="180">权限标识</text>
+  <text class="cell" x="350" y="180">数据类型</text>
+  <text class="cell" x="450" y="180">权限类型</text>
+  <text class="cell" x="550" y="180">状态</text>
+  <text class="cell" x="650" y="180">操作</text>
+  
+  <!-- 表格内容行 -->
+  <rect x="20" y="195" width="760" height="40" class="border"/>
+  <circle cx="35" cy="215" r="6" class="checkbox checkbox-checked"/>
+  <text class="cell" x="100" y="215">用户管理-全部数据</text>
+  <text class="cell" x="250" y="215">user_all</text>
+  <text class="cell" x="350" y="215">user</text>
+  <text class="cell" x="450" y="215">全部数据</text>
+  <text class="cell" x="550" y="215">启用</text>
+  <text class="cell" x="650" y="215">编辑 删除</text>
+  
+  <rect x="20" y="235" width="760" height="40" class="border"/>
+  <circle cx="35" cy="255" r="6" class="checkbox checkbox-checked"/>
+  <text class="cell" x="100" y="255">用户管理-本人数据</text>
+  <text class="cell" x="250" y="255">user_self</text>
+  <text class="cell" x="350" y="255">user</text>
+  <text class="cell" x="450" y="255">本人数据</text>
+  <text class="cell" x="550" y="255">启用</text>
+  <text class="cell" x="650" y="255">编辑 删除</text>
+  
+  <rect x="20" y="275" width="760" height="40" class="border"/>
+  <circle cx="35" cy="295" r="6" class="checkbox"/>
+  <text class="cell" x="100" y="295">用户管理-本部门数据</text>
+  <text class="cell" x="250" y="295">user_dept</text>
+  <text class="cell" x="350" y="295">user</text>
+  <text class="cell" x="450" y="295">本部门数据</text>
+  <text class="cell" x="550" y="295">启用</text>
+  <text class="cell" x="650" y="295">编辑 删除</text>
+  
+  <rect x="20" y="315" width="760" height="40" class="border"/>
+  <circle cx="35" cy="335" r="6" class="checkbox"/>
+  <text class="cell" x="100" y="335">订单管理-全部数据</text>
+  <text class="cell" x="250" y="335">order_all</text>
+  <text class="cell" x="350" y="335">order</text>
+  <text class="cell" x="450" y="335">全部数据</text>
+  <text class="cell" x="550" y="335">启用</text>
+  <text class="cell" x="650" y="335">编辑 删除</text>
+  
+  <rect x="20" y="355" width="760" height="40" class="border"/>
+  <circle cx="35" cy="375" r="6" class="checkbox"/>
+  <text class="cell" x="100" y="375">订单管理-自定义金额权限</text>
+  <text class="cell" x="250" y="375">order_custom_amount</text>
+  <text class="cell" x="350" y="375">order</text>
+  <text class="cell" x="450" y="375">自定义数据</text>
+  <text class="cell" x="550" y="375">启用</text>
+  <text class="cell" x="650" y="375">编辑 删除</text>
+  
+  <!-- 分页 -->
+  <rect x="20" y="420" width="760" height="40" class="border"/>
+  <text class="cell" x="30" y="445">分页：上一页 1 2 3 下一页 共20条 每页10条</text>
+  
+  <!-- 图表标题 -->
+  <text class="header" x="300" y="490">图1：数据权限列表页面示例</text>
+</svg>

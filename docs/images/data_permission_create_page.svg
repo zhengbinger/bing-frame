@@ -1,0 +1,110 @@
+<svg width="800" height="600" xmlns="http://www.w3.org/2000/svg">
+  <!-- 样式定义 -->
+  <defs>
+    <style type="text/css">
+      .header { font-family: Arial, sans-serif; font-size: 20px; font-weight: bold; fill: #333; }
+      .section { font-family: Arial, sans-serif; font-size: 14px; font-weight: bold; fill: #666; }
+      .border { fill: none; stroke: #ccc; stroke-width: 1; }
+      .form-bg { fill: #f9f9f9; }
+      .form-field { font-family: Arial, sans-serif; font-size: 13px; }
+      .label { font-family: Arial, sans-serif; font-size: 13px; fill: #333; }
+      .required { fill: #ff4d4f; }
+      .button { fill: #1890ff; stroke: #1890ff; }
+      .button-text { font-family: Arial, sans-serif; font-size: 14px; font-weight: bold; fill: white; }
+      .button-secondary { fill: white; stroke: #d9d9d9; }
+      .button-secondary-text { font-family: Arial, sans-serif; font-size: 14px; font-weight: bold; fill: #666; }
+      .json-editor { fill: white; }
+    </style>
+  </defs>
+  
+  <!-- 页面标题 -->
+  <text class="header" x="20" y="40">创建数据权限</text>
+  
+  <!-- 表单区域 -->
+  <rect x="20" y="60" width="760" height="500" class="border form-bg" rx="4" ry="4"/>
+  
+  <!-- 基本信息标题 -->
+  <text class="section" x="40" y="90">基本信息：</text>
+  
+  <!-- 权限名称 -->
+  <text class="label" x="40" y="130">权限名称：</text>
+  <rect x="120" y="110" width="300" height="32" class="border" rx="2" ry="2"/>
+  <text class="form-field" x="130" y="132">__________________</text>
+  <text class="required" x="430" y="130">*</text>
+  
+  <!-- 权限标识 -->
+  <text class="label" x="40" y="180">权限标识：</text>
+  <rect x="120" y="160" width="300" height="32" class="border" rx="2" ry="2"/>
+  <text class="form-field" x="130" y="182">__________________</text>
+  <text class="required" x="430" y="180">*</text>
+  
+  <!-- 数据类型 -->
+  <text class="label" x="40" y="230">数据类型：</text>
+  <rect x="120" y="210" width="150" height="32" class="border" rx="2" ry="2"/>
+  <text class="form-field" x="130" y="232">[下拉选择]</text>
+  <text class="required" x="280" y="230">*</text>
+  
+  <!-- 权限类型 -->
+  <text class="label" x="40" y="280">权限类型：</text>
+  <text class="required" x="120" y="280">*</text>
+  
+  <!-- 权限类型选项 -->
+  <rect x="120" y="260" width="620" height="120" class="border"/>
+  
+  <!-- 单选框 -->
+  <circle cx="135" cy="285" r="6" class="border"/>
+  <text class="form-field" x="150" y="288">全部数据</text>
+  
+  <circle cx="210" cy="285" r="6" class="border"/>
+  <text class="form-field" x="225" y="288">本人数据</text>
+  
+  <circle cx="285" cy="285" r="6" class="border"/>
+  <text class="form-field" x="300" y="288">本部门数据</text>
+  
+  <circle cx="385" cy="285" r="6" class="border checkbox-checked"/>
+  <circle cx="385" cy="285" r="3" fill="white"/>
+  <text class="form-field" x="400" y="288">本部门及以下数据</text>
+  
+  <circle cx="515" cy="285" r="6" class="border"/>
+  <text class="form-field" x="530" y="288">自定义数据</text>
+  
+  <!-- 自定义过滤条件区域 -->
+  <text class="section" x="120" y="315">自定义过滤条件：</text>
+  
+  <!-- JSON编辑器 -->
+  <rect x="130" y="320" width="600" height="140" class="border json-editor"/>
+  <text class="form-field" x="140" y="345">{</text>
+  <text class="form-field" x="170" y="370">"status": [1, 2, 3],</text>
+  <text class="form-field" x="170" y="395">"amount": {"min": 1000, "max": 10000}</text>
+  <text class="form-field" x="140" y="420">}</text>
+  
+  <!-- JSON格式帮助 -->
+  <text class="form-field" x="130" y="450" fill="#1890ff">JSON格式帮助：点击查看说明</text>
+  
+  <!-- 描述信息 -->
+  <text class="label" x="40" y="490">描述信息：</text>
+  <rect x="120" y="470" width="300" height="60" class="border" rx="2" ry="2"/>
+  <text class="form-field" x="130" y="492">__________________________</text>
+  
+  <!-- 状态 -->
+  <text class="label" x="40" y="550">状态：</text>
+  <text class="required" x="85" y="550">*</text>
+  
+  <rect x="90" y="530" width="60" height="28" class="button" rx="4" ry="4"/>
+  <text class="button-text" x="100" y="550">启用</text>
+  
+  <rect x="160" y="530" width="60" height="28" class="button-secondary" rx="4" ry="4"/>
+  <text class="button-secondary-text" x="170" y="550">禁用</text>
+  
+  <!-- 按钮区域 -->
+  <rect x="400" y="530" width="200" height="40"/>
+  
+  <rect x="450" y="530" width="80" height="36" class="button" rx="4" ry="4"/>
+  <text class="button-text" x="470" y="553">保存</text>
+  
+  <rect x="550" y="530" width="80" height="36" class="button-secondary" rx="4" ry="4"/>
+  <text class="button-secondary-text" x="570" y="553">取消</text>
+  
+  <!-- 图表标题 -->
+  <text class="header" x="300" y="590">图2：数据权限创建/编辑页面示例</text>
+</svg>
