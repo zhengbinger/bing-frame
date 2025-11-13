@@ -4,8 +4,7 @@ import com.bing.framework.common.ErrorCode;
 import com.bing.framework.exception.BusinessException;
 import com.bing.framework.service.WhiteListService;
 import com.bing.framework.util.JwtUtil;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -25,6 +24,7 @@ import java.util.concurrent.TimeUnit;
  * @date 2025-11-05
  */
 @Component
+@Slf4j
 public class JwtInterceptor implements HandlerInterceptor {
 
     @Autowired
@@ -43,7 +43,7 @@ public class JwtInterceptor implements HandlerInterceptor {
     private Integer jwtExpiration;
     
     // 日志记录器
-    private static final Logger log = LoggerFactory.getLogger(JwtInterceptor.class);
+
 
     /**
      * 拦截请求，验证JWT令牌

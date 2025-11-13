@@ -3,6 +3,7 @@ package com.bing.framework.controller;
 import com.bing.framework.annotation.AuditLogLevel;
 import com.bing.framework.common.ErrorCode;
 import com.bing.framework.common.Result;
+import com.bing.framework.config.CaptchaConfig;
 import com.bing.framework.context.RequestContext;
 import com.bing.framework.context.UserContext;
 import com.bing.framework.dto.LoginRequest;
@@ -15,6 +16,7 @@ import com.bing.framework.exception.BusinessException;
 import com.bing.framework.service.LoginRecordService;
 import com.bing.framework.service.RoleService;
 import com.bing.framework.service.UserService;
+import com.bing.framework.strategy.CaptchaStrategyFactory;
 import com.bing.framework.util.JwtUtil;
 import com.bing.framework.util.RedisUtil;
 import io.swagger.annotations.Api;
@@ -22,8 +24,7 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponses;
 import io.swagger.annotations.ApiResponse;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -52,15 +53,17 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping("/api/auth")
 @AuditLogLevel(module="认证管理" ,description = "用户登录、注册、注销和获取当前用户信息等认证相关功能")
+@Slf4j
 public class AuthController {
     
 
     
-    private static final Logger log = LoggerFactory.getLogger(AuthController.class);
+
     
     private static final String TOKEN_BLACKLIST_PREFIX = "token:blacklist:";
     private static final String USER_TOKEN_PREFIX = "user:token:";
     private static final String REFRESH_TOKEN_PREFIX = "refresh:token:";
+    private static final String LOGIN_FAILURE_COUNT_PREFIX = "login:failure:count:";
 
     @Autowired
     private UserService userService;
@@ -79,6 +82,12 @@ public class AuthController {
     
     @Autowired
     private RedisUtil redisUtil;
+    
+    @Autowired
+    private CaptchaStrategyFactory captchaStrategyFactory;
+    
+    @Autowired
+    private CaptchaConfig captchaConfig;
     
     @Value("${jwt.expiration:24}")
     private Integer jwtExpiration;
@@ -102,6 +111,9 @@ public class AuthController {
     })
     @PostMapping("/login")
     public Result<LoginResponse> login(@ApiParam(name = "loginRequest", value = "登录请求数据", required = true) @Validated @RequestBody LoginRequest loginRequest) {
+        // 验证码验证
+        validateCaptcha(loginRequest);
+        
         // 根据用户名查询用户
         User user = userService.getUserByUsername(loginRequest.getUsername());
         
@@ -110,6 +122,8 @@ public class AuthController {
             log.info("Login failed: user not found, username={}", loginRequest.getUsername());
             // 记录失败的登录日志
             recordLoginRecord(loginRequest.getUsername(), null, 0, "用户不存在");
+            // 增加登录失败次数
+            incrementLoginFailureCount(loginRequest.getUsername());
             throw new BusinessException(ErrorCode.USER_NOT_FOUND);
         }
         
@@ -118,6 +132,8 @@ public class AuthController {
             log.info("Login failed: user disabled, username={}", loginRequest.getUsername());
             // 记录登录记录
             recordLoginRecord(loginRequest.getUsername(), user.getId(), 0, "用户已禁用");
+            // 增加登录失败次数
+            incrementLoginFailureCount(loginRequest.getUsername());
             throw new BusinessException(ErrorCode.USER_DISABLED);
         }
         
@@ -159,10 +175,17 @@ public class AuthController {
             log.info("Password validation failed for user: {}", user.getUsername());
             // 记录登录记录
             recordLoginRecord(loginRequest.getUsername(), user.getId(), 0, "密码错误");
+            
+            // 增加登录失败次数
+            incrementLoginFailureCount(loginRequest.getUsername());
+            
             throw new BusinessException(ErrorCode.INCORRECT_PASSWORD);
         }
         
         log.info("Password validation successful for user: {}", user.getUsername());
+        
+        // 登录成功后清除失败次数
+        clearLoginFailureCount(loginRequest.getUsername());
         
         // 优先从缓存中获取token，如果没有则生成新的
         String userTokenKey = USER_TOKEN_PREFIX + user.getId();
@@ -440,6 +463,81 @@ public class AuthController {
      * @param status 登录状态：0-失败，1-成功
      * @param message 登录结果描述
      */
+    /**
+     * 验证验证码
+     */
+    private void validateCaptcha(LoginRequest loginRequest) {
+        // 如果验证码功能未启用，直接返回
+        if (!captchaConfig.isEnabled()) {
+            return;
+        }
+        
+        // 检查是否需要验证码（基于登录失败次数或始终要求）
+        boolean needCaptcha = isCaptchaRequired(loginRequest.getUsername());
+        if (!needCaptcha) {
+            return;
+        }
+        
+        // 前置校验：如果需要验证码但未提供验证码信息，抛出异常
+        if (loginRequest.getCaptchaKey() == null || loginRequest.getCaptchaKey().trim().isEmpty() ||
+            loginRequest.getCaptcha() == null || loginRequest.getCaptcha().trim().isEmpty()) {
+            throw new BusinessException(ErrorCode.CAPTCHA_REQUIRED);
+        }
+        
+        // 获取验证码类型
+        String captchaType = loginRequest.getCaptchaType();
+        if (captchaType == null || captchaType.trim().isEmpty()) {
+            captchaType = captchaConfig.getDefaultType();
+        }
+        
+        // 验证验证码
+        boolean isValid = captchaStrategyFactory.getStrategy(captchaType)
+                .validateCaptcha(loginRequest.getCaptchaKey(), loginRequest.getCaptcha());
+        
+        if (!isValid) {
+            throw new BusinessException(ErrorCode.INVALID_CAPTCHA);
+        }
+    }
+    
+    /**
+     * 判断是否需要验证码
+     */
+    private boolean isCaptchaRequired(String username) {
+        // 检查登录失败次数
+        String key = LOGIN_FAILURE_COUNT_PREFIX + username;
+        Integer failureCount = (Integer) redisUtil.get(key);
+        
+        // 如果失败次数达到阈值，需要验证码
+        return failureCount != null && failureCount >= captchaConfig.getLoginFailureThreshold();
+    }
+    
+    /**
+     * 增加登录失败次数
+     */
+    private void incrementLoginFailureCount(String username) {
+        String key = LOGIN_FAILURE_COUNT_PREFIX + username;
+        Integer failureCount = (Integer) redisUtil.get(key);
+        
+        if (failureCount == null) {
+            // 第一次失败，设置为1，有效期1小时
+            redisUtil.set(key, 1, 1, java.util.concurrent.TimeUnit.HOURS);
+        } else {
+            // 增加失败次数
+        redisUtil.increment(key, 1);
+            // 如果已经超过3次失败，延长有效期为24小时
+            if (failureCount >= 3) {
+                redisUtil.expire(key, 24, java.util.concurrent.TimeUnit.HOURS);
+            }
+        }
+    }
+    
+    /**
+     * 清除登录失败次数
+     */
+    private void clearLoginFailureCount(String username) {
+        redisUtil.delete(LOGIN_FAILURE_COUNT_PREFIX + username);
+    }
+    
     private void recordLoginRecord(String username, Long userId, Integer status, String message) {
         try {
             LoginRecord loginRecord = new LoginRecord();

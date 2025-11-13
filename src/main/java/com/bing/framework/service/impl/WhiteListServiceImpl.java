@@ -4,8 +4,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.bing.framework.entity.WhiteList;
 import com.bing.framework.mapper.WhiteListMapper;
 import com.bing.framework.service.WhiteListService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
@@ -24,6 +23,7 @@ import java.util.Set;
  * @date 2024-11-03
  */
 @Service
+@Slf4j
 public class WhiteListServiceImpl extends ServiceImpl<WhiteListMapper, WhiteList> implements WhiteListService {
 
     @Autowired
@@ -32,7 +32,7 @@ public class WhiteListServiceImpl extends ServiceImpl<WhiteListMapper, WhiteList
     /**
      * 日志记录器。
      */
-    private static final Logger log = LoggerFactory.getLogger(WhiteListServiceImpl.class);
+
 
     /**
      * Ant风格路径匹配器。

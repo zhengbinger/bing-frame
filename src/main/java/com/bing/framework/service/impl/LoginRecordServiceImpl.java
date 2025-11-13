@@ -6,8 +6,7 @@ import com.bing.framework.entity.LoginRecord;
 import com.bing.framework.mapper.LoginRecordMapper;
 import com.bing.framework.service.LoginRecordService;
 import com.bing.framework.dto.LoginRecordQueryDTO;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.text.SimpleDateFormat;
@@ -25,9 +24,10 @@ import java.util.List;
  * @date 2025-11-11
  */
 @Service
+@Slf4j
 public class LoginRecordServiceImpl extends ServiceImpl<LoginRecordMapper, LoginRecord> implements LoginRecordService {
 
-    private static final Logger log = LoggerFactory.getLogger(LoginRecordServiceImpl.class);
+
     private final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
     @Override

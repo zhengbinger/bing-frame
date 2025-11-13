@@ -2,8 +2,7 @@ package com.bing.framework.util;
 
 import com.bing.framework.entity.AuditLog;
 import com.bing.framework.mapper.AuditLogMapper;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.context.annotation.Lazy;
@@ -28,9 +27,8 @@ import java.util.concurrent.atomic.AtomicBoolean;
 // 添加@Lazy注解实现延迟初始化，提升启动性能
 @Component
 @Lazy
+@Slf4j
 public class AuditLogBufferManager {
-
-    private static final Logger logger = LoggerFactory.getLogger(AuditLogBufferManager.class);
     
     // 缓冲队列，用于存储待写入的审计日志
     private final BlockingQueue<AuditLog> bufferQueue;
@@ -63,12 +61,12 @@ public class AuditLogBufferManager {
     public boolean addLog(AuditLog auditLog) {
         boolean result = bufferQueue.offer(auditLog);
         if (!result) {
-            logger.warn("审计日志缓冲池已满，尝试直接写入数据库");
+            log.warn("审计日志缓冲池已满，尝试直接写入数据库");
             // 当缓冲池满时，尝试直接写入数据库
             try {
                 auditLogMapper.insert(auditLog);
             } catch (Exception e) {
-                logger.error("直接写入审计日志失败", e);
+                log.error("直接写入审计日志失败", e);
                 return false;
             }
         } else {
@@ -93,9 +91,9 @@ public class AuditLogBufferManager {
                 try {
                     // 批量插入数据库
                     auditLogMapper.insertBatch(logsToSave);
-                    logger.debug("成功批量写入{}条审计日志", logsToSave.size());
+                    log.debug("成功批量写入{}条审计日志", logsToSave.size());
                 } catch (Exception e) {
-                    logger.error("批量写入审计日志失败", e);
+                    log.error("批量写入审计日志失败", e);
                     // 尝试将失败的日志重新放入队列
                     for (AuditLog log : logsToSave) {
                         bufferQueue.offer(log);
@@ -136,7 +134,7 @@ public class AuditLogBufferManager {
      */
     @PreDestroy
     public void flushOnShutdown() {
-        logger.info("应用关闭，正在刷新审计日志缓冲池");
+        log.info("应用关闭，正在刷新审计日志缓冲池");
         while (!bufferQueue.isEmpty()) {
             flushBuffer();
             try {
@@ -145,6 +143,6 @@ public class AuditLogBufferManager {
                 Thread.currentThread().interrupt();
             }
         }
-        logger.info("审计日志缓冲池刷新完成");
+        log.info("审计日志缓冲池刷新完成");
     }
 }

@@ -2,6 +2,7 @@ package com.bing.framework.util;
 
 import com.bing.framework.entity.AuditLog;
 import com.bing.framework.service.AuditLogService;
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,8 +22,9 @@ import java.util.Date;
  * @date 2025-11-05
  */
 @Component
+@Slf4j
 public class AuditLogUtil {
-    
+
     private static final Logger auditLogger = LoggerFactory.getLogger("AUDIT_LOG");
     private static AuditLogUtil instance;
     

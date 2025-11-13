@@ -2,8 +2,7 @@ package com.bing.framework.exception;
 
 import com.bing.framework.common.ErrorCode;
 import com.bing.framework.common.Result;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -20,9 +19,10 @@ import java.sql.SQLException;
  * @date 2025-11-01
  */
 @ControllerAdvice
+@Slf4j
 public class GlobalExceptionHandler {
 
-    private static final Logger logger = LoggerFactory.getLogger(GlobalExceptionHandler.class);
+
 
     /**
      * 处理业务异常。
@@ -34,7 +34,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(BusinessException.class)
     @ResponseBody
     public Result<?> handleBusinessException(final BusinessException e, final HttpServletRequest request) {
-        logger.error("业务异常: {}", e.getMessage(), e);
+        log.error("业务异常: {}", e.getMessage(), e);
         // 直接使用ErrorCode获取多语言消息，而不是使用异常的message属性
         return Result.error(e.getErrorCode());
     }
@@ -49,7 +49,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(NullPointerException.class)
     @ResponseBody
     public Result<?> handleNullPointerException(final NullPointerException e, final HttpServletRequest request) {
-        logger.error("空指针异常: {}", e.getMessage(), e);
+        log.error("空指针异常: {}", e.getMessage(), e);
         return Result.error(ErrorCode.NULL_POINTER_ERROR);
     }
 
@@ -63,7 +63,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(SQLException.class)
     @ResponseBody
     public Result<?> handleSQLException(final SQLException e, final HttpServletRequest request) {
-        logger.error("数据库异常: {}", e.getMessage(), e);
+        log.error("数据库异常: {}", e.getMessage(), e);
         return Result.error(ErrorCode.DATABASE_ERROR);
     }
 
@@ -77,7 +77,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(IllegalArgumentException.class)
     @ResponseBody
     public Result<?> handleIllegalArgumentException(final IllegalArgumentException e, final HttpServletRequest request) {
-        logger.error("参数异常: {}", e.getMessage(), e);
+        log.error("参数异常: {}", e.getMessage(), e);
         return Result.error(ErrorCode.PARAM_ERROR, e.getMessage());
     }
 
@@ -91,7 +91,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(Exception.class)
     @ResponseBody
     public Result<?> handleException(final Exception e, final HttpServletRequest request) {
-        logger.error("系统异常: {}", e.getMessage(), e);
+        log.error("系统异常: {}", e.getMessage(), e);
         return Result.error(ErrorCode.SYSTEM_ERROR);
     }
 }

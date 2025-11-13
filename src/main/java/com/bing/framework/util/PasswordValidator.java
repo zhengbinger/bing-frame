@@ -1,7 +1,6 @@
 package com.bing.framework.util;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import java.util.regex.Matcher;
@@ -15,9 +14,8 @@ import java.util.regex.Pattern;
  * @date 2025-11-10
  */
 @Component
+@Slf4j
 public class PasswordValidator {
-
-    private static final Logger log = LoggerFactory.getLogger(PasswordValidator.class);
     
     // 密码最小长度
     private static final int MIN_LENGTH = 8;

@@ -32,6 +32,10 @@ public enum ErrorCode {
     USER_DISABLED(3004, "error.user.disabled"),
     INCORRECT_PASSWORD(3005, "error.user.incorrect_password"),
     REGISTER_FAILED(3006, "error.user.register_failed"),
+    INVALID_CAPTCHA(3007, "error.captcha.invalid"),
+    CAPTCHA_EXPIRED(3008, "error.captcha.expired"),
+    CAPTCHA_REQUIRED(3009, "error.captcha.required"),
+    CAPTCHA_FREQUENCY_LIMIT(3010, "error.captcha.frequency_limit"),
     
     // 数据库相关错误码 4000-4999
     DATABASE_ERROR(4000, "error.database"),

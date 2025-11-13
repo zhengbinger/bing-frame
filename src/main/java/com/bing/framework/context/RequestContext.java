@@ -5,8 +5,10 @@ import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
@@ -85,28 +87,58 @@ public class RequestContext {
             return new HashMap<>();
         }
     }
-
+    
     /**
-     * 获取客户端IP地址
+     * 获取指定的请求参数值
      * 
-     * @return 客户端IP地址
+     * @param paramName 参数名称
+     * @return 请求参数值，如果不存在则返回null
      */
-    public static String getClientIp() {
+    public static String getParameter(String paramName) {
         try {
-            return getClientIpFromRequest(getRequest());
+            return getRequest().getParameter(paramName);
         } catch (Exception e) {
-            log.error("获取客户端IP失败: {}", e.getMessage());
-            return "unknown";
+            log.error("获取请求参数失败: {}", e.getMessage());
+            return null;
         }
     }
-
+    
     /**
-     * 获取User-Agent信息
+     * 获取所有请求参数
      * 
-     * @return User-Agent字符串
+     * @return 请求参数映射
      */
-    public static String getUserAgent() {
-        return getHeader("User-Agent");
+    public static Map<String, String[]> getParameterMap() {
+        try {
+            return getRequest().getParameterMap();
+        } catch (Exception e) {
+            log.error("获取请求参数映射失败: {}", e.getMessage());
+            return new HashMap<>();
+        }
+    }
+    
+    /**
+     * 根据名称获取Cookie值
+     * 
+     * @param cookieName Cookie名称
+     * @return Cookie值，如果不存在则返回null
+     */
+    public static String getCookieValue(String cookieName) {
+        try {
+            HttpServletRequest request = getRequest();
+            Cookie[] cookies = request.getCookies();
+            if (cookies != null) {
+                for (Cookie cookie : cookies) {
+                    if (cookieName.equals(cookie.getName())) {
+                        return cookie.getValue();
+                    }
+                }
+            }
+            return null;
+        } catch (Exception e) {
+            log.error("获取Cookie值失败: {}", e.getMessage());
+            return null;
+        }
     }
 
     /**
@@ -133,6 +165,44 @@ public class RequestContext {
             return getRequest().getMethod();
         } catch (Exception e) {
             log.error("获取请求方法失败: {}", e.getMessage());
+            return null;
+        }
+    }
+
+    /**
+     * 获取User-Agent信息
+     * 
+     * @return User-Agent字符串
+     */
+    public static String getUserAgent() {
+        return getHeader("User-Agent");
+    }
+
+    /**
+     * 获取客户端IP地址
+     * 
+     * @return 客户端IP地址
+     */
+    public static String getClientIp() {
+        try {
+            return getClientIpFromRequest(getRequest());
+        } catch (Exception e) {
+            log.error("获取客户端IP失败: {}", e.getMessage());
+            return "unknown";
+        }
+    }
+    
+    /**
+     * 获取当前会话ID
+     * 
+     * @return 会话ID，如果不存在或获取失败则返回null
+     */
+    public static String getSessionId() {
+        try {
+            HttpSession session = getRequest().getSession(false);
+            return session != null ? session.getId() : null;
+        } catch (Exception e) {
+            log.error("获取会话ID失败: {}", e.getMessage());
             return null;
         }
     }

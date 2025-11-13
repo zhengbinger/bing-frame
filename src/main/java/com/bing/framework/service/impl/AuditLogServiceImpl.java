@@ -5,8 +5,7 @@ import com.bing.framework.entity.AuditLog;
 import com.bing.framework.mapper.AuditLogMapper;
 import com.bing.framework.service.AuditLogService;
 import com.bing.framework.util.AuditLogBufferManager;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.scheduling.annotation.Async;
@@ -29,9 +28,10 @@ import java.util.Date;
 // 添加@Lazy注解实现延迟初始化，提升启动性能
 @Service
 @Lazy
+@Slf4j
 public class AuditLogServiceImpl extends ServiceImpl<AuditLogMapper, AuditLog> implements AuditLogService {
 
-    private static final Logger logger = LoggerFactory.getLogger(AuditLogServiceImpl.class);
+
     
     private final AuditLogBufferManager bufferManager;
     private final Clock clock;
@@ -62,7 +62,7 @@ public class AuditLogServiceImpl extends ServiceImpl<AuditLogMapper, AuditLog> i
             bufferManager.addLog(auditLog);
         } catch (Exception e) {
             // 记录日志保存失败的情况
-            logger.error("保存审计日志失败", e);
+            log.error("保存审计日志失败", e);
         }
     }
     

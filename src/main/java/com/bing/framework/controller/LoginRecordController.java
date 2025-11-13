@@ -11,12 +11,11 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponses;
 import io.swagger.annotations.ApiResponse;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import javax.servlet.http.HttpServletRequest;
+import com.bing.framework.context.RequestContext;
 import java.util.List;
 
 /**
@@ -29,10 +28,11 @@ import java.util.List;
  */
 @Api(tags = "登录记录管理", description = "提供登录记录查询、清理等功能")
 @RestController
-@RequestMapping("/api/login-records")
+@RequestMapping("/api/loginRecords")
+@Slf4j
 public class LoginRecordController {
 
-    private static final Logger log = LoggerFactory.getLogger(LoginRecordController.class);
+
 
     @Autowired
     private LoginRecordService loginRecordService;
@@ -84,10 +84,9 @@ public class LoginRecordController {
     @GetMapping("/my")
     public Result<?> getMyLoginRecords(
             @ApiParam(name = "page", value = "页码，默认1", defaultValue = "1") @RequestParam(defaultValue = "1") Integer page,
-            @ApiParam(name = "size", value = "每页数量，默认10", defaultValue = "10") @RequestParam(defaultValue = "10") Integer size,
-            HttpServletRequest request) {
+            @ApiParam(name = "size", value = "每页数量，默认10", defaultValue = "10") @RequestParam(defaultValue = "10") Integer size) {
         try {
-            Long userId = (Long) request.getAttribute("userId");
+            Long userId = (Long) RequestContext.getRequest().getAttribute("userId");
             return Result.success(loginRecordService.getLoginRecordsByUserId(userId, page, size));
         } catch (Exception e) {
             log.error("查询当前用户登录记录失败：{}", e.getMessage(), e);

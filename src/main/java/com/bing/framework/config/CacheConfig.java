@@ -3,8 +3,7 @@ package com.bing.framework.config;
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.PropertyAccessor;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.CachingConfigurerSupport;
@@ -35,10 +34,10 @@ import java.time.Duration;
 // 添加@Lazy注解实现延迟初始化，提升启动性能
 @Configuration
 @EnableCaching
-@Lazy
+@Slf4j
 public class CacheConfig extends CachingConfigurerSupport {
 
-    private static final Logger log = LoggerFactory.getLogger(CacheConfig.class);
+
     
     @Value("${spring.cache.redis.key-prefix:bing:}")
     private String keyPrefix;

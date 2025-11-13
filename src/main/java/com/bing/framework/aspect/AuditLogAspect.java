@@ -12,6 +12,7 @@ import org.aspectj.lang.annotation.Pointcut;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
@@ -27,9 +28,9 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 @Aspect
 @Component
+@Slf4j
 public class AuditLogAspect {
     
-    private static final Logger logger = LoggerFactory.getLogger(AuditLogAspect.class);
     private static final Logger auditLogger = LoggerFactory.getLogger("AUDIT_LOG");
     
     @Autowired
@@ -145,7 +146,7 @@ public class AuditLogAspect {
             
         } catch (Exception e) {
             // 记录审计日志失败不影响主业务
-            logger.error("记录审计日志失败: {}", e.getMessage(), e);
+            log.error("记录审计日志失败: {}", e.getMessage(), e);
         }
     }
     

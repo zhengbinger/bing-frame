@@ -1,8 +1,7 @@
 package com.bing.framework.runner;
 
 import com.bing.framework.util.PasswordFormatChecker;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
@@ -15,9 +14,10 @@ import org.springframework.stereotype.Component;
  * @date 2025-11-10
  */
 @Component
+@Slf4j
 public class PasswordFormatCheckRunner implements CommandLineRunner {
 
-    private static final Logger log = LoggerFactory.getLogger(PasswordFormatCheckRunner.class);
+
     
     @Autowired
     private PasswordFormatChecker passwordFormatChecker;
