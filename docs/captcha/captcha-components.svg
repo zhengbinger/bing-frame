@@ -1,0 +1,67 @@
+<svg width="800" height="400" xmlns="http://www.w3.org/2000/svg">
+  <!-- 背景和标题 -->
+  <rect width="800" height="400" fill="#f9f9f9" rx="10" ry="10"/>
+  <text x="400" y="40" font-family="Arial" font-size="24" text-anchor="middle" font-weight="bold">核心组件关系图</text>
+  
+  <!-- CaptchaController -->
+  <rect x="100" y="100" width="200" height="70" fill="#e3f2fd" stroke="#1976d2" stroke-width="2" rx="5" ry="5"/>
+  <text x="200" y="130" font-family="Arial" font-size="16" text-anchor="middle" font-weight="bold">CaptchaController</text>
+  <text x="200" y="150" font-family="Arial" font-size="12" text-anchor="middle">@RestController</text>
+  
+  <!-- CaptchaStrategyFactory -->
+  <rect x="400" y="100" width="220" height="70" fill="#e8f5e9" stroke="#388e3c" stroke-width="2" rx="5" ry="5"/>
+  <text x="510" y="130" font-family="Arial" font-size="16" text-anchor="middle" font-weight="bold">CaptchaStrategyFactory</text>
+  <text x="510" y="150" font-family="Arial" font-size="12" text-anchor="middle">@Component</text>
+  
+  <!-- CaptchaStrategy -->
+  <rect x="400" y="230" width="220" height="60" fill="#f3e5f5" stroke="#7b1fa2" stroke-width="2" rx="5" ry="5"/>
+  <text x="510" y="260" font-family="Arial" font-size="16" text-anchor="middle" font-weight="bold">CaptchaStrategy</text>
+  <text x="510" y="280" font-family="Arial" font-size="12" text-anchor="middle">interface</text>
+  
+  <!-- ImageCaptchaStrategy -->
+  <rect x="100" y="230" width="200" height="60" fill="#fff3e0" stroke="#f57c00" stroke-width="2" rx="5" ry="5"/>
+  <text x="200" y="260" font-family="Arial" font-size="14" text-anchor="middle">ImageCaptchaStrategy</text>
+  <text x="200" y="280" font-family="Arial" font-size="12" text-anchor="middle">@Component("image")</text>
+  
+  <!-- CaptchaConfig -->
+  <rect x="650" y="230" width="120" height="60" fill="#fffde7" stroke="#ffd600" stroke-width="2" rx="5" ry="5"/>
+  <text x="710" y="260" font-family="Arial" font-size="16" text-anchor="middle">CaptchaConfig</text>
+  <text x="710" y="280" font-family="Arial" font-size="12" text-anchor="middle">@Component</text>
+  
+  <!-- CaptchaResult -->
+  <rect x="350" y="330" width="100" height="50" fill="#e0f7fa" stroke="#0097a7" stroke-width="2" rx="5" ry="5"/>
+  <text x="400" y="360" font-family="Arial" font-size="14" text-anchor="middle">CaptchaResult</text>
+  <text x="400" y="375" font-family="Arial" font-size="12" text-anchor="middle">@Data</text>
+  
+  <!-- 依赖关系箭头 -->
+  <!-- CaptchaController -> CaptchaStrategyFactory -->
+  <line x1="300" y1="135" x2="400" y2="135" stroke="#333333" stroke-width="2" marker-end="url(#arrowhead)"/>
+  <text x="350" y1="130" font-family="Arial" font-size="12" text-anchor="middle" fill="#666666">依赖</text>
+  
+  <!-- CaptchaController -> CaptchaConfig -->
+  <line x1="230" y1="170" x2="650" y2="260" stroke="#333333" stroke-width="2" marker-end="url(#arrowhead)"/>
+  <text x="440" y1="220" font-family="Arial" font-size="12" text-anchor="middle" fill="#666666">依赖</text>
+  
+  <!-- CaptchaStrategyFactory -> CaptchaStrategy -->
+  <line x1="510" y1="170" x2="510" y2="230" stroke="#333333" stroke-width="2" marker-end="url(#arrowhead)"/>
+  <text x="540" y1="200" font-family="Arial" font-size="12" text-anchor="middle" fill="#666666">管理</text>
+  
+  <!-- ImageCaptchaStrategy -> CaptchaStrategy -->
+  <line x1="300" y1="260" x2="400" y2="260" stroke="#333333" stroke-width="2" marker-end="url(#arrowhead)"/>
+  <text x="350" y1="255" font-family="Arial" font-size="12" text-anchor="middle" fill="#666666">实现</text>
+  
+  <!-- ImageCaptchaStrategy -> CaptchaResult -->
+  <line x1="200" y1="290" x2="200" y2="330" stroke="#333333" stroke-width="2" marker-end="url(#arrowhead)"/>
+  <text x="170" y1="310" font-family="Arial" font-size="12" text-anchor="middle" fill="#666666">返回</text>
+  
+  <!-- ImageCaptchaStrategy -> CaptchaConfig -->
+  <line x1="300" y1="260" x2="650" y2="260" stroke="#333333" stroke-width="2" marker-end="url(#arrowhead)"/>
+  <text x="475" y1="255" font-family="Arial" font-size="12" text-anchor="middle" fill="#666666">依赖</text>
+  
+  <!-- 箭头标记 -->
+  <defs>
+    <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#333333"/>
+    </marker>
+  </defs>
+</svg>
