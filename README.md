@@ -48,25 +48,45 @@ graph TD
 ```mermaid
 graph TD
     subgraph "应用层"
-        A[业务模块] --> A1[用户管理]
-        A --> A2[权限管理]
-        A --> A3[数据字典]
-        A --> A4[审计日志]
-        A --> A5[数据权限]
+        A[业务模块]
+        A1[用户管理]
+        A2[权限管理]
+        A3[数据字典]
+        A4[审计日志]
+        A5[数据权限]
+        
+        A --> A1
+        A --> A2
+        A --> A3
+        A --> A4
+        A --> A5
     end
 
     subgraph "框架层"
-        B[Spring Boot] --> B1[Spring MVC]
-        B --> B2[Spring Security]
-        B --> B3[Spring Cache]
-        B --> B4[Spring AOP]
-        B --> B5[Spring MessageSource]
+        B[Spring Boot]
+        B1[Spring MVC]
+        B2[Spring Security]
+        B3[Spring Cache]
+        B4[Spring AOP]
+        B5[Spring MessageSource]
+        
+        B --> B1
+        B --> B2
+        B --> B3
+        B --> B4
+        B --> B5
     end
 
     subgraph "数据层"
-        C1[MyBatis Plus] --> D1[MySQL]
-        C2[Spring Data JPA] --> D1
-        C3[Spring Cache] --> D2[Redis]
+        C1[MyBatis Plus]
+        C2[Spring Data JPA]
+        C3[Spring Cache]
+        D1[MySQL]
+        D2[Redis]
+        
+        C1 --> D1
+        C2 --> D1
+        C3 --> D2
     end
 
     subgraph "工具层"
@@ -126,25 +146,36 @@ src/main/resources/
 
 ```mermaid
 graph TD
-    A[核心框架] --> B[用户管理模块]
-    A --> C[权限管理模块]
-    A --> D[数据字典模块]
-    A --> E[审计日志模块]
-    A --> F[数据权限模块]
-    A --> G[认证授权模块]
-    A --> H[国际化模块]
+    subgraph "核心框架与模块关系"
+        A[核心框架]
+        B[用户管理模块]
+        C[权限管理模块]
+        D[数据字典模块]
+        E[审计日志模块]
+        F[数据权限模块]
+        G[认证授权模块]
+        H[国际化模块]
+    end
+    
+    A --> B
+    A --> C
+    A --> D
+    A --> E
+    A --> F
+    A --> G
+    A --> H
     
     B --> G
     B --> E
     C --> B
     C --> E
-    D --> A
-    E --> B
-    E --> C
-    F --> B
-    F --> C
-    G --> A
-    H --> A
+    D -- "提供配置" --> A
+    E -- "记录操作" --> B
+    E -- "记录操作" --> C
+    F -- "控制访问" --> B
+    F -- "控制访问" --> C
+    G -- "提供认证" --> A
+    H -- "支持国际化" --> A
 ```
 
 ### 核心功能模块说明
