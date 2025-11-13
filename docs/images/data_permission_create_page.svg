@@ -2,11 +2,16 @@
   <!-- 样式定义 -->
   <defs>
     <style type="text/css">
+      /* 确保没有黑色底块 */
+      * {
+        fill-opacity: 1;
+        stroke-opacity: 1;
+      }
       .header { font-family: Arial, sans-serif; font-size: 20px; font-weight: bold; fill: #333; }
       .section { font-family: Arial, sans-serif; font-size: 14px; font-weight: bold; fill: #666; }
       .border { fill: none; stroke: #ccc; stroke-width: 1; }
       .form-bg { fill: #f9f9f9; }
-      .form-field { font-family: Arial, sans-serif; font-size: 13px; }
+      .form-field { font-family: Arial, sans-serif; font-size: 13px; fill: #333; }
       .label { font-family: Arial, sans-serif; font-size: 13px; fill: #333; }
       .required { fill: #ff4d4f; }
       .button { fill: #1890ff; stroke: #1890ff; }

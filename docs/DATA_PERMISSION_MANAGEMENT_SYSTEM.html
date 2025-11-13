@@ -1,43 +1,167 @@
-# 数据权限管理体系设计文档
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>数据权限管理体系设计文档</title>
+    <style>
+        body {
+            font-family: 'Microsoft YaHei', 'Segoe UI', Roboto, Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #fff;
+        }
+        h1 {
+            color: #2c3e50;
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #3498db;
+        }
+        h2 {
+            color: #2980b9;
+            margin-top: 40px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #eaeaea;
+        }
+        h3 {
+            color: #16a085;
+            margin-top: 30px;
+        }
+        h4 {
+            color: #27ae60;
+            margin-top: 25px;
+        }
+        h5, h6 {
+            color: #f39c12;
+        }
+        p {
+            margin: 15px 0;
+            text-align: justify;
+        }
+        ul, ol {
+            margin: 15px 0;
+            padding-left: 30px;
+        }
+        li {
+            margin-bottom: 8px;
+        }
+        pre {
+            background-color: #f8f9fa;
+            border: 1px solid #e9ecef;
+            border-radius: 4px;
+            padding: 15px;
+            overflow-x: auto;
+            font-family: Monaco, Consolas, 'Courier New', monospace;
+            margin: 20px 0;
+        }
+        code {
+            font-family: Monaco, Consolas, 'Courier New', monospace;
+            background-color: #f8f9fa;
+            padding: 2px 4px;
+            border-radius: 3px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+            font-weight: bold;
+        }
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        img {
+            max-width: 100%;
+            height: auto;
+            margin: 20px auto;
+            display: block;
+        }
+        a {
+            color: #3498db;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <h1>数据权限管理体系设计文档</h1>
 
-## 1. 概述
+<h2>1. 概述</h2>
 
 数据权限管理是对系统中数据访问范围的控制，确保用户只能访问到其被授权的数据资源。本设计基于现有的RBAC功能权限体系和组织管理模块，构建一套灵活、可扩展、高性能的数据权限管理体系。
 
-### 1.1 设计目标
+<h3>1.1 设计目标</h3>
 
-- **精细化控制**：支持多维度、细粒度的数据访问控制
-- **灵活性**：提供多种数据权限策略，满足不同业务场景需求
-- **高性能**：在保证安全的前提下，最小化对系统性能的影响
-- **可扩展**：易于扩展新的数据源和权限策略
-- **用户友好**：提供直观的权限配置界面和使用体验
+<ul>
+<li><strong>精细化控制</strong>：支持多维度、细粒度的数据访问控制</li>
+<li><strong>灵活性</strong>：提供多种数据权限策略，满足不同业务场景需求</li>
+<li><strong>高性能</strong>：在保证安全的前提下，最小化对系统性能的影响</li>
+<li><strong>可扩展</strong>：易于扩展新的数据源和权限策略</li>
+<li><strong>用户友好</strong>：提供直观的权限配置界面和使用体验</li>
+</ul>
 
-## 2. 数据权限模型设计
+<h2>2. 数据权限模型设计</h2>
 
-### 2.1 核心概念
+<h3>2.1 核心概念</h3>
 
-#### 2.1.1 数据权限定义
+<h4>2.1.1 数据权限定义</h4>
 
 数据权限是指对特定数据资源的访问范围限制，通过数据过滤条件实现。
 
-#### 2.1.2 数据权限类型
+<h4>2.1.2 数据权限类型</h4>
 
-| 权限类型 | 描述 | 应用场景 |
-| :--- | :--- | :--- |
-| 全部数据 | 无限制访问所有数据 | 系统管理员 |
-| 本人数据 | 只能访问自己创建的数据 | 普通用户 |
-| 本部门数据 | 只能访问本部门数据 | 部门主管 |
-| 本部门及以下数据 | 可访问本部门及所有子部门数据 | 高级管理者 |
-| 自定义数据 | 通过自定义条件限制数据访问范围 | 特定业务场景 |
-
-### 2.1.3 示例数据
+<table>
+  <tr>
+    <th>权限类型</th>
+    <th>描述</th>
+    <th>应用场景</th>
+  </tr>
+  <tr>
+    <td>全部数据</td>
+    <td>无限制访问所有数据</td>
+    <td>系统管理员</td>
+  </tr>
+  <tr>
+    <td>本人数据</td>
+    <td>只能访问自己创建的数据</td>
+    <td>普通用户</td>
+  </tr>
+  <tr>
+    <td>本部门数据</td>
+    <td>只能访问本部门数据</td>
+    <td>部门主管</td>
+  </tr>
+  <tr>
+    <td>本部门及以下数据</td>
+    <td>可访问本部门及所有子部门数据</td>
+    <td>高级管理者</td>
+  </tr>
+  <tr>
+    <td>自定义数据</td>
+    <td>通过自定义条件限制数据访问范围</td>
+    <td>特定业务场景</td>
+  </tr>
+</table>
+<h3>2.1.3 示例数据</h3>
 
 以下是数据权限相关的示例数据，展示如何在系统中配置不同类型的数据权限：
 
-#### 2.1.3.1 数据权限表示例数据
+<h4>2.1.3.1 数据权限表示例数据</h4>
 
-```sql
-INSERT INTO data_permission (name, code, data_type, permission_type, filter_conditions, description, status) VALUES
+<pre><code class="language-sql">INSERT INTO data_permission (name, code, data_type, permission_type, filter_conditions, description, status) VALUES
 -- 全部数据权限示例
 ('用户管理-全部数据', 'user_all', 'user', 1, NULL, '可查看和管理所有用户数据', 1),
 ('订单管理-全部数据', 'order_all', 'order', 1, NULL, '可查看和管理所有订单数据', 1),
@@ -57,12 +181,11 @@ INSERT INTO data_permission (name, code, data_type, permission_type, filter_cond
 -- 自定义数据权限示例
 ('用户管理-自定义状态权限', 'user_custom_status', 'user', 5, '{"status": [1, 2, 3], "level": "manager"}', '只能查看特定状态和级别的用户数据', 1),
 ('订单管理-自定义金额权限', 'order_custom_amount', 'order', 5, '{"amount": {"min": 1000, "max": 10000}}', '只能查看特定金额范围的订单数据', 1);
-```
+</code></pre>
 
-#### 2.1.3.2 角色数据权限关联表示例数据
+<h4>2.1.3.2 角色数据权限关联表示例数据</h4>
 
-```sql
--- 系统管理员角色分配全部数据权限
+<pre><code class="language-sql">-- 系统管理员角色分配全部数据权限
 INSERT INTO role_data_permission (role_id, data_permission_id) VALUES
 (1, 1),  -- 系统管理员-用户管理全部数据
 (1, 2);  -- 系统管理员-订单管理全部数据
@@ -80,57 +203,142 @@ INSERT INTO role_data_permission (role_id, data_permission_id) VALUES
 -- 财务主管角色分配自定义数据权限
 INSERT INTO role_data_permission (role_id, data_permission_id) VALUES
 (4, 10); -- 财务主管-订单管理自定义金额权限
-```
+</code></pre>
 
-### 2.2 数据模型设计
+<h3>2.2 数据模型设计</h3>
 
 数据权限管理系统的核心数据模型关系如下：
 
-![数据权限模型关系图](images/data_permission_model.svg)
+<img src="images/data_permission_model.svg" alt="数据权限模型关系图">
 
-#### 2.2.1 数据权限表（data_permission）
+<h4>2.2.1 数据权限表（data_permission）</h4>
 
-| 字段名 | 数据类型 | 约束 | 描述 |
-| :--- | :--- | :--- | :--- |
-| `id` | `bigint(20)` | `PRIMARY KEY` | 权限ID |
-| `name` | `varchar(255)` | `NOT NULL` | 权限名称 |
-| `code` | `varchar(100)` | `UNIQUE NOT NULL` | 权限标识 |
-| `data_type` | `varchar(50)` | `NOT NULL` | 数据类型（如user, order等） |
-| `permission_type` | `tinyint(1)` | `NOT NULL` | 权限类型（1-全部，2-本人，3-本部门，4-本部门及以下，5-自定义） |
-| `filter_conditions` | `json` | | 自定义过滤条件JSON |
-| `description` | `varchar(500)` | | 权限描述 |
-| `status` | `tinyint(1)` | `DEFAULT 1` | 状态（0-禁用，1-启用） |
-| `create_time` | `datetime` | `DEFAULT CURRENT_TIMESTAMP` | 创建时间 |
-| `update_time` | `datetime` | `DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP` | 更新时间 |
+<table>
+  <tr>
+    <th>字段名</th>
+    <th>数据类型</th>
+    <th>约束</th>
+    <th>描述</th>
+  </tr>
+  <tr>
+    <td>`id`</td>
+    <td>`bigint(20)`</td>
+    <td>`PRIMARY KEY`</td>
+    <td>权限ID</td>
+  </tr>
+  <tr>
+    <td>`name`</td>
+    <td>`varchar(255)`</td>
+    <td>`NOT NULL`</td>
+    <td>权限名称</td>
+  </tr>
+  <tr>
+    <td>`code`</td>
+    <td>`varchar(100)`</td>
+    <td>`UNIQUE NOT NULL`</td>
+    <td>权限标识</td>
+  </tr>
+  <tr>
+    <td>`data_type`</td>
+    <td>`varchar(50)`</td>
+    <td>`NOT NULL`</td>
+    <td>数据类型（如user, order等）</td>
+  </tr>
+  <tr>
+    <td>`permission_type`</td>
+    <td>`tinyint(1)`</td>
+    <td>`NOT NULL`</td>
+    <td>权限类型（1-全部，2-本人，3-本部门，4-本部门及以下，5-自定义）</td>
+  </tr>
+  <tr>
+    <td>`filter_conditions`</td>
+    <td>`json`</td>
+    <td></td>
+    <td>自定义过滤条件JSON</td>
+  </tr>
+  <tr>
+    <td>`description`</td>
+    <td>`varchar(500)`</td>
+    <td></td>
+    <td>权限描述</td>
+  </tr>
+  <tr>
+    <td>`status`</td>
+    <td>`tinyint(1)`</td>
+    <td>`DEFAULT 1`</td>
+    <td>状态（0-禁用，1-启用）</td>
+  </tr>
+  <tr>
+    <td>`create_time`</td>
+    <td>`datetime`</td>
+    <td>`DEFAULT CURRENT_TIMESTAMP`</td>
+    <td>创建时间</td>
+  </tr>
+  <tr>
+    <td>`update_time`</td>
+    <td>`datetime`</td>
+    <td>`DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP`</td>
+    <td>更新时间</td>
+  </tr>
+</table>
+<p><strong>索引</strong>：</p>
+<ul>
+<li>`idx_code` ON `code`</li>
+<li>`idx_data_type` ON `data_type`</li>
+</ul>
 
-**索引**：
-- `idx_code` ON `code`
-- `idx_data_type` ON `data_type`
+<h4>2.2.2 角色数据权限关联表（role_data_permission）</h4>
 
-#### 2.2.2 角色数据权限关联表（role_data_permission）
+<table>
+  <tr>
+    <th>字段名</th>
+    <th>数据类型</th>
+    <th>约束</th>
+    <th>描述</th>
+  </tr>
+  <tr>
+    <td>`id`</td>
+    <td>`bigint(20)`</td>
+    <td>`PRIMARY KEY`</td>
+    <td>关联ID</td>
+  </tr>
+  <tr>
+    <td>`role_id`</td>
+    <td>`bigint(20)`</td>
+    <td>`NOT NULL`</td>
+    <td>角色ID</td>
+  </tr>
+  <tr>
+    <td>`data_permission_id`</td>
+    <td>`bigint(20)`</td>
+    <td>`NOT NULL`</td>
+    <td>数据权限ID</td>
+  </tr>
+  <tr>
+    <td>`create_time`</td>
+    <td>`datetime`</td>
+    <td>`DEFAULT CURRENT_TIMESTAMP`</td>
+    <td>创建时间</td>
+  </tr>
+</table>
+<p><strong>索引</strong>：</p>
+<ul>
+<li>`idx_role_id` ON `role_id`</li>
+<li>`idx_data_permission_id` ON `data_permission_id`</li>
+<li>`idx_role_data` ON `(role_id, data_permission_id)` UNIQUE</li>
+</ul>
 
-| 字段名 | 数据类型 | 约束 | 描述 |
-| :--- | :--- | :--- | :--- |
-| `id` | `bigint(20)` | `PRIMARY KEY` | 关联ID |
-| `role_id` | `bigint(20)` | `NOT NULL` | 角色ID |
-| `data_permission_id` | `bigint(20)` | `NOT NULL` | 数据权限ID |
-| `create_time` | `datetime` | `DEFAULT CURRENT_TIMESTAMP` | 创建时间 |
+<p><strong>外键约束</strong>：</p>
+<ul>
+<li>`fk_role_id` FOREIGN KEY (`role_id`) REFERENCES `role` (`id`) ON DELETE CASCADE</li>
+<li>`fk_data_permission_id` FOREIGN KEY (`data_permission_id`) REFERENCES `data_permission` (`id`) ON DELETE CASCADE</li>
+</ul>
 
-**索引**：
-- `idx_role_id` ON `role_id`
-- `idx_data_permission_id` ON `data_permission_id`
-- `idx_role_data` ON `(role_id, data_permission_id)` UNIQUE
+<h3>2.3 实体类设计</h3>
 
-**外键约束**：
-- `fk_role_id` FOREIGN KEY (`role_id`) REFERENCES `role` (`id`) ON DELETE CASCADE
-- `fk_data_permission_id` FOREIGN KEY (`data_permission_id`) REFERENCES `data_permission` (`id`) ON DELETE CASCADE
+<h4>2.3.1 DataPermission 实体类</h4>
 
-### 2.3 实体类设计
-
-#### 2.3.1 DataPermission 实体类
-
-```java
-/**
+<pre><code class="language-java">/**
  * 数据权限实体类
  * 用于定义系统中的数据访问权限规则
  * 
@@ -205,12 +413,11 @@ public class DataPermission implements Serializable {
     @ApiModelProperty(value = "更新时间")
     private Date updateTime;
 }
-```
+</code></pre>
 
-#### 2.3.2 RoleDataPermission 实体类
+<h4>2.3.2 RoleDataPermission 实体类</h4>
 
-```java
-/**
+<pre><code class="language-java">/**
  * 角色数据权限关联实体类
  * 用于存储角色与数据权限之间的多对多关系
  * 
@@ -249,36 +456,39 @@ public class RoleDataPermission implements Serializable {
     @ApiModelProperty(value = "创建时间")
     private Date createTime;
 }
-```
+</code></pre>
 
-## 3. 数据权限与功能权限集成设计
+<h2>3. 数据权限与功能权限集成设计</h2>
 
-### 3.1 权限验证流程
+<h3>3.1 权限验证流程</h3>
 
 数据权限验证的完整流程如下所示：
 
-![数据权限验证流程图](images/data_permission_flow.svg)
+<img src="images/data_permission_flow.svg" alt="数据权限验证流程图">
 
-1. **功能权限验证**：首先验证用户是否有执行该操作的功能权限
-2. **数据权限过滤**：在执行数据操作前，根据用户的数据权限生成过滤条件
-3. **数据查询执行**：将过滤条件应用到SQL查询中，限制数据访问范围
+<ol>
+<li><strong>功能权限验证</strong>：首先验证用户是否有执行该操作的功能权限</li>
+<li><strong>数据权限过滤</strong>：在执行数据操作前，根据用户的数据权限生成过滤条件</li>
+<li><strong>数据查询执行</strong>：将过滤条件应用到SQL查询中，限制数据访问范围</li>
+</ol>
 
-### 3.2 权限优先级规则
+<h3>3.2 权限优先级规则</h3>
 
 当用户拥有多个角色时，数据权限的合并规则：
 
-1. **向上兼容原则**：更高级别的数据权限会覆盖低级别权限（如"全部数据"权限覆盖其他权限）
-2. **类型合并原则**：相同类型的数据权限，其过滤条件会进行逻辑或（OR）合并
-3. **类型优先原则**：不同类型的数据权限按权限级别从高到低优先级排序
+<ol>
+<li><strong>向上兼容原则</strong>：更高级别的数据权限会覆盖低级别权限（如"全部数据"权限覆盖其他权限）</li>
+<li><strong>类型合并原则</strong>：相同类型的数据权限，其过滤条件会进行逻辑或（OR）合并</li>
+<li><strong>类型优先原则</strong>：不同类型的数据权限按权限级别从高到低优先级排序</li>
+</ol>
 
-## 4. 数据权限实现方案
+<h2>4. 数据权限实现方案</h2>
 
-### 4.1 核心组件设计
+<h3>4.1 核心组件设计</h3>
 
-#### 4.1.1 数据权限解析器（DataPermissionResolver）
+<h4>4.1.1 数据权限解析器（DataPermissionResolver）</h4>
 
-```java
-/**
+<pre><code class="language-java">/**
  * 数据权限解析器接口
  * 负责解析不同类型的数据权限，生成对应的SQL过滤条件
  * 
@@ -303,12 +513,11 @@ public interface DataPermissionResolver {
      */
     Integer getPermissionType();
 }
-```
+</code></pre>
 
-#### 4.1.2 数据权限服务（DataPermissionService）
+<h4>4.1.2 数据权限服务（DataPermissionService）</h4>
 
-```java
-/**
+<pre><code class="language-java">/**
  * 数据权限服务接口
  * 提供数据权限的管理和验证功能
  * 
@@ -360,12 +569,11 @@ public interface DataPermissionService extends IService<DataPermission> {
      */
     Long createCustomDataPermission(DataPermission dataPermission);
 }
-```
+</code></pre>
 
-### 4.2 数据权限拦截器设计
+<h3>4.2 数据权限拦截器设计</h3>
 
-```java
-/**
+<pre><code class="language-java">/**
  * 数据权限拦截器
  * 用于拦截SQL查询并应用数据权限过滤条件
  * 
@@ -437,14 +645,13 @@ public class DataPermissionInterceptor implements InnerInterceptor {
         return enhancedSql;
     }
 }
-```
+</code></pre>
 
-### 4.3 不同类型数据权限的解析器实现
+<h3>4.3 不同类型数据权限的解析器实现</h3>
 
-#### 4.3.1 本人数据权限解析器
+<h4>4.3.1 本人数据权限解析器</h4>
 
-```java
-/**
+<pre><code class="language-java">/**
  * 本人数据权限解析器
  * 负责解析"只能访问自己创建的数据"类型的权限
  * 
@@ -480,12 +687,11 @@ public class SelfDataPermissionResolver implements DataPermissionResolver {
         return "create_user_id"; // 默认字段名
     }
 }
-```
+</code></pre>
 
-#### 4.3.2 本部门数据权限解析器
+<h4>4.3.2 本部门数据权限解析器</h4>
 
-```java
-/**
+<pre><code class="language-java">/**
  * 本部门数据权限解析器
  * 负责解析"只能访问本部门数据"类型的权限
  * 
@@ -530,12 +736,11 @@ public class DepartmentDataPermissionResolver implements DataPermissionResolver 
         return "organization_id"; // 默认字段名
     }
 }
-```
+</code></pre>
 
-#### 4.3.3 本部门及以下数据权限解析器
+<h4>4.3.3 本部门及以下数据权限解析器</h4>
 
-```java
-/**
+<pre><code class="language-java">/**
  * 本部门及以下数据权限解析器
  * 负责解析"可访问本部门及所有子部门数据"类型的权限
  * 
@@ -603,12 +808,11 @@ public class DepartmentAndChildrenDataPermissionResolver implements DataPermissi
         return "organization_id"; // 默认字段名
     }
 }
-```
+</code></pre>
 
-### 4.4 数据权限注解设计
+<h3>4.4 数据权限注解设计</h3>
 
-```java
-/**
+<pre><code class="language-java">/**
  * 数据权限注解
  * 用于标记需要进行数据权限控制的方法
  * 
@@ -635,27 +839,71 @@ public @interface DataPermission {
      */
     String[] mappings() default {};
 }
-```
+</code></pre>
 
-## 5. 数据权限管理功能实现
+<h2>5. 数据权限管理功能实现</h2>
 
-### 5.1 数据权限管理API接口
+<h3>5.1 数据权限管理API接口</h3>
 
-| API路径 | 方法 | 描述 | 参数 |
-| :--- | :--- | :--- | :--- |
-| `/api/data-permissions` | `GET` | 获取数据权限列表 | page: 页码<br>limit: 每页数量<br>dataType: 数据类型(可选) |
-| `/api/data-permissions/{id}` | `GET` | 获取数据权限详情 | id: 权限ID |
-| `/api/data-permissions` | `POST` | 创建数据权限 | DataPermission对象 |
-| `/api/data-permissions/{id}` | `PUT` | 更新数据权限 | id: 权限ID<br>DataPermission对象 |
-| `/api/data-permissions/{id}` | `DELETE` | 删除数据权限 | id: 权限ID |
-| `/api/data-permissions/data-types` | `GET` | 获取系统支持的数据类型列表 | 无 |
-| `/api/roles/{roleId}/data-permissions` | `GET` | 获取角色的数据权限列表 | roleId: 角色ID |
-| `/api/roles/{roleId}/data-permissions` | `POST` | 为角色分配数据权限 | roleId: 角色ID<br>permissionIds: 权限ID列表 |
+<table>
+  <tr>
+    <th>API路径</th>
+    <th>方法</th>
+    <th>描述</th>
+    <th>参数</th>
+  </tr>
+  <tr>
+    <td>`/api/data-permissions`</td>
+    <td>`GET`</td>
+    <td>获取数据权限列表</td>
+    <td>page: 页码<br>limit: 每页数量<br>dataType: 数据类型(可选)</td>
+  </tr>
+  <tr>
+    <td>`/api/data-permissions/{id}`</td>
+    <td>`GET`</td>
+    <td>获取数据权限详情</td>
+    <td>id: 权限ID</td>
+  </tr>
+  <tr>
+    <td>`/api/data-permissions`</td>
+    <td>`POST`</td>
+    <td>创建数据权限</td>
+    <td>DataPermission对象</td>
+  </tr>
+  <tr>
+    <td>`/api/data-permissions/{id}`</td>
+    <td>`PUT`</td>
+    <td>更新数据权限</td>
+    <td>id: 权限ID<br>DataPermission对象</td>
+  </tr>
+  <tr>
+    <td>`/api/data-permissions/{id}`</td>
+    <td>`DELETE`</td>
+    <td>删除数据权限</td>
+    <td>id: 权限ID</td>
+  </tr>
+  <tr>
+    <td>`/api/data-permissions/data-types`</td>
+    <td>`GET`</td>
+    <td>获取系统支持的数据类型列表</td>
+    <td>无</td>
+  </tr>
+  <tr>
+    <td>`/api/roles/{roleId}/data-permissions`</td>
+    <td>`GET`</td>
+    <td>获取角色的数据权限列表</td>
+    <td>roleId: 角色ID</td>
+  </tr>
+  <tr>
+    <td>`/api/roles/{roleId}/data-permissions`</td>
+    <td>`POST`</td>
+    <td>为角色分配数据权限</td>
+    <td>roleId: 角色ID<br>permissionIds: 权限ID列表</td>
+  </tr>
+</table>
+<h3>5.2 数据权限管理Controller示例</h3>
 
-### 5.2 数据权限管理Controller示例
-
-```java
-/**
+<pre><code class="language-java">/**
  * 数据权限管理控制器
  * 提供数据权限的CRUD操作和角色数据权限分配功能
  * 
@@ -746,10 +994,9 @@ public class DataPermissionController {
         return Result.success(dataTypes);
     }
 }
-```
+</code></pre>
 
-```java
-/**
+<pre><code class="language-java">/**
  * 角色数据权限管理控制器
  * 提供角色数据权限分配功能
  * 
@@ -786,12 +1033,11 @@ public class RoleDataPermissionController {
         return Result.success(assigned);
     }
 }
-```
+</code></pre>
 
-### 5.3 数据权限注解使用示例
+<h3>5.3 数据权限注解使用示例</h3>
 
-```java
-/**
+<pre><code class="language-java">/**
  * 用户管理控制器
  * 使用数据权限注解进行数据访问控制
  * 
@@ -834,20 +1080,21 @@ public class UserController {
         return Result.success(user);
     }
 }
-```
+</code></pre>
 
-## 6. 性能优化设计
+<h2>6. 性能优化设计</h2>
 
-### 6.1 数据权限缓存
+<h3>6.1 数据权限缓存</h3>
 
 为提高数据权限验证性能，设计三级缓存策略：
 
-1. **本地缓存**：在应用内存中缓存用户的数据权限信息
-2. **Redis缓存**：分布式缓存，适合多实例部署场景
-3. **权限预热**：系统启动时预热常用权限数据
+<ol>
+<li><strong>本地缓存</strong>：在应用内存中缓存用户的数据权限信息</li>
+<li><strong>Redis缓存</strong>：分布式缓存，适合多实例部署场景</li>
+<li><strong>权限预热</strong>：系统启动时预热常用权限数据</li>
+</ol>
 
-```java
-/**
+<pre><code class="language-java">/**
  * 数据权限缓存管理器
  * 负责缓存用户数据权限信息，提高性能
  * 
@@ -922,23 +1169,24 @@ public class DataPermissionCacheManager {
         }
     }
 }
-```
+</code></pre>
 
-### 6.2 SQL优化策略
+<h3>6.2 SQL优化策略</h3>
 
-1. **索引优化**：为常用的数据权限过滤字段创建索引
-2. **预编译SQL**：使用预编译SQL减少SQL解析开销
-3. **条件合并**：合并多个数据权限过滤条件，减少SQL复杂度
-4. **查询优化**：避免在大数据量场景下使用复杂的权限过滤逻辑
+<ol>
+<li><strong>索引优化</strong>：为常用的数据权限过滤字段创建索引</li>
+<li><strong>预编译SQL</strong>：使用预编译SQL减少SQL解析开销</li>
+<li><strong>条件合并</strong>：合并多个数据权限过滤条件，减少SQL复杂度</li>
+<li><strong>查询优化</strong>：避免在大数据量场景下使用复杂的权限过滤逻辑</li>
+</ol>
 
-## 7. 扩展性设计
+<h2>7. 扩展性设计</h2>
 
-### 7.1 自定义数据权限策略
+<h3>7.1 自定义数据权限策略</h3>
 
 系统支持通过实现自定义数据权限解析器扩展新的数据权限类型：
 
-```java
-/**
+<pre><code class="language-java">/**
  * 自定义数据权限解析器注册中心
  * 管理和注册所有数据权限解析器
  * 
@@ -978,28 +1226,29 @@ public class DataPermissionResolverRegistry {
         return Collections.unmodifiableMap(resolvers);
     }
 }
-```
+</code></pre>
 
-### 7.2 数据权限扩展点
+<h3>7.2 数据权限扩展点</h3>
 
 系统提供多个扩展点，允许开发者自定义数据权限行为：
 
-1. **数据权限过滤钩子**：允许在应用过滤条件前进行自定义处理
-2. **权限合并策略扩展**：允许自定义多个数据权限的合并规则
-3. **数据类型注册机制**：允许动态注册新的数据类型
+<ol>
+<li><strong>数据权限过滤钩子</strong>：允许在应用过滤条件前进行自定义处理</li>
+<li><strong>权限合并策略扩展</strong>：允许自定义多个数据权限的合并规则</li>
+<li><strong>数据类型注册机制</strong>：允许动态注册新的数据类型</li>
+</ol>
 
-## 8. 系统集成方案
+<h2>8. 系统集成方案</h2>
 
 数据权限管理系统的整体架构设计如下：
 
-![数据权限管理系统架构图](images/data_permission_architecture.svg)
+<img src="images/data_permission_architecture.svg" alt="数据权限管理系统架构图">
 
-### 8.1 与Spring Security集成
+<h3>8.1 与Spring Security集成</h3>
 
-### 8.1 与Spring Security集成
+<h3>8.1 与Spring Security集成</h3>
 
-```java
-/**
+<pre><code class="language-java">/**
  * 数据权限表达式处理器
  * 扩展Spring Security表达式，支持数据权限验证
  * 
@@ -1039,14 +1288,13 @@ public class DataPermissionExpressionHandler {
         return dataPermissionService.getUserFilterCondition(userId, dataType);
     }
 }
-```
+</code></pre>
 
-### 8.2 与MyBatis-Plus集成
+<h3>8.2 与MyBatis-Plus集成</h3>
 
 通过配置MyBatis-Plus插件，自动应用数据权限过滤：
 
-```java
-/**
+<pre><code class="language-java">/**
  * MyBatis配置类
  * 注册数据权限插件
  * 
@@ -1075,205 +1323,268 @@ public class MyBatisConfig {
         return interceptor;
     }
 }
-```
+</code></pre>
 
-## 9. 优缺点分析
+<h2>9. 优缺点分析</h2>
 
-### 9.1 优点
+<h3>9.1 优点</h3>
 
-1. **灵活性**：支持多种数据权限类型，适应不同业务场景
-2. **细粒度控制**：可以精确控制用户对数据的访问范围
-3. **高性能**：采用多级缓存和SQL优化策略，保证系统性能
-4. **可扩展**：提供多种扩展点，方便自定义和扩展
-5. **与现有体系无缝集成**：与RBAC权限体系和组织架构有机结合
+<ol>
+<li><strong>灵活性</strong>：支持多种数据权限类型，适应不同业务场景</li>
+<li><strong>细粒度控制</strong>：可以精确控制用户对数据的访问范围</li>
+<li><strong>高性能</strong>：采用多级缓存和SQL优化策略，保证系统性能</li>
+<li><strong>可扩展</strong>：提供多种扩展点，方便自定义和扩展</li>
+<li><strong>与现有体系无缝集成</strong>：与RBAC权限体系和组织架构有机结合</li>
+</ol>
 
-### 9.2 缺点
+<h3>9.2 缺点</h3>
 
-1. **复杂度增加**：数据权限的引入增加了系统的复杂度
-2. **配置工作量**：需要为每个角色和数据类型配置数据权限
-3. **性能影响**：在复杂数据权限场景下可能对查询性能产生影响
-4. **维护成本**：需要定期审查和维护数据权限配置
+<ol>
+<li><strong>复杂度增加</strong>：数据权限的引入增加了系统的复杂度</li>
+<li><strong>配置工作量</strong>：需要为每个角色和数据类型配置数据权限</li>
+<li><strong>性能影响</strong>：在复杂数据权限场景下可能对查询性能产生影响</li>
+<li><strong>维护成本</strong>：需要定期审查和维护数据权限配置</li>
+</ol>
 
-## 10. 实施建议
+<h2>10. 实施建议</h2>
 
-### 10.1 分步实施策略
+<h3>10.1 分步实施策略</h3>
 
-1. **第一阶段**：实现基础数据权限功能（全部数据、本人数据、本部门数据）
-2. **第二阶段**：添加复杂数据权限类型（本部门及以下、自定义数据权限）
-3. **第三阶段**：优化性能和用户体验，添加高级功能（权限模板、批量配置等）
+<ol>
+<li><strong>第一阶段</strong>：实现基础数据权限功能（全部数据、本人数据、本部门数据）</li>
+<li><strong>第二阶段</strong>：添加复杂数据权限类型（本部门及以下、自定义数据权限）</li>
+<li><strong>第三阶段</strong>：优化性能和用户体验，添加高级功能（权限模板、批量配置等）</li>
+</ol>
 
-### 10.1 分步实施策略
+<h3>10.1 分步实施策略</h3>
 
-1. **第一阶段**：实现基础数据权限功能（全部数据、本人数据、本部门数据）
-2. **第二阶段**：添加复杂数据权限类型（本部门及以下、自定义数据权限）
-3. **第三阶段**：优化性能和用户体验，添加高级功能（权限模板、批量配置等）
+<ol>
+<li><strong>第一阶段</strong>：实现基础数据权限功能（全部数据、本人数据、本部门数据）</li>
+<li><strong>第二阶段</strong>：添加复杂数据权限类型（本部门及以下、自定义数据权限）</li>
+<li><strong>第三阶段</strong>：优化性能和用户体验，添加高级功能（权限模板、批量配置等）</li>
+</ol>
 
-### 10.2 性能监控与优化
+<h3>10.2 性能监控与优化</h3>
 
-1. **监控SQL执行性能**：使用慢查询日志监控数据权限过滤对查询性能的影响
-2. **缓存命中率监控**：监控数据权限缓存的命中率，优化缓存策略
-3. **定期优化**：根据实际使用情况，定期优化数据权限规则和实现
+<ol>
+<li><strong>监控SQL执行性能</strong>：使用慢查询日志监控数据权限过滤对查询性能的影响</li>
+<li><strong>缓存命中率监控</strong>：监控数据权限缓存的命中率，优化缓存策略</li>
+<li><strong>定期优化</strong>：根据实际使用情况，定期优化数据权限规则和实现</li>
+</ol>
 
-### 10.3 安全建议
+<h3>10.3 安全建议</h3>
 
-1. **权限审查**：定期审查用户的数据权限配置，确保符合最小权限原则
-2. **敏感数据保护**：对敏感数据实施更严格的数据权限控制
-3. **权限变更审计**：记录所有数据权限变更操作，便于追踪和审计
+<ol>
+<li><strong>权限审查</strong>：定期审查用户的数据权限配置，确保符合最小权限原则</li>
+<li><strong>敏感数据保护</strong>：对敏感数据实施更严格的数据权限控制</li>
+<li><strong>权限变更审计</strong>：记录所有数据权限变更操作，便于追踪和审计</li>
+</ol>
 
-## 11. 数据权限操作流程示例
+<h2>11. 数据权限操作流程示例</h2>
 
-### 11.1 数据权限配置流程
+<h3>11.1 数据权限配置流程</h3>
 
 以下是系统管理员为角色配置数据权限的典型操作流程：
 
-1. **进入数据权限管理页面**
-   - 登录系统，导航至「系统管理」→「权限管理」→「数据权限」
+<ol>
+<li><strong>进入数据权限管理页面</strong></li>
+</ol>
+<ul>
+<li>登录系统，导航至「系统管理」→「权限管理」→「数据权限」</li>
+</ul>
 
-2. **创建新的数据权限**
-   - 点击「创建数据权限」按钮
-   - 填写权限名称、权限标识、数据类型
-   - 选择权限类型（全部数据、本人数据、本部门数据、本部门及以下数据、自定义数据）
-   - 如果选择「自定义数据」，则通过JSON编辑器配置过滤条件
-   - 填写权限描述，设置状态为「启用」
-   - 点击「保存」按钮
+<ol>
+<li><strong>创建新的数据权限</strong></li>
+</ol>
+<ul>
+<li>点击「创建数据权限」按钮</li>
+<li>填写权限名称、权限标识、数据类型</li>
+<li>选择权限类型（全部数据、本人数据、本部门数据、本部门及以下数据、自定义数据）</li>
+<li>如果选择「自定义数据」，则通过JSON编辑器配置过滤条件</li>
+<li>填写权限描述，设置状态为「启用」</li>
+<li>点击「保存」按钮</li>
+</ul>
 
-3. **为角色分配数据权限**
-   - 导航至「角色管理」页面，选择目标角色
-   - 点击「分配数据权限」按钮
-   - 在弹出的权限选择对话框中，为每个数据类型选择相应的数据权限
-   - 点击「确认分配」按钮
+<ol>
+<li><strong>为角色分配数据权限</strong></li>
+</ol>
+<ul>
+<li>导航至「角色管理」页面，选择目标角色</li>
+<li>点击「分配数据权限」按钮</li>
+<li>在弹出的权限选择对话框中，为每个数据类型选择相应的数据权限</li>
+<li>点击「确认分配」按钮</li>
+</ul>
 
-4. **验证数据权限效果**
-   - 以拥有该角色的用户身份登录系统
-   - 访问相关业务模块，验证只能看到被授权的数据范围
+<ol>
+<li><strong>验证数据权限效果</strong></li>
+</ol>
+<ul>
+<li>以拥有该角色的用户身份登录系统</li>
+<li>访问相关业务模块，验证只能看到被授权的数据范围</li>
+</ul>
 
-### 11.2 常见数据权限使用场景示例
+<h3>11.2 常见数据权限使用场景示例</h3>
 
-#### 11.2.1 场景一：用户管理
+<h4>11.2.1 场景一：用户管理</h4>
 
-**管理员视角**：
-- 拥有「用户管理-全部数据」权限
-- 可以查看和管理系统中所有用户的数据
-- SQL过滤条件：无
+<strong>管理员视角</strong>：
+<ul>
+<li>拥有「用户管理-全部数据」权限</li>
+<li>可以查看和管理系统中所有用户的数据</li>
+<li>SQL过滤条件：无</li>
+</ul>
 
-**部门经理视角**：
-- 拥有「用户管理-部门及以下数据」权限
-- 可以查看和管理本部门及所有子部门的用户数据
-- SQL过滤条件：`organization_id IN (1, 2, 3, 4, 5)`（假设部门ID层级为1->2,3->4,5）
+<p><strong>部门经理视角</strong>：</p>
+<ul>
+<li>拥有「用户管理-部门及以下数据」权限</li>
+<li>可以查看和管理本部门及所有子部门的用户数据</li>
+<li>SQL过滤条件：`organization_id IN (1, 2, 3, 4, 5)`（假设部门ID层级为1->2,3->4,5）</li>
+</ul>
 
-**普通员工视角**：
-- 拥有「用户管理-本人数据」权限
-- 只能查看自己创建或与自己相关的用户数据
-- SQL过滤条件：`create_user_id = 1001`（假设用户ID为1001）
+<p><strong>普通员工视角</strong>：</p>
+<ul>
+<li>拥有「用户管理-本人数据」权限</li>
+<li>只能查看自己创建或与自己相关的用户数据</li>
+<li>SQL过滤条件：`create_user_id = 1001`（假设用户ID为1001）</li>
+</ul>
 
-#### 11.2.2 场景二：订单管理
+<h4>11.2.2 场景二：订单管理</h4>
 
-**财务主管视角**：
-- 拥有「订单管理-自定义金额权限」权限
-- 只能查看特定金额范围的订单数据
-- SQL过滤条件：`amount BETWEEN 1000 AND 10000`
+<strong>财务主管视角</strong>：
+<ul>
+<li>拥有「订单管理-自定义金额权限」权限</li>
+<li>只能查看特定金额范围的订单数据</li>
+<li>SQL过滤条件：`amount BETWEEN 1000 AND 10000`</li>
+</ul>
 
-**销售经理视角**：
-- 拥有「订单管理-本部门数据」权限
-- 只能查看本部门的订单数据
-- SQL过滤条件：`department_id = 2`（假设部门ID为2）
+<p><strong>销售经理视角</strong>：</p>
+<ul>
+<li>拥有「订单管理-本部门数据」权限</li>
+<li>只能查看本部门的订单数据</li>
+<li>SQL过滤条件：`department_id = 2`（假设部门ID为2）</li>
+</ul>
 
-## 12. 页面设计
+<h2>12. 页面设计</h2>
 
-### 12.1 数据权限管理页面
+<h3>12.1 数据权限管理页面</h3>
 
-#### 12.1.1 数据权限列表页
+<h4>12.1.1 数据权限列表页</h4>
 
-**设计要点**：
-- 表格形式展示所有数据权限
-- 支持按权限名称、数据类型、权限类型进行搜索和筛选
-- 支持批量启用/禁用、批量删除操作
-- 每个权限项显示权限名称、权限标识、数据类型、权限类型、状态等信息
-- 提供创建、编辑、删除操作按钮
+<strong>设计要点</strong>：
+<ul>
+<li>表格形式展示所有数据权限</li>
+<li>支持按权限名称、数据类型、权限类型进行搜索和筛选</li>
+<li>支持批量启用/禁用、批量删除操作</li>
+<li>每个权限项显示权限名称、权限标识、数据类型、权限类型、状态等信息</li>
+<li>提供创建、编辑、删除操作按钮</li>
+</ul>
 
-**界面原型**：
+<p><strong>界面原型</strong>：</p>
 
-下图展示了数据权限列表页面的布局和功能元素：
+<p>下图展示了数据权限列表页面的布局和功能元素：</p>
 
-![数据权限列表页面示例](images/data_permission_list_page.svg)
+<p><img src="images/data_permission_list_page.svg" alt="数据权限列表页面示例"></p>
 
-*图1：数据权限列表页面示例*
+<p><em>图1：数据权限列表页面示例</em></p>
 
-#### 12.1.2 数据权限创建/编辑页面
+<h4>12.1.2 数据权限创建/编辑页面</h4>
 
-**设计要点**：
-- 表单形式填写数据权限信息
-- 根据选择的权限类型，动态显示相应的配置项
-- 自定义数据权限类型提供JSON编辑器
-- 表单验证确保必填项完整
-- 提供保存和取消操作按钮
+<strong>设计要点</strong>：
+<ul>
+<li>表单形式填写数据权限信息</li>
+<li>根据选择的权限类型，动态显示相应的配置项</li>
+<li>自定义数据权限类型提供JSON编辑器</li>
+<li>表单验证确保必填项完整</li>
+<li>提供保存和取消操作按钮</li>
+</ul>
 
-**界面原型**：
+<p><strong>界面原型</strong>：</p>
 
-下图展示了数据权限创建/编辑页面的表单设计和交互元素：
+<p>下图展示了数据权限创建/编辑页面的表单设计和交互元素：</p>
 
-![数据权限创建/编辑页面示例](images/data_permission_create_page.svg)
+<p><img src="images/data_permission_create_page.svg" alt="数据权限创建/编辑页面示例"></p>
 
-*图2：数据权限创建/编辑页面示例*
+<p><em>图2：数据权限创建/编辑页面示例</em></p>
 
-### 12.2 角色数据权限分配页面
+<h3>12.2 角色数据权限分配页面</h3>
 
-**设计要点**：
-- 按数据类型分组显示可分配的数据权限
-- 每个数据类型提供单选或多选权限的方式
-- 清晰展示当前已分配的权限
-- 提供全选、清除选择等快捷操作
-- 提供确认分配和取消操作按钮
+<strong>设计要点</strong>：
+<ul>
+<li>按数据类型分组显示可分配的数据权限</li>
+<li>每个数据类型提供单选或多选权限的方式</li>
+<li>清晰展示当前已分配的权限</li>
+<li>提供全选、清除选择等快捷操作</li>
+<li>提供确认分配和取消操作按钮</li>
+</ul>
 
-**界面原型**：
+<p><strong>界面原型</strong>：</p>
 
-下图展示了角色数据权限分配页面的布局和交互方式：
+<p>下图展示了角色数据权限分配页面的布局和交互方式：</p>
 
-![角色数据权限分配页面示例](images/role_data_permission_assignment.svg)
+<p><img src="images/role_data_permission_assignment.svg" alt="角色数据权限分配页面示例"></p>
 
-*图3：角色数据权限分配页面示例*
+<p><em>图3：角色数据权限分配页面示例</em></p>
 
-### 12.3 数据权限效果示例页面
+<h3>12.3 数据权限效果示例页面</h3>
 
-#### 12.3.1 用户数据列表页面（不同权限视角）
+<h4>12.3.1 用户数据列表页面（不同权限视角）</h4>
 
 下图展示了不同权限视角下用户数据列表页面的显示效果对比：
 
-![不同权限视角下的用户数据列表对比](images/data_permission_view_comparison.svg)
+<img src="images/data_permission_view_comparison.svg" alt="不同权限视角下的用户数据列表对比">
 
-*图4：不同权限视角下的用户数据列表对比*
+<em>图4：不同权限视角下的用户数据列表对比</em>
 
-**关键差异说明**：
+<strong>关键差异说明</strong>：
 
-1. **系统管理员视角**：
-   - 可查看所有250条用户记录
-   - 包含所有部门的用户数据
-   - 分页显示为25页
+<ol>
+<li><strong>系统管理员视角</strong>：</li>
+</ol>
+<ul>
+<li>可查看所有250条用户记录</li>
+<li>包含所有部门的用户数据</li>
+<li>分页显示为25页</li>
+</ul>
 
-2. **技术部经理视角**：
-   - 仅可查看45条技术部及其子部门的用户记录
-   - 数据范围限制在技术部组织架构内
-   - 分页显示为5页
+<ol>
+<li><strong>技术部经理视角</strong>：</li>
+</ol>
+<ul>
+<li>仅可查看45条技术部及其子部门的用户记录</li>
+<li>数据范围限制在技术部组织架构内</li>
+<li>分页显示为5页</li>
+</ul>
 
-3. **普通员工视角**：
-   - 仅可查看3条与自己相关的用户记录
-   - 数据范围严格限制在个人创建或相关的数据
-   - 无需分页显示
+<ol>
+<li><strong>普通员工视角</strong>：</li>
+</ol>
+<ul>
+<li>仅可查看3条与自己相关的用户记录</li>
+<li>数据范围严格限制在个人创建或相关的数据</li>
+<li>无需分页显示</li>
+</ul>
 
-这种可视化对比清晰地展示了数据权限控制如何有效地限制不同角色用户的数据访问范围，确保了数据安全性和隐私保护。
+<p>这种可视化对比清晰地展示了数据权限控制如何有效地限制不同角色用户的数据访问范围，确保了数据安全性和隐私保护。</p>
 
-1. **权限审查**：定期审查用户的数据权限配置，确保符合最小权限原则
-2. **敏感数据保护**：对敏感数据实施更严格的数据权限控制
-3. **权限变更审计**：记录所有数据权限变更操作，便于追踪和审计
+<ol>
+<li><strong>权限审查</strong>：定期审查用户的数据权限配置，确保符合最小权限原则</li>
+<li><strong>敏感数据保护</strong>：对敏感数据实施更严格的数据权限控制</li>
+<li><strong>权限变更审计</strong>：记录所有数据权限变更操作，便于追踪和审计</li>
+</ol>
 
-## 13. 未来扩展方向
+<h2>13. 未来扩展方向</h2>
 
-1. **数据权限模板**：创建常用数据权限模板，简化权限配置
-2. **动态数据权限**：支持基于业务规则动态计算数据权限
-3. **跨系统数据权限**：实现多系统间的数据权限协同管理
-4. **数据权限分析**：提供数据权限使用分析和优化建议
-5. **可视化配置工具**：提供图形化的数据权限配置界面
+<ol>
+<li><strong>数据权限模板</strong>：创建常用数据权限模板，简化权限配置</li>
+<li><strong>动态数据权限</strong>：支持基于业务规则动态计算数据权限</li>
+<li><strong>跨系统数据权限</strong>：实现多系统间的数据权限协同管理</li>
+<li><strong>数据权限分析</strong>：提供数据权限使用分析和优化建议</li>
+<li><strong>可视化配置工具</strong>：提供图形化的数据权限配置界面</li>
+</ol>
 
-## 12. 总结
+<h2>12. 总结</h2>
 
 本设计方案提供了一套完整的数据权限管理体系，与现有的RBAC功能权限和组织管理模块紧密集成，支持多种数据权限策略，可以满足企业级应用对数据访问控制的需求。方案具有良好的扩展性和灵活性，同时通过多级缓存和SQL优化策略保证了系统性能。实施时建议采用分步策略，逐步完善功能，并持续监控和优化性能。
+
+</body>
+</html>

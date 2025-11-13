@@ -2,11 +2,16 @@
   <!-- 样式定义 -->
   <defs>
     <style type="text/css">
+      /* 确保没有黑色底块 */
+      * {
+        fill-opacity: 1;
+        stroke-opacity: 1;
+      }
       .header { font-family: Arial, sans-serif; font-size: 20px; font-weight: bold; fill: #333; }
-      .section { font-family: Arial, sans-serif; font-size: 14px; }
+      .section { font-family: Arial, sans-serif; font-size: 14px; fill: #333; }
       .border { fill: none; stroke: #ccc; stroke-width: 1; }
       .header-bg { fill: #f5f5f5; }
-      .cell { font-family: Arial, sans-serif; font-size: 12px; }
+      .cell { font-family: Arial, sans-serif; font-size: 12px; fill: #333; }
       .button { fill: #1890ff; stroke: #1890ff; }
       .button-text { font-family: Arial, sans-serif; font-size: 12px; font-weight: bold; fill: white; }
       .checkbox { fill: white; stroke: #ccc; stroke-width: 1; }

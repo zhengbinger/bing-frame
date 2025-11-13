@@ -45,15 +45,18 @@
         font-weight: bold;
         font-size: 14px;
         text-anchor: middle;
+        fill: #000;
       }
       .text {
         font-size: 12px;
         text-anchor: middle;
+        fill: #000;
       }
       .title {
         font-size: 20px;
         font-weight: bold;
         text-anchor: middle;
+        fill: #000;
       }
       .arrow {
         stroke: #333;
@@ -62,11 +65,17 @@
       }
       .legend-item {
         font-size: 12px;
+        fill: #000;
       }
       .note {
         font-size: 11px;
         fill: #666;
         text-anchor: middle;
+      }
+      /* 确保没有黑色底块 */
+      * {
+        fill-opacity: 1;
+        stroke-opacity: 1;
       }
     </style>
   </defs>
@@ -152,28 +161,28 @@
   <line x1="570" y1="430" x2="570" y2="520" class="arrow" />
 
   <!-- 图例 -->
-  <rect x="50" y="50" width="15" height="10" fill="#f0f7ff" stroke="#2c7ad6" stroke-width="2" rx="2" ry="2" />
-  <text x="70" y="60" class="legend-item" text-anchor="start">层级</text>
+  <rect x="50" y="520" width="15" height="10" fill="#f0f7ff" stroke="#2c7ad6" stroke-width="2" rx="2" ry="2" />
+  <text x="70" y="530" class="legend-item" text-anchor="start">层级</text>
   
-  <rect x="50" y="70" width="15" height="10" fill="#e6fff0" stroke="#00a86b" stroke-width="1" rx="2" ry="2" />
-  <text x="70" y="80" class="legend-item" text-anchor="start">服务组件</text>
+  <rect x="50" y="540" width="15" height="10" fill="#e6fff0" stroke="#00a86b" stroke-width="1" rx="2" ry="2" />
+  <text x="70" y="550" class="legend-item" text-anchor="start">服务组件</text>
   
-  <rect x="50" y="90" width="15" height="10" fill="#ffe6e6" stroke="#ff6b6b" stroke-width="1" rx="2" ry="2" stroke-dasharray="3,2" />
-  <text x="70" y="100" class="legend-item" text-anchor="start">接口</text>
+  <rect x="50" y="560" width="15" height="10" fill="#ffe6e6" stroke="#ff6b6b" stroke-width="1" rx="2" ry="2" stroke-dasharray="3,2" />
+  <text x="70" y="570" class="legend-item" text-anchor="start">接口</text>
   
-  <rect x="50" y="110" width="15" height="10" fill="#fff0ff" stroke="#9d4edd" stroke-width="1" rx="5" ry="5" />
-  <text x="70" y="120" class="legend-item" text-anchor="start">数据存储</text>
+  <rect x="50" y="580" width="15" height="10" fill="#fff0ff" stroke="#9d4edd" stroke-width="1" rx="5" ry="5" />
+  <text x="70" y="590" class="legend-item" text-anchor="start">数据存储</text>
 
   <!-- 说明 -->
   <text x="750" y="50" class="note">数据权限管理系统采用分层架构设计，与现有RBAC权限体系和</text>
   <text x="750" y="65" class="note">组织管理模块无缝集成，支持多种数据权限类型和灵活的扩展机制。</text>
 
   <!-- 权限流程说明 -->
-  <rect x="700" y="80" width="180" height="120" fill="#f9f9f9" stroke="#ccc" stroke-width="1" rx="5" ry="5" />
-  <text x="790" y="100" class="component-title" font-size="12" fill="#666">权限控制流程</text>
-  <text x="710" y="120" font-size="11" fill="#666">1. 功能权限验证</text>
-  <text x="710" y="140" font-size="11" fill="#666">2. 获取数据权限规则</text>
-  <text x="710" y="160" font-size="11" fill="#666">3. 生成数据过滤条件</text>
-  <text x="710" y="180" font-size="11" fill="#666">4. 应用SQL动态过滤</text>
-  <text x="710" y="200" font-size="11" fill="#666">5. 返回权限范围内数据</text>
+  <rect x="700" y="350" width="180" height="120" fill="#f9f9f9" stroke="#ccc" stroke-width="1" rx="5" ry="5" />
+  <text x="790" y="370" class="component-title" font-size="12" fill="#666">权限控制流程</text>
+  <text x="710" y="390" font-size="11" fill="#666">1. 功能权限验证</text>
+  <text x="710" y="410" font-size="11" fill="#666">2. 获取数据权限规则</text>
+  <text x="710" y="430" font-size="11" fill="#666">3. 生成数据过滤条件</text>
+  <text x="710" y="450" font-size="11" fill="#666">4. 应用SQL动态过滤</text>
+  <text x="710" y="470" font-size="11" fill="#666">5. 返回权限范围内数据</text>
 </svg>

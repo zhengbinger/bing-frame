@@ -17,9 +17,11 @@
         font-weight: bold;
         font-size: 14px;
         text-anchor: middle;
+        fill: #000;
       }
       .attribute {
         font-size: 12px;
+        fill: #000;
       }
       .relationship-line {
         stroke: #333;
@@ -35,6 +37,12 @@
         font-size: 18px;
         font-weight: bold;
         text-anchor: middle;
+        fill: #000;
+      }
+      /* 确保没有黑色底块 */
+      * {
+        fill-opacity: 1;
+        stroke-opacity: 1;
       }
     </style>
   </defs>
@@ -56,7 +64,7 @@
   <text x="335" y="175" class="attribute">name</text>
 
   <!-- 数据权限实体 -->
-  <rect x="550" y="100" width="170" height="180" rx="5" ry="5" class="entity" />
+  <rect x="550" y="90" width="170" height="190" rx="5" ry="5" class="entity" />
   <text x="635" y="125" class="entity-label">数据权限 (DataPermission)</text>
   <text x="560" y="150" class="attribute primary-key">id (PK)</text>
   <text x="560" y="175" class="attribute">name</text>
@@ -81,8 +89,8 @@
 
   <!-- 数据权限到角色数据权限关联 -->
   <line x1="635" y1="280" x2="635" y2="340" class="relationship-line" />
-  <text x="655" y="310" class="relationship-label">一对多</text>
   <line x1="635" y1="340" x2="525" y2="340" class="relationship-line" />
+  <text x="655" y="310" class="relationship-label">一对多</text>
 
   <!-- 数据权限类型图例 -->
   <rect x="100" y="450" width="200" height="100" rx="5" ry="5" fill="#f5f5f5" stroke="#999" stroke-width="1" />

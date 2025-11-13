@@ -14,6 +14,15 @@
       .button-secondary-text { font-family: Arial, sans-serif; font-size: 14px; font-weight: bold; fill: #666; }
       .radio-border { fill: white; stroke: #ccc; stroke-width: 1; }
       .radio-selected { fill: #1890ff; }
+      /* 确保没有黑色底块 */
+      * {
+        fill-opacity: 1;
+        stroke-opacity: 1;
+      }
+      /* 确保所有文本可见 */
+      text {
+        fill: #000;
+      }
     </style>
   </defs>
   

@@ -1,4 +1,13 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="800" height="600" viewBox="0 0 800 600">
+  <defs>
+    <style>
+      /* 确保没有黑色底块 */
+      * {
+        fill-opacity: 1;
+        stroke-opacity: 1;
+      }
+    </style>
+  </defs>
   <rect width="800" height="600" fill="#f9f9f9" rx="10" ry="10"/>
   
   <!-- 标题 -->
