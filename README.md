@@ -197,3 +197,30 @@ java -jar target/bing-framework-0.0.1-SNAPSHOT.jar
 7. 添加限流、熔断等服务治理功能
 8. 扩展国际化支持更多语言
 9. 添加缓存国际化消息功能，提高性能
+
+## 模块文档
+
+以下是项目中各功能模块的详细文档链接：
+
+### 系统架构与基础
+- [API文档](docs/API_DOCUMENTATION.md) - API接口文档
+- [缓存使用指南](docs/CACHE_USAGE.md) - 缓存系统配置与使用说明
+- [密码加密实现](docs/PASSWORD_ENCRYPTION.md) - 密码加密策略与实现
+- [单元测试报告指南](docs/UNIT_TEST_REPORT_GUIDE.md) - 单元测试编写与报告生成
+
+### 安全与认证
+- [RBAC权限系统](docs/RBAC_SYSTEM.md) - 基于角色的访问控制系统设计
+- [登录系统](docs/LOGIN_SYSTEM.md) - 用户认证与登录功能实现
+- [审计日志系统](docs/AUDIT_LOG_SYSTEM.md) - 系统操作审计日志功能
+
+### 数据管理
+- [数据字典管理系统](docs/DATA_DICT_MANAGEMENT_SYSTEM.md) - 数据字典维护与使用
+- [数据权限管理系统](docs/DATA_PERMISSION_MANAGEMENT_SYSTEM.md) - 精细化数据访问控制
+- [数据库配置导入导出系统](docs/DATABASE_CONFIG_IMPORT_EXPORT_SYSTEM.md) - 配置导入导出功能
+- [数据库配置导入导出设计文档](docs/DATABASE_CONFIG_IMPORT_EXPORT_DESIGN.md) - 配置导入导出详细设计
+
+### 多端支持
+- [多客户端用户系统](docs/MULTI_CLIENT_USER_SYSTEM.md) - 多端用户支持方案
+
+### 组织管理
+- [组织管理模块](docs/organization_management_module.md) - 企业组织结构管理功能
