@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bing.framework.mapper.SystemConfigMapper">
+
+    <!-- 结果映射 -->
+    <resultMap id="BaseResultMap" type="com.bing.framework.entity.SystemConfig">
+        <id column="id" property="id" jdbcType="BIGINT"/>
+        <result column="config_key" property="configKey" jdbcType="VARCHAR"/>
+        <result column="config_value" property="configValue" jdbcType="VARCHAR"/>
+        <result column="config_type" property="configType" jdbcType="VARCHAR"/>
+        <result column="description" property="description" jdbcType="VARCHAR"/>
+        <result column="config_category" property="configCategory" jdbcType="VARCHAR"/>
+        <result column="enabled" property="enabled" jdbcType="INTEGER"/>
+        <result column="sort_order" property="sortOrder" jdbcType="INTEGER"/>
+        <result column="is_sensitive" property="isSensitive" jdbcType="INTEGER"/>
+        <result column="created_time" property="createdTime" jdbcType="TIMESTAMP"/>
+        <result column="updated_time" property="updatedTime" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <!-- 基础列名 -->
+    <sql id="Base_Column_List">
+        id, config_key, config_value, config_type, description, config_category, enabled, sort_order, `is_sensitive`, `created_time`, `updated_time`
+    </sql>
+
+    <!-- 自定义查询：按配置键查询配置 -->
+    <select id="selectByConfigKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM system_config
+        WHERE config_key = #{configKey,jdbcType=VARCHAR}
+        AND enabled = 1
+    </select>
+
+    <!-- 自定义查询：按配置类型查询配置列表 -->
+    <select id="selectByConfigType" parameterType="java.lang.String" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM system_config
+        WHERE config_type = #{configType,jdbcType=VARCHAR}
+        AND enabled = 1
+        ORDER BY sort_order ASC
+    </select>
+
+    <!-- 自定义查询：查询所有启用的配置 -->
+    <select id="selectEnabledConfigs" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM system_config
+        WHERE enabled = 1
+        ORDER BY sort_order ASC, config_key ASC
+    </select>
+
+    <!-- 自定义查询：检查配置键是否存在 -->
+    <select id="checkConfigKeyExists" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM system_config
+        WHERE config_key = #{configKey,jdbcType=VARCHAR}
+        <if test="excludeId != null">
+            AND id != #{excludeId,jdbcType=BIGINT}
+        </if>
+    </select>
+
+    <!-- 自定义更新：更新配置值 -->
+    <update id="updateConfigValue">
+        UPDATE system_config
+        SET config_value = #{configValue,jdbcType=VARCHAR},
+            updated_time = NOW()
+        WHERE id = #{id,jdbcType=BIGINT}
+    </update>
+
+    <!-- 自定义更新：根据配置键更新配置值 -->
+    <update id="updateConfigValueByKey">
+        UPDATE system_config
+        SET config_value = #{configValue,jdbcType=VARCHAR},
+            updated_time = NOW()
+        WHERE config_key = #{configKey,jdbcType=VARCHAR}
+        AND enabled = 1
+    </update>
+
+    <!-- 自定义更新：批量更新配置状态 -->
+    <update id="updateBatchStatus">
+        UPDATE system_config
+        SET enabled = #{enabled,jdbcType=INTEGER},
+            updated_time = NOW()
+        WHERE id IN
+        <foreach collection="ids" item="id" open="(" separator="," close=")">
+            #{id,jdbcType=BIGINT}
+        </foreach>
+    </update>
+
+</mapper>
