@@ -2,36 +2,103 @@
 
 ## 概述
 
-Bing Framework提供了一套完整的安全功能，包括请求频率限制、输入验证和SQL注入防护、API签名验证、敏感操作二次验证、安全HTTP响应头等。这些功能可以有效提高应用的安全性。
+Bing Framework提供了一套完整的安全功能，包括客户端风险管理、加密密钥管理、请求频率限制、输入验证和SQL注入防护、API签名验证、敏感操作二次验证、安全HTTP响应头等。这些功能可以有效提高应用的安全性，支持多层级安全策略和智能风险识别。
+
+## 最新安全增强功能（2025-11-17）
+
+### 新增安全模块
+
+#### 1. 客户端风险级别管理
+- **功能**：ClientRiskLevel枚举类定义了多个风险等级
+- **风险等级**：LOW、MEDIUM、HIGH、CRITICAL等
+- **应用场景**：根据客户端风险等级执行不同级别的安全策略
+
+#### 2. 客户端安全配置档案
+- **功能**：ClientSecurityProfile类管理客户端安全配置
+- **支持特性**：支持基于配置文件的灵活安全策略
+- **应用场景**：为不同类型的客户端应用定制安全策略
+
+#### 3. 客户端类型安全配置
+- **功能**：ClientTypeSecurityConfig类实现客户端安全配置的动态管理
+- **核心方法**：`getSecurityProfile()`获取安全配置档案
+- **应用场景**：根据客户端类型（如Web、移动端、API客户端）应用相应安全策略
+
+### 重要修复（2025-11-17）
+
+#### ClientTypeSecurityConfig编译错误修复
+- **问题**：@Builder注解与手动构造函数冲突导致的编译错误
+- **解决方案**：移除类级别的@Builder注解，清理未使用的import语句
+- **影响**：解决了"无法将构造器ClientTypeSecurityConfig应用到给定类型"的编译错误
+- **验证**：确保编译通过，所有安全配置功能正常工作
+
+#### 4. 增强JWT令牌管理
+- **功能**：SecureJwtTokenProvider提供安全的JWT令牌生成和验证
+- **特性**：支持令牌过期配置化、可疑活动监控
+- **应用场景**：高安全性JWT令牌管理，防止令牌伪造和篡改
+
+#### 5. 安全事件监控
+- **功能**：SecurityEvent类记录安全相关事件
+- **监控内容**：登录异常、访问权限变更、敏感操作等
+- **应用场景**：安全审计和威胁检测
+
+#### 6. 可疑活动检测
+- **功能**：SuspiciousActivity类记录和跟踪可疑活动
+- **检测范围**：异常登录模式、异常操作频率、地理位置异常等
+- **应用场景**：实时威胁检测和风险评估
 
 ## 安全功能清单
 
-### 1. 请求频率限制（Rate Limiting）
+### 1. 客户端风险管理
+- **核心类**：ClientRiskLevel、ClientSecurityProfile、ClientTypeSecurityConfig
+- **功能**：智能识别客户端风险级别，动态调整安全策略
+- **特性**：支持LOW、MEDIUM、HIGH、CRITICAL多级风险分类
+
+### 2. 高级加密密钥管理
+- **核心类**：AESUtil
+- **功能**：提供企业级AES加密/解密功能
+- **特性**：支持多种加密模式、密钥管理、安全随机数生成
+
+### 3. 增强JWT令牌安全
+- **核心类**：SecureJwtTokenProvider、SecureTokenValidationResult
+- **功能**：安全的令牌生成、验证和状态管理
+- **特性**：支持令牌过期配置、可疑活动监控、令牌状态验证
+
+### 4. 安全事件监控体系
+- **核心类**：SecurityEvent
+- **功能**：全面的安全事件记录和审计
+- **特性**：登录异常监控、权限变更审计、操作轨迹跟踪
+
+### 5. 可疑活动智能检测
+- **核心类**：SuspiciousActivity
+- **功能**：实时检测和记录可疑活动
+- **特性**：异常模式识别、地理位置分析、行为风险评估
+
+### 6. 请求频率限制（Rate Limiting）
 - **技术栈**：Spring Cloud Gateway + Redis
 - **功能**：防止API滥用和暴力攻击
 - **实现**：分布式限流，支持多种限流算法
 
-### 2. 输入验证和SQL注入防护
+### 7. 输入验证和SQL注入防护
 - **实现方式**：SecureInput注解 + InputValidationAspect切面
 - **功能**：对用户输入进行严格验证，防止XSS和SQL注入攻击
 
-### 3. API签名验证机制
+### 8. API签名验证机制
 - **实现方式**：ApiSignature注解 + 验证切面
 - **功能**：确保API请求的完整性和真实性
 
-### 4. 敏感操作二次验证
+### 9. 敏感操作二次验证
 - **实现方式**：SensitiveOperation注解 + 验证机制
 - **功能**：对敏感操作进行额外的安全验证
 
-### 5. 安全HTTP响应头配置
+### 10. 安全HTTP响应头配置
 - **功能**：设置CSP、X-Frame-Options等安全响应头
 - **防护**：防止XSS、点击劫持等攻击
 
 ## 快速开始
 
-### 1. 基本配置
+### 1. 新增安全配置
 
-在application.yml中配置Redis连接（用于限流功能）：
+在application.yml中配置新增的安全功能：
 
 ```yaml
 spring:
@@ -51,6 +118,37 @@ spring:
 # 自定义安全配置
 bing:
   security:
+    # 客户端安全配置
+    client-security:
+      enabled: true
+      default-risk-level: LOW
+      risk-assessment-enabled: true
+      
+    # 增强JWT配置
+    jwt:
+      secret: ${JWT_SECRET:your-jwt-secret-key}
+      expiration: ${JWT_EXPIRATION:3600}
+      refresh-expiration: ${JWT_REFRESH_EXPIRATION:86400}
+      security-enhanced: true
+      
+    # AES加密配置
+    encryption:
+      algorithm: AES/GCM/NoPadding
+      key-size: 256
+      iv-size: 12
+      
+    # 安全事件配置
+    security-events:
+      enabled: true
+      log-level: INFO
+      audit-enabled: true
+      
+    # 可疑活动检测
+    suspicious-activity:
+      enabled: true
+      detection-threshold: 5
+      monitoring-window: 300 # 5分钟
+      
     # API签名配置
     api-signature:
       enabled: true
@@ -74,6 +172,368 @@ bing:
 public class BingFrameworkApplication {
     public static void main(String[] args) {
         SpringApplication.run(BingFrameworkApplication.class, args);
+    }
+}
+```
+
+## 新增安全功能使用详解
+
+### 1. 客户端风险管理使用
+
+#### 1.1 风险级别定义和评估
+
+```java
+@RestController
+public class ClientSecurityController {
+    
+    @Autowired
+    private ClientTypeSecurityConfig clientSecurityConfig;
+    
+    @GetMapping("/api/security/profile/{clientType}")
+    public Result<ClientSecurityProfile> getClientSecurityProfile(
+            @PathVariable String clientType) {
+        
+        // 根据客户端类型获取安全配置档案
+        ClientSecurityProfile profile = clientSecurityConfig.getSecurityProfile(clientType);
+        
+        // 基于客户端特征评估风险等级
+        ClientRiskLevel riskLevel = assessClientRisk(profile);
+        
+        return Result.success(profile);
+    }
+    
+    private ClientRiskLevel assessClientRisk(ClientSecurityProfile profile) {
+        // 风险评估逻辑
+        if (profile.getSecurityScore() >= 80) {
+            return ClientRiskLevel.LOW;
+        } else if (profile.getSecurityScore() >= 60) {
+            return ClientRiskLevel.MEDIUM;
+        } else if (profile.getSecurityScore() >= 40) {
+            return ClientRiskLevel.HIGH;
+        } else {
+            return ClientRiskLevel.CRITICAL;
+        }
+    }
+}
+```
+
+#### 1.2 动态安全策略应用
+
+```java
+@Service
+public class AdaptiveSecurityService {
+    
+    @Autowired
+    private ClientTypeSecurityConfig securityConfig;
+    
+    public void applySecurityPolicy(HttpServletRequest request, String clientType) {
+        ClientSecurityProfile profile = securityConfig.getSecurityProfile(clientType);
+        ClientRiskLevel riskLevel = profile.getRiskLevel();
+        
+        switch (riskLevel) {
+            case LOW:
+                // 低风险：应用基本安全措施
+                applyBasicSecurity(request);
+                break;
+            case MEDIUM:
+                // 中等风险：增加额外的输入验证
+                applyEnhancedInputValidation(request);
+                break;
+            case HIGH:
+                // 高风险：启用多重验证和严格监控
+                applyStrictSecurity(request);
+                break;
+            case CRITICAL:
+                // 严重风险：触发紧急安全响应
+                triggerEmergencyResponse(request);
+                break;
+        }
+    }
+}
+```
+
+### 2. 增强JWT令牌管理
+
+#### 2.1 安全令牌生成和验证
+
+```java
+@RestController
+public class SecureAuthController {
+    
+    @Autowired
+    private SecureJwtTokenProvider tokenProvider;
+    
+    @PostMapping("/api/auth/login")
+    public Result<LoginResponse> secureLogin(@RequestBody LoginRequest request) {
+        try {
+            // 验证用户凭据
+            User user = userService.authenticate(request);
+            
+            // 创建增强安全令牌
+            SecureTokenValidationResult tokenResult = tokenProvider.generateSecureToken(
+                user.getId(),
+                user.getClientType(),
+                ClientRiskLevel.MEDIUM
+            );
+            
+            // 记录安全事件
+            SecurityEvent event = SecurityEvent.builder()
+                .eventType("LOGIN_SUCCESS")
+                .userId(user.getId())
+                .clientType(user.getClientType())
+                .riskLevel(tokenResult.getRiskLevel())
+                .description("用户成功登录")
+                .build();
+            securityEventService.recordEvent(event);
+            
+            return Result.success(LoginResponse.builder()
+                .token(tokenResult.getToken())
+                .refreshToken(tokenResult.getRefreshToken())
+                .expiresIn(tokenResult.getExpirationTime())
+                .build());
+                
+        } catch (Exception e) {
+            // 记录可疑活动
+            recordSuspiciousActivity(request, "LOGIN_FAILURE", e.getMessage());
+            return Result.error("登录失败");
+        }
+    }
+    
+    @PostMapping("/api/auth/verify")
+    public Result<TokenVerificationResult> verifyToken(
+            @RequestHeader("Authorization") String token) {
+        
+        SecureTokenValidationResult result = tokenProvider.validateSecureToken(token);
+        
+        if (result.isValid()) {
+            return Result.success(TokenVerificationResult.builder()
+                .valid(true)
+                .userId(result.getUserId())
+                .expiresAt(result.getExpirationTime())
+                .build());
+        } else {
+            // 令牌无效，记录安全事件
+            SecurityEvent event = SecurityEvent.builder()
+                .eventType("TOKEN_VERIFICATION_FAILED")
+                .description("令牌验证失败: " + result.getFailureReason())
+                .build();
+            securityEventService.recordEvent(event);
+            
+            return Result.error("令牌验证失败");
+        }
+    }
+}
+```
+
+### 3. 加密密钥管理
+
+#### 3.1 AES加密使用示例
+
+```java
+@Service
+public class SecureDataService {
+    
+    @Autowired
+    private AESUtil aesUtil;
+    
+    public String encryptSensitiveData(String data, String keyAlias) {
+        try {
+            // 使用AESUtil进行安全加密
+            String encryptedData = aesUtil.encrypt(data, keyAlias);
+            
+            // 记录加密操作
+            SecurityEvent event = SecurityEvent.builder()
+                .eventType("DATA_ENCRYPTION")
+                .description("敏感数据加密完成")
+                .build();
+            securityEventService.recordEvent(event);
+            
+            return encryptedData;
+        } catch (Exception e) {
+            logger.error("数据加密失败", e);
+            throw new SecurityException("数据加密失败", e);
+        }
+    }
+    
+    public String decryptSensitiveData(String encryptedData, String keyAlias) {
+        try {
+            // 使用AESUtil进行安全解密
+            String decryptedData = aesUtil.decrypt(encryptedData, keyAlias);
+            
+            // 记录解密操作
+            SecurityEvent event = SecurityEvent.builder()
+                .eventType("DATA_DECRYPTION")
+                .description("敏感数据解密完成")
+                .build();
+            securityEventService.recordEvent(event);
+            
+            return decryptedData;
+        } catch (Exception e) {
+            logger.error("数据解密失败", e);
+            throw new SecurityException("数据解密失败", e);
+        }
+    }
+}
+```
+
+### 4. 安全事件监控
+
+#### 4.1 安全事件记录和查询
+
+```java
+@Service
+public class SecurityEventService {
+    
+    public void recordEvent(SecurityEvent event) {
+        // 设置时间戳
+        event.setEventTime(LocalDateTime.now());
+        event.setEventId(UUID.randomUUID().toString());
+        
+        // 持久化到数据库
+        securityEventRepository.save(event);
+        
+        // 实时监控高危事件
+        if (event.getRiskLevel() == ClientRiskLevel.CRITICAL) {
+            triggerCriticalEventAlert(event);
+        }
+    }
+    
+    public List<SecurityEvent> getSecurityEvents(String userId, LocalDateTime startTime, 
+                                                LocalDateTime endTime) {
+        return securityEventRepository.findByUserIdAndEventTimeBetween(
+            userId, startTime, endTime);
+    }
+    
+    @EventListener
+    public void handleSecurityEvent(SecurityEvent event) {
+        // 实时处理安全事件
+        if (event.getEventType().equals("LOGIN_FAILURE")) {
+            // 检查是否为暴力破解攻击
+            checkBruteForceAttack(event);
+        }
+    }
+}
+```
+
+### 5. 可疑活动检测
+
+#### 5.1 可疑活动记录和分析
+
+```java
+@Service
+public class SuspiciousActivityService {
+    
+    public void recordSuspiciousActivity(HttpServletRequest request, 
+                                       String activityType, String description) {
+        
+        SuspiciousActivity activity = SuspiciousActivity.builder()
+            .activityType(activityType)
+            .clientIp(request.getRemoteAddr())
+            .userAgent(request.getHeader("User-Agent"))
+            .description(description)
+            .riskScore(calculateRiskScore(request, activityType))
+            .detectionTime(LocalDateTime.now())
+            .build();
+        
+        // 保存可疑活动记录
+        suspiciousActivityRepository.save(activity);
+        
+        // 实时风险评估
+        if (activity.getRiskScore() > 80) {
+            triggerHighRiskAlert(activity);
+        }
+        
+        // 记录安全事件
+        SecurityEvent event = SecurityEvent.builder()
+            .eventType("SUSPICIOUS_ACTIVITY")
+            .description("检测到可疑活动: " + description)
+            .riskLevel(ClientRiskLevel.HIGH)
+            .build();
+        securityEventService.recordEvent(event);
+    }
+    
+    private int calculateRiskScore(HttpServletRequest request, String activityType) {
+        int score = 0;
+        
+        // 基于IP地址分析
+        if (isKnownMaliciousIP(request.getRemoteAddr())) {
+            score += 50;
+        }
+        
+        // 基于用户代理分析
+        String userAgent = request.getHeader("User-Agent");
+        if (isSuspiciousUserAgent(userAgent)) {
+            score += 30;
+        }
+        
+        // 基于活动类型分析
+        switch (activityType) {
+            case "LOGIN_FAILURE":
+                score += 40;
+                break;
+            case "PASSWORD_CHANGE":
+                score += 60;
+                break;
+            case "TRANSFER_MONEY":
+                score += 80;
+                break;
+        }
+        
+        return Math.min(score, 100);
+    }
+}
+```
+
+### 6. 综合安全策略示例
+
+```java
+@RestController
+public class ComprehensiveSecurityController {
+    
+    @PostMapping("/api/secure/operation")
+    public Result<String> executeSecureOperation(
+            @RequestBody SecureOperationRequest request,
+            HttpServletRequest httpRequest) {
+        
+        try {
+            // 1. 获取客户端安全配置
+            String clientType = extractClientType(httpRequest);
+            ClientSecurityProfile profile = clientSecurityConfig.getSecurityProfile(clientType);
+            
+            // 2. 应用动态安全策略
+            adaptiveSecurityService.applySecurityPolicy(httpRequest, clientType);
+            
+            // 3. 输入验证和清理
+            validateAndSanitizeInput(request);
+            
+            // 4. 令牌验证
+            String token = extractToken(httpRequest);
+            SecureTokenValidationResult tokenResult = tokenProvider.validateSecureToken(token);
+            
+            if (!tokenResult.isValid()) {
+                recordSuspiciousActivity(httpRequest, "INVALID_TOKEN", "无效令牌");
+                return Result.error("令牌验证失败");
+            }
+            
+            // 5. 执行业务操作
+            String result = businessService.executeOperation(request);
+            
+            // 6. 记录成功事件
+            SecurityEvent event = SecurityEvent.builder()
+                .eventType("SECURE_OPERATION_SUCCESS")
+                .userId(tokenResult.getUserId())
+                .clientType(clientType)
+                .description("安全操作执行成功")
+                .build();
+            securityEventService.recordEvent(event);
+            
+            return Result.success(result);
+            
+        } catch (Exception e) {
+            // 记录失败事件和可疑活动
+            recordFailureAndSuspiciousActivity(httpRequest, e);
+            return Result.error("操作失败");
+        }
     }
 }
 ```

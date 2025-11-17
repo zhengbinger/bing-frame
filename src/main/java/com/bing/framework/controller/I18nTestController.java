@@ -1,12 +1,8 @@
 package com.bing.framework.controller;
 
-import com.bing.framework.common.ErrorCode;
-import com.bing.framework.common.Result;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
-import io.swagger.annotations.ApiResponses;
-import io.swagger.annotations.ApiResponse;
+import java.util.HashMap;
+import java.util.Locale;
+import java.util.Map;
 
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,15 +10,22 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.HashMap;
-import java.util.Locale;
-import java.util.Map;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
+import io.swagger.annotations.ApiResponses;
+import io.swagger.annotations.ApiResponse;
+
+import com.bing.framework.common.ErrorCode;
+import com.bing.framework.common.Result;
 
 /**
  * 国际化测试控制器
+ * 基于Spring的LocaleContextHolder和MessageSource实现的国际化支持
  * 用于演示和测试错误码的多语言支持功能
- *
+ * 
  * @author zhengbing
+ * @date 2025-11-17
  */
 @Api(tags = "国际化测试", description = "提供国际化功能测试接口，演示多语言错误消息的处理")
 @RestController

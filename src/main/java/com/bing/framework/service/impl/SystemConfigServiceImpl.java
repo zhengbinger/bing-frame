@@ -1,18 +1,19 @@
 package com.bing.framework.service.impl;
 
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.bing.framework.entity.SystemConfig;
-import com.bing.framework.mapper.SystemConfigMapper;
-import com.bing.framework.service.SystemConfigService;
-import com.bing.framework.util.SystemConfigCacheManager;
+import java.util.List;
+import java.util.regex.Pattern;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-import java.util.regex.Pattern;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.bing.framework.entity.SystemConfig;
+import com.bing.framework.mapper.SystemConfigMapper;
+import com.bing.framework.service.SystemConfigService;
+import com.bing.framework.util.SystemConfigCacheManager;
 
 /**
  * 系统配置服务实现类

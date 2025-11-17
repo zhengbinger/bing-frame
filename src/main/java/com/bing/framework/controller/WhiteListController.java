@@ -1,25 +1,27 @@
 package com.bing.framework.controller;
 
+import java.util.List;
+
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.bing.framework.common.ErrorCode;
-import com.bing.framework.common.Result;
-import com.bing.framework.entity.WhiteList;
-import com.bing.framework.service.WhiteListService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponses;
 import io.swagger.annotations.ApiResponse;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
+import com.bing.framework.common.ErrorCode;
+import com.bing.framework.common.Result;
+import com.bing.framework.entity.WhiteList;
+import com.bing.framework.service.WhiteListService;
 
 /**
- * 白名单控制器。
- * 提供白名单的增删改查等管理功能。
+ * 白名单控制器
+ * 基于MyBatis-Plus和分页插件实现的RESTful API接口
+ * 提供白名单的增删改查等管理功能，支持分页查询和缓存刷新
  *
  * @author zhengbing
  * @date 2024-11-03

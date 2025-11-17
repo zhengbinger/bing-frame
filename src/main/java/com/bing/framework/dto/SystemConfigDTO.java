@@ -1,12 +1,13 @@
 package com.bing.framework.dto;
 
-import io.swagger.v3.oas.annotations.media.Schema;
+import java.time.LocalDateTime;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
-import java.time.LocalDateTime;
+
+import io.swagger.v3.oas.annotations.media.Schema;
 
 /**
  * 系统配置数据传输对象

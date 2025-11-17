@@ -1,29 +1,32 @@
 package com.bing.framework.controller;
 
-import com.bing.framework.common.ErrorCode;
-import com.bing.framework.common.Result;
-import com.bing.framework.config.CaptchaConfig;
-import com.bing.framework.dto.CaptchaResult;
-import com.bing.framework.exception.BusinessException;
-import com.bing.framework.strategy.CaptchaStrategyFactory;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
-import io.swagger.annotations.ApiResponses;
-import io.swagger.annotations.ApiResponse;
-import lombok.extern.slf4j.Slf4j;
+import java.util.UUID;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.UUID;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
+
+import lombok.extern.slf4j.Slf4j;
+
+import com.bing.framework.common.ErrorCode;
+import com.bing.framework.common.Result;
+import com.bing.framework.config.CaptchaConfig;
+import com.bing.framework.dto.CaptchaResult;
+import com.bing.framework.exception.BusinessException;
+import com.bing.framework.strategy.CaptchaStrategyFactory;
 
 /**
  * 验证码控制器
- * 提供验证码生成和刷新的API接口
- * 支持多种类型的验证码，如图形验证码、短信验证码等
+ * 基于Spring策略模式设计实现的RESTful API接口
+ * 提供验证码生成和刷新的API接口，支持多种类型的验证码，如图形验证码、短信验证码等
  * 
  * @author zhengbing
  * @date 2025-11-05

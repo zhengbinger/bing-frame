@@ -1,10 +1,12 @@
 package com.bing.framework.mapper;
 
+import java.util.Date;
+import java.util.List;
+
+import org.apache.ibatis.annotations.Mapper;
+
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.bing.framework.entity.User;
-import org.apache.ibatis.annotations.Mapper;
-import java.util.List;
-import java.util.Date;
 
 /**
  * 用户Mapper接口

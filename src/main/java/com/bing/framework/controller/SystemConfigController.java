@@ -1,27 +1,30 @@
 package com.bing.framework.controller;
 
-import com.bing.framework.common.ErrorCode;
-import com.bing.framework.common.Result;
-import com.bing.framework.entity.SystemConfig;
-import com.bing.framework.service.SystemConfigService;
-import com.bing.framework.util.SystemConfigCacheManager;
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.tags.Tag;
+import java.util.List;
+
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
-import java.util.List;
+import com.bing.framework.common.ErrorCode;
+import com.bing.framework.common.Result;
+import com.bing.framework.entity.SystemConfig;
+import com.bing.framework.service.SystemConfigService;
+import com.bing.framework.util.SystemConfigCacheManager;
+
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.tags.Tag;
 
 /**
  * 系统配置控制器
- * 提供系统配置管理的RESTful API接口
- * 支持配置的查询、更新、验证等操作
+ * 基于Spring Security权限控制和缓存机制实现的RESTful API接口
+ * 提供系统配置管理的查询、更新、验证等操作，支持配置缓存和批量操作
  * 
  * @author zhengbing
  * @date 2025-11-15

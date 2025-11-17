@@ -1,5 +1,15 @@
 package com.bing.framework.service.impl;
 
+import java.util.Date;
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.bing.framework.common.ErrorCode;
 import com.bing.framework.entity.Role;
@@ -9,15 +19,8 @@ import com.bing.framework.mapper.UserMapper;
 import com.bing.framework.service.RoleService;
 import com.bing.framework.service.UserService;
 import com.bing.framework.util.PasswordValidator;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.Cacheable;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
+
 import lombok.extern.slf4j.Slf4j;
-import java.util.Date;
-import java.util.List;
 
 /**
  * 用户服务实现类

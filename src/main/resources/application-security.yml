@@ -1,0 +1,177 @@
+# Bing Framework 安全配置示例
+# application-security.yml
+
+# JWT 安全配置
+jwt:
+  # 基本配置
+  secret: "bing-framework-jwt-secret-key-2025"
+  expiration: 24  # 默认24小时
+  refresh:
+    expiration: 168  # 刷新令牌7天
+  
+  # 证书版本管理
+  certificate:
+    version: "v1"
+    rotation-days: 90  # 90天轮换一次
+  
+  # 安全特性配置
+  security:
+    device-fingerprint: true    # 启用设备指纹
+    location-aware: true        # 启用地理位置感知
+    anti-replay: true           # 启用防重放攻击
+    token-blacklist-enabled: true  # 启用令牌黑名单
+    session-fixation-protection: true  # 会话固定防护
+    require-https: true         # 强制HTTPS
+
+# Bing 安全配置
+bing:
+  # 安全配置
+  security:
+    # 密码安全
+    password:
+      min-length: 8
+      max-length: 64
+      require-upper-and-lower: true
+      require-digit: true
+      require-special-char: true
+      forbidden-passwords:
+        - "123456"
+        - "password"
+        - "admin"
+        - "root"
+        - "bing2025"
+      history-check-count: 5
+    
+    # 会话安全
+    session:
+      max-concurrent-sessions: 3
+      timeout-minutes: 30
+      session-fixation-protection: true
+      secure-cookie: true
+      http-only-cookie: true
+      same-site-strict: true
+    
+    # 请求安全
+    request:
+      max-request-size-mb: 10
+      slow-request-threshold-ms: 5000
+      allowed-content-types:
+        - "application/json"
+        - "application/xml"
+        - "application/x-www-form-urlencoded"
+      forbidden-headers:
+        - "X-Forwarded-Host"
+        - "X-Original-URL"
+        - "X-Rewrite-URL"
+    
+    # API签名
+    api-signature:
+      enabled: true
+      algorithm: "HmacSHA256"
+      timeout-minutes: 15
+      time-window-seconds: 300
+      require-https: true
+    
+    # 加密配置
+    encryption:
+      aes-key: "BingFrameworkKey2025!"
+      key-rotation-days: 90
+      enable-field-encryption: true
+      encrypted-fields:
+        - "password"
+        - "phone"
+        - "email"
+        - "idCard"
+        - "bankAccount"
+    
+    # 监控配置
+    monitoring:
+      enable-security-monitoring: true
+      suspicious-activity-threshold: 10
+      retention-days: 90
+      enable-alerts: true
+      alert-emails:
+        - "admin@bingframework.com"
+        - "security@bingframework.com"
+      enable-auto-block: true
+      block-threshold: 20
+      block-hours: 24
+
+  # 客户端类型特定配置
+  client-types:
+    web:
+      risk-level: "HIGH"
+      expiration-hours: 2
+      max-concurrent-sessions: 2
+      require-device-fingerprint: true
+      require-geo-verification: false
+    
+    app:
+      risk-level: "MEDIUM"
+      expiration-hours: 24
+      max-concurrent-sessions: 3
+      require-device-fingerprint: true
+      require-geo-verification: true
+    
+    wechat:
+      risk-level: "MEDIUM"
+      expiration-hours: 168  # 7天
+      max-concurrent-sessions: 5
+      require-device-fingerprint: true
+      require-geo-verification: false
+    
+    miniprogram:
+      risk-level: "LOW"
+      expiration-hours: 720  # 30天
+      max-concurrent-sessions: 10
+      require-device-fingerprint: false
+      require-geo-verification: false
+    
+    harmony:
+      risk-level: "MEDIUM"
+      expiration-hours: 168  # 7天
+      max-concurrent-sessions: 3
+      require-device-fingerprint: true
+      require-geo-verification: true
+    
+    meta:
+      risk-level: "HIGH"
+      expiration-hours: 12
+      max-concurrent-sessions: 1
+      require-device-fingerprint: true
+      require-geo-verification: true
+
+# Spring 统一配置
+spring:
+  # Redis 配置 (用于安全缓存)
+  redis:
+    host: localhost
+    port: 6379
+    password: ""
+    database: 1  # 使用数据库1专门存储安全相关数据
+    timeout: 2000ms
+    lettuce:
+      pool:
+        max-active: 20
+        max-idle: 10
+        min-idle: 5
+        max-wait: 2000ms
+
+  # 注意：数据源配置请参考其他环境配置文件
+  # - 开发环境：application-dev.yml
+  # - 测试环境：application-test.yml
+  # - 生产环境：application-prod.yml
+
+# 日志配置
+logging:
+  level:
+    com.bing.framework.security: DEBUG
+    com.bing.framework.interceptor: DEBUG
+    org.springframework.security: DEBUG
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"
+    file: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"
+  file:
+    name: logs/bing-security.log
+    max-size: 100MB
+    max-history: 30

@@ -1,5 +1,27 @@
 package com.bing.framework.controller;
 
+import java.util.Arrays;
+import java.util.Date;
+import java.util.List;
+import java.util.Set;
+import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
+
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
+
+import lombok.extern.slf4j.Slf4j;
+
 import com.bing.framework.annotation.AuditLogLevel;
 import com.bing.framework.common.ErrorCode;
 import com.bing.framework.common.Result;
@@ -19,32 +41,11 @@ import com.bing.framework.service.UserService;
 import com.bing.framework.strategy.CaptchaStrategyFactory;
 import com.bing.framework.util.JwtUtil;
 import com.bing.framework.util.RedisUtil;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
-import io.swagger.annotations.ApiResponses;
-import io.swagger.annotations.ApiResponse;
-import lombok.extern.slf4j.Slf4j;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.*;
-// 不再直接导入HttpServletRequest，使用RequestContext代替
-
-
-import java.util.Date;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Set;
-import java.util.concurrent.TimeUnit;
-import java.util.stream.Collectors;
 
 /**
  * 认证控制器
- * 处理用户登录、注册、注销等认证相关功能
+ * 基于JWT令牌、Spring Security和Redis缓存机制实现的RESTful API接口
+ * 提供用户登录、注册、注销等认证相关功能，集成Spring Security和Redis缓存机制
  * 
  * @author zhengbing
  * @date 2025-11-05

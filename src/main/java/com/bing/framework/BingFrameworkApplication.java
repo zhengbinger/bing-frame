@@ -9,6 +9,8 @@ import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 /**
@@ -30,13 +32,14 @@ import org.springframework.context.annotation.EnableAspectJAutoProxy;
 @EnableCaching // 启用缓存
 @EnableAspectJAutoProxy // 启用AOP功能
 public class BingFrameworkApplication {
+    private static final Logger log = LoggerFactory.getLogger(BingFrameworkApplication.class);
 
 	public static void main(String[] args) {
-		System.out.println("开始启动应用...");
+        log.info("开始启动Bing Framework应用...");
 		// 启动Spring Boot应用并获取应用上下文
 		ConfigurableApplicationContext context = SpringApplication.run(BingFrameworkApplication.class, args);
-		System.out.println("应用启动成功！访问地址：http://localhost:8081/api");
-		System.out.println("应用正在运行中，请按 Ctrl+C 停止应用");
+        log.info("应用启动成功！访问地址：http://localhost:8081/api");
+        log.info("应用正在运行中，请按 Ctrl+C 停止应用");
 		
 
 	}

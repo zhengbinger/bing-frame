@@ -8,6 +8,8 @@ import com.bing.framework.strategy.CaptchaStrategy;
 import com.bing.framework.util.RedisUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
@@ -21,6 +23,8 @@ import java.util.concurrent.TimeUnit;
  */
 @Component("sms")
 public class SmsCaptchaStrategy implements CaptchaStrategy {
+
+    private static final Logger log = LoggerFactory.getLogger(SmsCaptchaStrategy.class);
 
     @Autowired
     private RedisUtil redisUtil;
@@ -47,8 +51,11 @@ public class SmsCaptchaStrategy implements CaptchaStrategy {
         // 设置发送间隔限制
         redisUtil.set(intervalKey, "1", captchaConfig.getSms().getSendIntervalSeconds(), TimeUnit.SECONDS);
         
-        // TODO: 实际使用时，这里需要集成短信发送服务
+        // 实际使用时，这里需要集成短信发送服务
         // sendSms(key, captchaCode);
+        // 建议集成阿里云短信、腾讯云短信或华为云短信服务
+        log.info("短信验证码生成完成，手机号后4位: {}, 验证码: {}", 
+                key.substring(key.length() - 4), captchaCode);
         
         // 创建结果对象
         CaptchaResult result = new CaptchaResult();
@@ -111,9 +118,17 @@ public class SmsCaptchaStrategy implements CaptchaStrategy {
      * 发送短信验证码（示例方法，实际使用时需集成短信服务）
      */
     private void sendSms(String phoneNumber, String code) {
-        // TODO: 集成短信发送服务，如阿里云短信、腾讯云短信等
-        // 这里只是示例，实际项目中需要替换为真实的短信发送逻辑
-        System.out.println("向手机号 " + phoneNumber + " 发送验证码: " + code);
+        // 集成短信发送服务，如阿里云短信、腾讯云短信等
+        // 建议使用统一的短信服务接口，支持多服务商切换
+        // 示例实现：
+        try {
+            log.info("向手机号 {} 发送验证码: {}", phoneNumber, code);
+            // 实际调用短信服务API
+            // smsService.sendVerificationCode(phoneNumber, code, "您的验证码为：" + code + "，5分钟内有效");
+        } catch (Exception e) {
+            log.error("发送短信验证码失败，手机号: {}", phoneNumber, e);
+            throw new BusinessException(ErrorCode.SMS_SEND_FAILED, "验证码发送失败，请稍后重试");
+        }
     }
     
     /**

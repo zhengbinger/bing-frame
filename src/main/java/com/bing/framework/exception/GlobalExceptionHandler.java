@@ -1,14 +1,17 @@
 package com.bing.framework.exception;
 
-import com.bing.framework.common.ErrorCode;
-import com.bing.framework.common.Result;
-import lombok.extern.slf4j.Slf4j;
+import java.sql.SQLException;
+
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import javax.servlet.http.HttpServletRequest;
-import java.sql.SQLException;
+import com.bing.framework.common.ErrorCode;
+import com.bing.framework.common.Result;
+
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * 全局异常处理类

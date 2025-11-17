@@ -1,24 +1,26 @@
 package com.bing.framework.controller;
 
-import com.bing.framework.entity.User;
-import com.bing.framework.service.UserService;
-import com.bing.framework.common.Result;
-import com.bing.framework.service.PermissionService;
-import com.bing.framework.context.RequestContext;
-import com.bing.framework.dto.PasswordResetRequest;
-import com.bing.framework.dto.BatchPasswordResetRequest;
-import com.bing.framework.dto.BatchNonBCryptPasswordResetRequest;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
-import io.swagger.annotations.ApiResponses;
-import io.swagger.annotations.ApiResponse;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
+
+import com.bing.framework.common.Result;
+import com.bing.framework.context.RequestContext;
+import com.bing.framework.dto.BatchNonBCryptPasswordResetRequest;
+import com.bing.framework.dto.BatchPasswordResetRequest;
+import com.bing.framework.dto.PasswordResetRequest;
+import com.bing.framework.entity.User;
+import com.bing.framework.service.PermissionService;
+import com.bing.framework.service.UserService;
 
 /**
  * 用户控制器

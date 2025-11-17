@@ -1,8 +1,9 @@
 package com.bing.framework.util;
 
-import com.bing.framework.entity.AuditLog;
-import com.bing.framework.service.AuditLogService;
-import lombok.extern.slf4j.Slf4j;
+import java.util.Date;
+
+import javax.servlet.http.HttpServletRequest;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,8 +11,10 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
-import javax.servlet.http.HttpServletRequest;
-import java.util.Date;
+import lombok.extern.slf4j.Slf4j;
+
+import com.bing.framework.entity.AuditLog;
+import com.bing.framework.service.AuditLogService;
 
 /**
  * 审计日志工具类

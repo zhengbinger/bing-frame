@@ -1,12 +1,12 @@
 package com.bing.framework.dto;
 
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
-import lombok.Data;
-
 import java.util.Date;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
+
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
+
+import lombok.Data;
 
 /**
  * 登录响应DTO

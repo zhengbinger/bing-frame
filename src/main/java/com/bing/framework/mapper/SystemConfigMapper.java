@@ -1,13 +1,14 @@
 package com.bing.framework.mapper;
 
-import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.bing.framework.entity.SystemConfig;
+import java.util.List;
+
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
 
-import java.util.List;
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.bing.framework.entity.SystemConfig;
 
 /**
  * 系统配置数据访问层接口

@@ -1,9 +1,10 @@
 package com.bing.framework.service;
 
+import java.util.List;
+
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.bing.framework.entity.Role;
 import com.bing.framework.entity.User;
-import java.util.List;
 
 /**
  * 用户服务接口

@@ -9,6 +9,8 @@ import com.bing.framework.service.AuditLogService;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -25,6 +27,8 @@ import java.util.concurrent.Executor;
 // 移除@Component注解，改为通过配置类进行延迟注册
 public class AuditLogAppender extends AppenderBase<ILoggingEvent> implements ApplicationContextAware {
     
+    private static final Logger log = LoggerFactory.getLogger(AuditLogAppender.class);
+    
     // 静态的ApplicationContext引用
     private static ApplicationContext applicationContext;
     private static Executor auditLogExecutor;
@@ -37,15 +41,15 @@ public class AuditLogAppender extends AppenderBase<ILoggingEvent> implements App
     public static synchronized void setStaticApplicationContext(ApplicationContext context) {
         if (context != null) {
             applicationContext = context;
-            System.out.println("[AUDIT_LOG] ApplicationContext set via static method");
+            log.debug("[AUDIT_LOG] ApplicationContext set via static method");
             // 如果设置了ApplicationContext，尝试初始化线程池
             try {
                 if (auditLogExecutor == null) {
                     auditLogExecutor = context.getBean("auditLogExecutor", Executor.class);
-                    System.out.println("[AUDIT_LOG] auditLogExecutor initialized via static method");
+                    log.debug("[AUDIT_LOG] auditLogExecutor initialized via static method");
                 }
             } catch (Exception e) {
-                System.err.println("[AUDIT_LOG] Failed to initialize auditLogExecutor: " + e.getMessage());
+                log.error("[AUDIT_LOG] Failed to initialize auditLogExecutor: {}", e.getMessage(), e);
             }
         }
     }
@@ -73,7 +77,7 @@ public class AuditLogAppender extends AppenderBase<ILoggingEvent> implements App
                 try {
                     processAuditLog(event);
                 } catch (Exception e) {
-                    System.err.println("处理审计日志失败: " + e.getMessage());
+                    log.error("处理审计日志失败: {}", e.getMessage(), e);
                 }
             });
         }
@@ -104,7 +108,7 @@ public class AuditLogAppender extends AppenderBase<ILoggingEvent> implements App
             // 调用服务记录审计日志
             auditLogService.recordAuditLog(auditLog);
         } catch (Exception e) {
-            System.err.println("记录审计日志到数据库失败: " + e.getMessage());
+            log.error("记录审计日志到数据库失败: {}", e.getMessage(), e);
         }
     }
     
@@ -171,14 +175,14 @@ public class AuditLogAppender extends AppenderBase<ILoggingEvent> implements App
     @Override
     public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
         AuditLogAppender.applicationContext = applicationContext;
-        System.out.println("[AUDIT_LOG] ApplicationContext set via ApplicationContextAware interface");
+        log.debug("[AUDIT_LOG] ApplicationContext set via ApplicationContextAware interface");
         
         // 初始化线程池
         try {
             this.auditLogExecutor = applicationContext.getBean("auditLogExecutor", Executor.class);
-            System.out.println("[AUDIT_LOG] auditLogExecutor initialized");
+            log.debug("[AUDIT_LOG] auditLogExecutor initialized");
         } catch (Exception e) {
-            System.err.println("[AUDIT_LOG] Failed to initialize auditLogExecutor: " + e.getMessage());
+            log.error("[AUDIT_LOG] Failed to initialize auditLogExecutor: {}", e.getMessage(), e);
         }
-    }
+    }	
 }

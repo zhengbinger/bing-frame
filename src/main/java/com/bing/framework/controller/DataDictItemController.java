@@ -1,22 +1,25 @@
 package com.bing.framework.controller;
 
-import com.bing.framework.entity.DataDictItem;
-import com.bing.framework.service.DataDictItemService;
+import java.util.List;
+
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponses;
 import io.swagger.annotations.ApiResponse;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-import java.util.List;
+
+import com.bing.framework.entity.DataDictItem;
+import com.bing.framework.service.DataDictItemService;
 
 /**
  * 数据字典项控制器
- * 提供数据字典项的RESTful API接口，包括字典项的增删改查等操作
- * 使用Swagger注解生成API文档，便于前端开发和接口测试
+ * 基于MyBatis-Plus实现的RESTful API接口
+ * 提供数据字典项的增删改查等操作，使用Swagger注解生成API文档，便于前端开发和接口测试
  * 
  * @author zhengbing
  * @date 2025-11-14

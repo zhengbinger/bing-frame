@@ -1,21 +1,27 @@
 package com.bing.framework.controller;
 
+import java.util.List;
+
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
+
 import com.bing.framework.common.ErrorCode;
 import com.bing.framework.common.Result;
 import com.bing.framework.entity.Organization;
 import com.bing.framework.service.OrganizationService;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
-import java.util.List;
 
 /**
  * 组织管理控制器
- * 提供组织相关的RESTful API接口
- *
+ * 基于MyBatis-Plus实现的RESTful API接口
+ * 提供组织相关的RESTful API接口，支持树形结构管理、循环引用检测等功能
+ * 
  * @author zhengbing
  * @date 2025-11-12
  */

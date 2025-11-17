@@ -36,6 +36,7 @@ public enum ErrorCode {
     CAPTCHA_EXPIRED(3008, "error.captcha.expired"),
     CAPTCHA_REQUIRED(3009, "error.captcha.required"),
     CAPTCHA_FREQUENCY_LIMIT(3010, "error.captcha.frequency_limit"),
+    SMS_SEND_FAILED(3011, "error.sms.send_failed"),
     
     // 数据库相关错误码 4000-4999
     DATABASE_ERROR(4000, "error.database"),
@@ -44,10 +45,12 @@ public enum ErrorCode {
     UNAUTHORIZED(5000, "error.unauthorized"),
     FORBIDDEN(5001, "error.forbidden"),
     INVALID_TOKEN(5002, "error.token.invalid"),
-    TOKEN_BLACKLISTED(5003, "error.token.blacklisted"),
-    INVALID_REFRESH_TOKEN(5005, "error.refresh_token.invalid"),
-    REFRESH_TOKEN_FAILED(5006, "error.refresh_token.failed"),
-    LOGOUT_FAILED(5004, "error.logout.failed"),
+    TOKEN_EXPIRED(5004, "error.token.expired"),
+    TOKEN_BLACKLISTED(5005, "error.token.blacklisted"),
+    DEVICE_MISMATCH(5006, "error.device.mismatch"),
+    INVALID_REFRESH_TOKEN(5007, "error.refresh_token.invalid"),
+    REFRESH_TOKEN_FAILED(5008, "error.refresh_token.failed"),
+    LOGOUT_FAILED(5009, "error.logout.failed"),
     
     // 未知错误
     UNKNOWN_ERROR(9999, "error.unknown");

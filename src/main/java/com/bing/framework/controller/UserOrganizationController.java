@@ -1,21 +1,24 @@
 package com.bing.framework.controller;
 
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
+
 import com.bing.framework.common.ErrorCode;
 import com.bing.framework.common.Result;
 import com.bing.framework.entity.Organization;
 import com.bing.framework.entity.UserOrganization;
 import com.bing.framework.service.UserOrganizationService;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
-import java.util.List;
 
 /**
  * 用户组织关联管理Controller
- * 提供用户与组织关联关系的RESTful API接口
- * 支持用户与组织的关联、解绑、查询、设置主组织等操作
+ * 基于MyBatis-Plus实现的RESTful API接口
+ * 提供用户与组织关联关系的CRUD操作，支持用户与组织的关联、解绑、查询、设置主组织等操作
  * 
  * @author zhengbing
  * @date 2025-11-12
