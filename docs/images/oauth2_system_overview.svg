@@ -1,0 +1,157 @@
+<svg width="1200" height="800" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <style>
+      .title { font-family: Arial, sans-serif; font-size: 18px; font-weight: bold; fill: #2c3e50; }
+      .subtitle { font-family: Arial, sans-serif; font-size: 14px; font-weight: bold; fill: #34495e; }
+      .text { font-family: Arial, sans-serif; font-size: 12px; fill: #2c3e50; }
+      .node { stroke: #3498db; stroke-width: 2px; fill: #ecf0f1; rx: 5px; ry: 5px; }
+      .core { fill: #3498db; stroke: #2980b9; stroke-width: 2px; }
+      .external { fill: #e74c3c; stroke: #c0392b; stroke-width: 2px; }
+      .data { fill: #f39c12; stroke: #e67e22; stroke-width: 2px; }
+      .frontend { fill: #2ecc71; stroke: #27ae60; stroke-width: 2px; }
+    </style>
+  </defs>
+  
+  <!-- 标题 -->
+  <text x="600" y="30" class="title" text-anchor="middle">第三方登录集成系统全景图</text>
+  
+  <!-- 前端层 -->
+  <g id="frontend">
+    <text x="100" y="80" class="subtitle">前端层</text>
+    <rect x="50" y="100" width="120" height="60" class="frontend"/>
+    <text x="110" y="130" class="text" text-anchor="middle">Web前端</text>
+    <text x="110" y="145" class="text" text-anchor="middle" font-size="10">Vue.js/React</text>
+    
+    <rect x="200" y="100" width="120" height="60" class="frontend"/>
+    <text x="260" y="130" class="text" text-anchor="middle">移动端</text>
+    <text x="260" y="145" class="text" text-anchor="middle" font-size="10">iOS/Android</text>
+    
+    <rect x="350" y="100" width="120" height="60" class="frontend"/>
+    <text x="410" y="130" class="text" text-anchor="middle">管理后台</text>
+    <text x="410" y="145" class="text" text-anchor="middle" font-size="10">Admin Panel</text>
+  </g>
+  
+  <!-- 认证网关层 -->
+  <g id="gateway">
+    <text x="100" y="220" class="subtitle">认证网关层</text>
+    <rect x="50" y="240" width="420" height="60" class="core"/>
+    <text x="260" y="270" class="text" text-anchor="middle" fill="white">OAuth2认证服务 (Spring Security OAuth2)</text>
+  </g>
+  
+  <!-- 核心服务层 -->
+  <g id="services">
+    <text x="100" y="360" class="subtitle">核心服务层</text>
+    
+    <rect x="50" y="380" width="130" height="60" class="core"/>
+    <text x="115" y="405" class="text" text-anchor="middle" fill="white">OAuth2服务</text>
+    <text x="115" y="420" class="text" text-anchor="middle" fill="white" font-size="10">认证处理</text>
+    
+    <rect x="200" y="380" width="130" height="60" class="core"/>
+    <text x="265" y="405" class="text" text-anchor="middle" fill="white">账号绑定服务</text>
+    <text x="265" y="420" class="text" text-anchor="middle" fill="white" font-size="10">Account Binding</text>
+    
+    <rect x="350" y="380" width="130" height="60" class="core"/>
+    <text x="415" y="405" class="text" text-anchor="middle" fill="white">配置管理</text>
+    <text x="415" y="420" class="text" text-anchor="middle" fill="white" font-size="10">Config Management</text>
+  </g>
+  
+  <!-- 第三方平台 -->
+  <g id="third-party">
+    <text x="800" y="80" class="subtitle">第三方平台</text>
+    
+    <rect x="750" y="100" width="100" height="50" class="external"/>
+    <text x="800" y="125" class="text" text-anchor="middle">Google</text>
+    <text x="800" y="140" class="text" text-anchor="middle" font-size="10">OAuth2.0</text>
+    
+    <rect x="870" y="100" width="100" height="50" class="external"/>
+    <text x="920" y="125" class="text" text-anchor="middle">微信</text>
+    <text x="920" y="140" class="text" text-anchor="middle" font-size="10">WeChat</text>
+    
+    <rect x="750" y="170" width="100" height="50" class="external"/>
+    <text x="800" y="195" class="text" text-anchor="middle">钉钉</text>
+    <text x="800" y="210" class="text" text-anchor="middle" font-size="10">DingTalk</text>
+    
+    <rect x="870" y="170" width="100" height="50" class="external"/>
+    <text x="920" y="195" class="text" text-anchor="middle">QQ</text>
+    <text x="920" y="210" class="text" text-anchor="middle" font-size="10">Tencent</text>
+    
+    <rect x="810" y="240" width="120" height="50" class="external"/>
+    <text x="870" y="265" class="text" text-anchor="middle">AD/LDAP</text>
+    <text x="870" y="280" class="text" text-anchor="middle" font-size="10">企业目录</text>
+    
+    <rect x="750" y="310" width="100" height="50" class="external"/>
+    <text x="800" y="335" class="text" text-anchor="middle">GitHub</text>
+    <text x="800" y="350" class="text" text-anchor="middle" font-size="10">Developer</text>
+    
+    <rect x="870" y="310" width="100" height="50" class="external"/>
+    <text x="920" y="335" class="text" text-anchor="middle">支付宝</text>
+    <text x="920" y="350" class="text" text-anchor="middle" font-size="10">Alipay</text>
+  </g>
+  
+  <!-- 数据层 -->
+  <g id="data">
+    <text x="100" y="500" class="subtitle">数据层</text>
+    
+    <rect x="50" y="520" width="120" height="60" class="data"/>
+    <text x="110" y="545" class="text" text-anchor="middle">MySQL数据库</text>
+    <text x="110" y="565" class="text" text-anchor="middle" font-size="10">用户数据</text>
+    
+    <rect x="200" y="520" width="120" height="60" class="data"/>
+    <text x="260" y="545" class="text" text-anchor="middle">Redis缓存</text>
+    <text x="260" y="565" class="text" text-anchor="middle" font-size="10">Token存储</text>
+    
+    <rect x="350" y="520" width="120" height="60" class="data"/>
+    <text x="410" y="545" class="text" text-anchor="middle">配置数据库</text>
+    <text x="410" y="565" class="text" text-anchor="middle" font-size="10">OAuth配置</text>
+  </g>
+  
+  <!-- 连接线 -->
+  <g id="connections">
+    <!-- 前端到网关 -->
+    <line x1="110" y1="160" x2="110" y2="240" stroke="#34495e" stroke-width="2" marker-end="url(#arrowhead)"/>
+    <line x1="260" y1="160" x2="260" y2="240" stroke="#34495e" stroke-width="2" marker-end="url(#arrowhead)"/>
+    <line x1="410" y1="160" x2="410" y2="240" stroke="#34495e" stroke-width="2" marker-end="url(#arrowhead)"/>
+    
+    <!-- 网关到服务 -->
+    <line x1="115" y1="300" x2="115" y2="380" stroke="#34495e" stroke-width="2" marker-end="url(#arrowhead)"/>
+    <line x1="265" y1="300" x2="265" y2="380" stroke="#34495e" stroke-width="2" marker-end="url(#arrowhead)"/>
+    <line x1="415" y1="300" x2="415" y2="380" stroke="#34495e" stroke-width="2" marker-end="url(#arrowhead)"/>
+    
+    <!-- 服务到第三方 -->
+    <line x1="480" y1="410" x2="750" y2="150" stroke="#e74c3c" stroke-width="2" stroke-dasharray="5,5" marker-end="url(#arrowhead)"/>
+    
+    <!-- 服务到数据 -->
+    <line x1="115" y1="440" x2="110" y2="520" stroke="#f39c12" stroke-width="2" marker-end="url(#arrowhead)"/>
+    <line x1="265" y1="440" x2="260" y2="520" stroke="#f39c12" stroke-width="2" marker-end="url(#arrowhead)"/>
+    <line x1="415" y1="440" x2="410" y2="520" stroke="#f39c12" stroke-width="2" marker-end="url(#arrowhead)"/>
+  </g>
+  
+  <!-- 箭头定义 -->
+  <defs>
+    <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#34495e"/>
+    </marker>
+  </defs>
+  
+  <!-- 图例 -->
+  <g id="legend">
+    <text x="50" y="650" class="subtitle">图例说明</text>
+    <rect x="50" y="660" width="20" height="15" class="frontend"/>
+    <text x="80" y="672" class="text">前端应用</text>
+    
+    <rect x="180" y="660" width="20" height="15" class="core"/>
+    <text x="210" y="672" class="text">核心服务</text>
+    
+    <rect x="310" y="660" width="20" height="15" class="external"/>
+    <text x="340" y="672" class="text">第三方平台</text>
+    
+    <rect x="440" y="660" width="20" height="15" class="data"/>
+    <text x="470" y="672" class="text">数据存储</text>
+    
+    <line x1="50" y1="695" x2="120" y2="695" stroke="#34495e" stroke-width="2" marker-end="url(#arrowhead)"/>
+    <text x="130" y="702" class="text">正常流程</text>
+    
+    <line x1="200" y1="695" x2="270" y2="695" stroke="#e74c3c" stroke-width="2" stroke-dasharray="5,5" marker-end="url(#arrowhead)"/>
+    <text x="280" y="702" class="text">第三方集成</text>
+  </g>
+</svg>

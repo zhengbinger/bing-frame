@@ -1,0 +1,161 @@
+<svg width="1400" height="1000" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <style>
+      .title { font-family: Arial, sans-serif; font-size: 20px; font-weight: bold; fill: #2c3e50; }
+      .root { font-family: Arial, sans-serif; font-size: 16px; font-weight: bold; fill: white; }
+      .branch { font-family: Arial, sans-serif; font-size: 14px; font-weight: bold; fill: #2c3e50; }
+      .leaf { font-family: Arial, sans-serif; font-size: 12px; fill: #2c3e50; }
+      .root-node { fill: #e74c3c; stroke: #c0392b; stroke-width: 3px; }
+      .branch-node { fill: #3498db; stroke: #2980b9; stroke-width: 2px; }
+      .leaf-node { fill: #2ecc71; stroke: #27ae60; stroke-width: 1px; }
+      .platform-node { fill: #f39c12; stroke: #e67e22; stroke-width: 2px; }
+    </style>
+    <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#34495e"/>
+    </marker>
+  </defs>
+  
+  <!-- 标题 -->
+  <text x="700" y="30" class="title" text-anchor="middle">第三方账号绑定管理思维导图</text>
+  
+  <!-- 中心节点 -->
+  <ellipse cx="700" cy="500" rx="120" ry="60" class="root-node"/>
+  <text x="700" y="500" class="root" text-anchor="middle">第三方账号绑定管理</text>
+  
+  <!-- 第一级分支 -->
+  <g id="branches">
+    <!-- 账号绑定 -->
+    <line x1="650" y1="460" x2="500" y2="300" stroke="#3498db" stroke-width="3"/>
+    <ellipse cx="480" cy="280" rx="80" ry="30" class="branch-node"/>
+    <text x="480" y="285" class="branch" text-anchor="middle">账号绑定</text>
+    
+    <!-- 平台支持 -->
+    <line x1="750" y1="460" x2="900" y2="300" stroke="#3498db" stroke-width="3"/>
+    <ellipse cx="920" cy="280" rx="80" ry="30" class="branch-node"/>
+    <text x="920" y="285" class="branch" text-anchor="middle">平台支持</text>
+    
+    <!-- 用户管理 -->
+    <line x1="620" y1="540" x2="400" y2="650" stroke="#3498db" stroke-width="3"/>
+    <ellipse cx="380" cy="670" rx="80" ry="30" class="branch-node"/>
+    <text x="380" y="675" class="branch" text-anchor="middle">用户管理</text>
+    
+    <!-- 安全机制 -->
+    <line x1="780" y1="540" x2="1000" y2="650" stroke="#3498db" stroke-width="3"/>
+    <ellipse cx="1020" cy="670" rx="80" ry="30" class="branch-node"/>
+    <text x="1020" y="675" class="branch" text-anchor="middle">安全机制</text>
+    
+    <!-- 数据存储 -->
+    <line x1="700" y1="560" x2="700" y2="750" stroke="#3498db" stroke-width="3"/>
+    <ellipse cx="700" cy="770" rx="80" ry="30" class="branch-node"/>
+    <text x="700" y="775" class="branch" text-anchor="middle">数据存储</text>
+    
+    <!-- 业务逻辑 -->
+    <line x1="580" y1="500" x2="200" y2="500" stroke="#3498db" stroke-width="3"/>
+    <ellipse cx="180" cy="500" rx="80" ry="30" class="branch-node"/>
+    <text x="180" y="505" class="branch" text-anchor="middle">业务逻辑</text>
+  </g>
+  
+  <!-- 第二级节点 -->
+  <g id="leaves">
+    <!-- 账号绑定子节点 -->
+    <line x1="450" y1="280" x2="300" y2="150" stroke="#2ecc71" stroke-width="2"/>
+    <ellipse cx="280" cy="130" rx="60" ry="25" class="leaf-node"/>
+    <text x="280" y="135" class="leaf" text-anchor="middle">自动绑定</text>
+    
+    <line x1="480" y1="280" x2="450" y2="150" stroke="#2ecc71" stroke-width="2"/>
+    <ellipse cx="430" cy="130" rx="60" ry="25" class="leaf-node"/>
+    <text x="430" y="135" class="leaf" text-anchor="middle">手动绑定</text>
+    
+    <line x1="510" y1="280" x2="600" y2="150" stroke="#2ecc71" stroke-width="2"/>
+    <ellipse cx="580" cy="130" rx="60" ry="25" class="leaf-node"/>
+    <text x="580" y="135" class="leaf" text-anchor="middle">绑定解绑</text>
+    
+    <!-- 平台支持子节点 -->
+    <line x1="920" y1="280" x2="800" y2="100" stroke="#f39c12" stroke-width="2"/>
+    <ellipse cx="780" cy="80" rx="50" ry="20" class="platform-node"/>
+    <text x="780" y="85" class="leaf" text-anchor="middle">互联网平台</text>
+    
+    <line x1="920" y1="280" x2="900" y2="100" stroke="#f39c12" stroke-width="2"/>
+    <ellipse cx="880" cy="80" rx="50" ry="20" class="platform-node"/>
+    <text x="880" y="85" class="leaf" text-anchor="middle">企业系统</text>
+    
+    <line x1="920" y1="280" x2="1000" y2="100" stroke="#f39c12" stroke-width="2"/>
+    <ellipse cx="980" cy="80" rx="50" ry="20" class="platform-node"/>
+    <text x="980" y="85" class="leaf" text-anchor="middle">插件扩展</text>
+    
+    <!-- 用户管理子节点 -->
+    <line x1="380" y1="670" x2="200" y2="800" stroke="#2ecc71" stroke-width="2"/>
+    <ellipse cx="180" cy="820" rx="60" ry="25" class="leaf-node"/>
+    <text x="180" y="825" class="leaf" text-anchor="middle">用户注册</text>
+    
+    <line x1="380" y1="670" x2="300" y2="800" stroke="#2ecc71" stroke-width="2"/>
+    <ellipse cx="280" cy="820" rx="60" ry="25" class="leaf-node"/>
+    <text x="280" y="825" class="leaf" text-anchor="middle">用户登录</text>
+    
+    <line x1="380" y1="670" x2="400" y2="800" stroke="#2ecc71" stroke-width="2"/>
+    <ellipse cx="380" cy="820" rx="60" ry="25" class="leaf-node"/>
+    <text x="380" y="825" class="leaf" text-anchor="middle">用户信息</text>
+    
+    <!-- 安全机制子节点 -->
+    <line x1="1020" y1="670" x2="1100" y2="800" stroke="#2ecc71" stroke-width="2"/>
+    <ellipse cx="1080" cy="820" rx="60" ry="25" class="leaf-node"/>
+    <text x="1080" y="825" class="leaf" text-anchor="middle">CSRF防护</text>
+    
+    <line x1="1020" y1="670" x2="1200" y2="800" stroke="#2ecc71" stroke-width="2"/>
+    <ellipse cx="1180" cy="820" rx="60" ry="25" class="leaf-node"/>
+    <text x="1180" y="825" class="leaf" text-anchor="middle">Token验证</text>
+    
+    <line x1="1020" y1="670" x2="900" y2="800" stroke="#2ecc71" stroke-width="2"/>
+    <ellipse cx="880" cy="820" rx="60" ry="25" class="leaf-node"/>
+    <text x="880" y="825" class="leaf" text-anchor="middle">频率限制</text>
+    
+    <!-- 数据存储子节点 -->
+    <line x1="700" y1="770" x2="500" y2="900" stroke="#2ecc71" stroke-width="2"/>
+    <ellipse cx="480" cy="920" rx="60" ry="25" class="leaf-node"/>
+    <text x="480" y="925" class="leaf" text-anchor="middle">MySQL</text>
+    
+    <line x1="700" y1="770" x2="700" y2="900" stroke="#2ecc71" stroke-width="2"/>
+    <ellipse cx="680" cy="920" rx="60" ry="25" class="leaf-node"/>
+    <text x="680" y="925" class="leaf" text-anchor="middle">Redis</text>
+    
+    <line x1="700" y1="770" x2="900" y2="900" stroke="#2ecc71" stroke-width="2"/>
+    <ellipse cx="880" cy="920" rx="60" ry="25" class="leaf-node"/>
+    <text x="880" y="925" class="leaf" text-anchor="middle">配置存储</text>
+    
+    <!-- 业务逻辑子节点 -->
+    <line x1="180" y1="500" x2="100" y2="400" stroke="#2ecc71" stroke-width="2"/>
+    <ellipse cx="80" cy="380" rx="60" ry="25" class="leaf-node"/>
+    <text x="80" y="385" class="leaf" text-anchor="middle">登录流程</text>
+    
+    <line x1="180" y1="500" x2="100" y2="500" stroke="#2ecc71" stroke-width="2"/>
+    <ellipse cx="80" cy="500" rx="60" ry="25" class="leaf-node"/>
+    <text x="80" y="505" class="leaf" text-anchor="middle">权限检查</text>
+    
+    <line x1="180" y1="500" x2="100" y2="600" stroke="#2ecc71" stroke-width="2"/>
+    <ellipse cx="80" cy="620" rx="60" ry="25" class="leaf-node"/>
+    <text x="80" y="625" class="leaf" text-anchor="middle">日志审计</text>
+  </g>
+  
+  <!-- 详细说明文本 -->
+  <g id="details">
+    <!-- 账号绑定详细说明 -->
+    <text x="200" y="100" class="leaf" fill="#e74c3c">• 自动绑定：邮箱匹配自动关联账号</text>
+    <text x="200" y="120" class="leaf" fill="#e74c3c">• 手动绑定：用户主动选择绑定方式</text>
+    <text x="200" y="140" class="leaf" fill="#e74c3c">• 绑定解绑：支持账号解绑和重新绑定</text>
+    
+    <!-- 平台支持详细说明 -->
+    <text x="800" y="50" class="leaf" fill="#f39c12">• 互联网：Google、微信、QQ、GitHub等</text>
+    <text x="800" y="70" class="leaf" fill="#f39c12">• 企业系统：AD/LDAP、SAML、CAS等</text>
+    <text x="800" y="90" class="leaf" fill="#f39c12">• 插件化：支持自定义平台快速接入</text>
+    
+    <!-- 用户管理详细说明 -->
+    <text x="100" y="860" class="leaf" fill="#27ae60">• 自动注册：第三方信息自动创建用户</text>
+    <text x="100" y="880" class="leaf" fill="#27ae60">• 身份验证：多维度验证用户身份</text>
+    <text x="100" y="900" class="leaf" fill="#27ae60">• 信息同步：实时同步第三方用户信息</text>
+    
+    <!-- 安全机制详细说明 -->
+    <text x="1200" y="860" class="leaf" fill="#e67e22">• State参数：防止CSRF攻击</text>
+    <text x="1200" y="880" class="leaf" fill="#e67e22">• 令牌校验：严格验证access_token</text>
+    <text x="1200" y="900" class="leaf" fill="#e67e22">• 访问限制：防刷频率控制</text>
+  </g>
+</svg>
