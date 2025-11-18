@@ -32,16 +32,16 @@ public class DataDict implements Serializable {
     private Long id;
 
     /**
-     * 字典类型编码
+     * 字典编码
      */
-    @ApiModelProperty(value = "字典类型编码", notes = "唯一标识字典类型", required = true, dataType = "String", example = "USER_STATUS")
-    private String dictCode;
+    @ApiModelProperty(value = "字典编码", notes = "唯一标识字典类型", required = true, dataType = "String", example = "USER_STATUS")
+    private String code;
 
     /**
-     * 字典类型名称
+     * 字典名称
      */
-    @ApiModelProperty(value = "字典类型名称", required = true, dataType = "String", example = "用户状态")
-    private String dictName;
+    @ApiModelProperty(value = "字典名称", required = true, dataType = "String", example = "用户状态")
+    private String name;
 
     /**
      * 字典描述

@@ -40,10 +40,10 @@ public class DataDictServiceImpl extends ServiceImpl<DataDictMapper, DataDict> i
     }
 
     @Override
-    @Cacheable(value = "dataDict", key = "#dictCode")
-    public DataDict getDataDictByDictCode(String dictCode) {
-        log.debug("查询字典编码: {}", dictCode);
-        return dataDictMapper.selectByDictCode(dictCode);
+    @Cacheable(value = "dataDict", key = "#code")
+    public DataDict getDataDictByCode(String code) {
+        log.debug("查询字典编码: {}", code);
+        return dataDictMapper.selectByCode(code);
     }
 
     @Override
@@ -60,27 +60,25 @@ public class DataDictServiceImpl extends ServiceImpl<DataDictMapper, DataDict> i
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    @CacheEvict(value = "dataDict", key = "#dataDict.dictCode")
+    @CacheEvict(value = "dataDict", key = "#dataDict.code")
     public boolean saveDataDict(DataDict dataDict) {
-        // 检查字典编码是否已存在
-        if (isDictCodeExists(dataDict.getDictCode(), null)) {
-            log.error("字典编码已存在: {}", dataDict.getDictCode());
-            throw new RuntimeException("字典编码已存在");
+        if (isDictCodeExists(dataDict.getCode(), null)) {
+            log.error("字典编码已存在: {}", dataDict.getCode());
+            throw new BusinessException("字典编码已存在");
         }
-        log.info("新增字典: {}", dataDict.getDictName());
+        log.info("新增字典: {}", dataDict.getName());
         return baseMapper.insert(dataDict) > 0;
     }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    @CacheEvict(value = "dataDict", key = "#dataDict.dictCode")
+    @CacheEvict(value = "dataDict", key = "#dataDict.code")
     public boolean updateDataDict(DataDict dataDict) {
-        // 检查字典编码是否已存在（排除当前ID）
-        if (isDictCodeExists(dataDict.getDictCode(), dataDict.getId())) {
-            log.error("字典编码已存在: {}", dataDict.getDictCode());
-            throw new RuntimeException("字典编码已存在");
+        if (isDictCodeExists(dataDict.getCode(), dataDict.getId())) {
+            log.error("字典编码已存在: {}", dataDict.getCode());
+            throw new BusinessException("字典编码已存在");
         }
-        log.info("更新字典: {}", dataDict.getDictName());
+        log.info("更新字典: {}", dataDict.getName());
         return baseMapper.updateById(dataDict) > 0;
     }
 
@@ -123,8 +121,8 @@ public class DataDictServiceImpl extends ServiceImpl<DataDictMapper, DataDict> i
     }
 
     @Override
-    public boolean isDictCodeExists(String dictCode, Long excludeId) {
-        int count = dataDictMapper.checkDictCodeExists(dictCode, excludeId);
+    private boolean isDictCodeExists(String code, Long excludeId) {
+        int count = dataDictMapper.checkDictCodeExists(code, excludeId);
         return count > 0;
     }
 }

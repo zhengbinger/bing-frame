@@ -18,10 +18,10 @@ public interface DataDictMapper extends BaseMapper<DataDict> {
 
     /**
      * 根据字典编码查询字典
-     * @param dictCode 字典编码
+     * @param code 字典编码
      * @return 字典对象
      */
-    DataDict selectByDictCode(String dictCode);
+    DataDict selectByCode(String code);
 
     /**
      * 查询启用的字典列表

@@ -71,10 +71,9 @@ public class DataDictItemController {
     @ApiOperation(value = "根据字典编码查询字典项列表", notes = "获取指定字典编码下的所有字典项")
     @ApiResponse(code = 200, message = "查询成功")
     @GetMapping("/list-by-code/{dictCode}")
-    public ResponseEntity<List<DataDictItem>> getDataDictItemsByDictCode(
-            @ApiParam(name = "dictCode", value = "字典编码", required = true) @PathVariable String dictCode) {
-        log.debug("根据字典编码查询字典项列表: {}", dictCode);
-        List<DataDictItem> items = dataDictItemService.getDataDictItemsByDictCode(dictCode);
+    public ResponseEntity<List<DataDictItem>> getDataDictItemsByCode(
+            @ApiParam(name = "code", value = "字典编码", required = true) @PathVariable String code) {
+        List<DataDictItem> items = dataDictItemService.getDataDictItemsByCode(code);
         return ResponseEntity.ok(items);
     }
 
@@ -84,10 +83,9 @@ public class DataDictItemController {
     @ApiOperation(value = "根据字典编码查询启用的字典项列表", notes = "获取指定字典编码下的所有启用状态的字典项")
     @ApiResponse(code = 200, message = "查询成功")
     @GetMapping("/list-enabled-by-code/{dictCode}")
-    public ResponseEntity<List<DataDictItem>> getEnabledDataDictItemsByDictCode(
-            @ApiParam(name = "dictCode", value = "字典编码", required = true) @PathVariable String dictCode) {
-        log.debug("根据字典编码查询启用的字典项列表: {}", dictCode);
-        List<DataDictItem> items = dataDictItemService.getEnabledDataDictItemsByDictCode(dictCode);
+    public ResponseEntity<List<DataDictItem>> getEnabledDataDictItemsByCode(
+            @ApiParam(name = "code", value = "字典编码", required = true) @PathVariable String code) {
+        List<DataDictItem> items = dataDictItemService.getEnabledDataDictItemsByCode(code);
         return ResponseEntity.ok(items);
     }
 
@@ -102,7 +100,7 @@ public class DataDictItemController {
     @PostMapping
     public ResponseEntity<Boolean> saveDataDictItem(
             @ApiParam(name = "dataDictItem", value = "字典项对象", required = true) @RequestBody DataDictItem dataDictItem) {
-        log.debug("新增字典项: {}", dataDictItem.getItemText());
+        log.debug("新增字典项: {}", dataDictItem.getLabel());
         try {
             boolean result = dataDictItemService.saveDataDictItem(dataDictItem);
             return ResponseEntity.ok(result);
@@ -124,7 +122,7 @@ public class DataDictItemController {
     @PutMapping
     public ResponseEntity<Boolean> updateDataDictItem(
             @ApiParam(name = "dataDictItem", value = "字典项对象", required = true) @RequestBody DataDictItem dataDictItem) {
-        log.debug("更新字典项: {}", dataDictItem.getItemText());
+        log.debug("更新字典项: {}", dataDictItem.getLabel());
         try {
             boolean result = dataDictItemService.updateDataDictItem(dataDictItem);
             if (!result) {

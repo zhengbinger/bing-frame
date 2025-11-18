@@ -16,6 +16,7 @@ INSERT INTO `sys_white_list` (`pattern`, `type`, `description`, `enabled`) VALUE
 ('/api/auth/login', 'URL', '用户登录接口', 1),
 ('/api/auth/register', 'URL', '用户注册接口', 1),
 ('/api/auth/logout', 'URL', '用户注销接口', 1),
+('/api/captcha/**', 'URL', '验证码管理接口，包括生成和刷新验证码', 1),
 ('/api/white-list/**', 'URL', '白名单管理接口', 1),
 ('/api/data-dict/**', 'URL', '数据字典管理接口', 1),
 ('/api/data-dict-item/**', 'URL', '数据字典项管理接口', 1),

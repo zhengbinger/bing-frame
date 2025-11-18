@@ -2,6 +2,7 @@ package com.bing.framework.strategy.impl;
 
 import com.bing.framework.common.ErrorCode;
 import com.bing.framework.config.CaptchaConfig;
+import com.bing.framework.context.RequestContext;
 import com.bing.framework.dto.CaptchaResult;
 import com.bing.framework.exception.BusinessException;
 import com.bing.framework.strategy.CaptchaStrategy;
@@ -36,10 +37,23 @@ public class SmsCaptchaStrategy implements CaptchaStrategy {
 
     @Override
     public CaptchaResult generateCaptcha(String key) {
-        // 检查发送频率限制
-        String intervalKey = "sms:interval:" + key;
-        if (redisUtil.hasKey(intervalKey)) {
-            throw new BusinessException(ErrorCode.CAPTCHA_FREQUENCY_LIMIT, "短信验证码发送过于频繁");
+        // 获取客户端IP地址作为刷频限制的标识
+        String clientIp = RequestContext.getClientIp();
+        if (clientIp == null) {
+            clientIp = "unknown";
+        }
+        
+        // 检查发送频率限制（基于IP限制）
+        String ipIntervalKey = "sms:ip:interval:" + clientIp;
+        if (redisUtil.hasKey(ipIntervalKey)) {
+            throw new BusinessException(ErrorCode.CAPTCHA_FREQUENCY_LIMIT, "发送过于频繁，请稍后再试");
+        }
+        
+        // 检查每日发送限制（基于IP限制）
+        String dailyKey = "sms:ip:daily:" + clientIp;
+        Integer dailyCount = (Integer) redisUtil.get(dailyKey);
+        if (dailyCount != null && dailyCount >= 10) { // 每天最多10次
+            throw new BusinessException(ErrorCode.CAPTCHA_FREQUENCY_LIMIT, "今日发送次数已达上限");
         }
         
         // 生成随机数字验证码
@@ -48,14 +62,21 @@ public class SmsCaptchaStrategy implements CaptchaStrategy {
         // 将验证码保存到Redis
         redisUtil.set("captcha:" + key, captchaCode, captchaConfig.getExpireMinutes(), TimeUnit.MINUTES);
         
-        // 设置发送间隔限制
-        redisUtil.set(intervalKey, "1", captchaConfig.getSms().getSendIntervalSeconds(), TimeUnit.SECONDS);
+        // 设置发送间隔限制（基于IP）
+        redisUtil.set(ipIntervalKey, "1", captchaConfig.getSms().getSendIntervalSeconds(), TimeUnit.SECONDS);
+        
+        // 增加每日发送计数
+        if (dailyCount == null) {
+            redisUtil.set(dailyKey, 1, 24, TimeUnit.HOURS);
+        } else {
+            redisUtil.set(dailyKey, dailyCount + 1, 24, TimeUnit.HOURS);
+        }
         
         // 实际使用时，这里需要集成短信发送服务
         // sendSms(key, captchaCode);
         // 建议集成阿里云短信、腾讯云短信或华为云短信服务
-        log.info("短信验证码生成完成，手机号后4位: {}, 验证码: {}", 
-                key.substring(key.length() - 4), captchaCode);
+        log.info("短信验证码生成完成，手机号后4位: {}, 客户端IP: {}, 验证码: {}", 
+                key.substring(key.length() - 4), clientIp, captchaCode);
         
         // 创建结果对象
         CaptchaResult result = new CaptchaResult();

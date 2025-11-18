@@ -38,22 +38,16 @@ public class DataDictItem implements Serializable {
     private Long dictId;
 
     /**
-     * 字典类型编码
+     * 显示文本
      */
-    @ApiModelProperty(value = "字典类型编码", notes = "冗余字段，便于查询", dataType = "String", example = "USER_STATUS")
-    private String dictCode;
+    @ApiModelProperty(value = "显示文本", notes = "显示的文本内容", required = true, dataType = "String", example = "启用")
+    private String label;
 
     /**
      * 字典项值
      */
     @ApiModelProperty(value = "字典项值", notes = "实际存储的值", required = true, dataType = "String", example = "1")
-    private String itemValue;
-
-    /**
-     * 字典项文本
-     */
-    @ApiModelProperty(value = "字典项文本", notes = "显示的文本内容", required = true, dataType = "String", example = "启用")
-    private String itemText;
+    private String value;
 
     /**
      * 字典项描述
@@ -72,12 +66,6 @@ public class DataDictItem implements Serializable {
      */
     @ApiModelProperty(value = "排序号", dataType = "Integer", example = "1")
     private Integer sort;
-
-    /**
-     * 扩展信息（JSON格式）
-     */
-    @ApiModelProperty(value = "扩展信息", notes = "JSON格式存储的额外配置", dataType = "String")
-    private String extendInfo;
 
     /**
      * 创建时间

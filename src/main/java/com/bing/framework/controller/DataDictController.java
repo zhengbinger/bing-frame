@@ -61,11 +61,11 @@ public class DataDictController {
         @ApiResponse(code = 200, message = "查询成功"),
         @ApiResponse(code = 404, message = "字典不存在")
     })
-    @GetMapping("/code/{dictCode}")
-    public ResponseEntity<DataDict> getDataDictByDictCode(
-            @ApiParam(name = "dictCode", value = "字典编码", required = true) @PathVariable String dictCode) {
-        log.debug("根据字典编码查询字典: {}", dictCode);
-        DataDict dataDict = dataDictService.getDataDictByDictCode(dictCode);
+    @GetMapping("/code/{code}")
+    public ResponseEntity<DataDict> getDataDictByCode(
+            @ApiParam(name = "code", value = "字典编码", required = true) @PathVariable String code) {
+        log.debug("根据字典编码查询字典: {}", code);
+        DataDict dataDict = dataDictService.getDataDictByCode(code);
         if (dataDict == null) {
             return ResponseEntity.notFound().build();
         }
@@ -107,7 +107,7 @@ public class DataDictController {
     @PostMapping
     public ResponseEntity<Boolean> saveDataDict(
             @ApiParam(name = "dataDict", value = "字典对象", required = true) @RequestBody DataDict dataDict) {
-        log.debug("新增字典: {}", dataDict.getDictName());
+        log.debug("新增字典: {}", dataDict.getName());
         try {
             boolean result = dataDictService.saveDataDict(dataDict);
             return ResponseEntity.ok(result);
@@ -129,7 +129,7 @@ public class DataDictController {
     @PutMapping
     public ResponseEntity<Boolean> updateDataDict(
             @ApiParam(name = "dataDict", value = "字典对象", required = true) @RequestBody DataDict dataDict) {
-        log.debug("更新字典: {}", dataDict.getDictName());
+        log.debug("更新字典: {}", dataDict.getName());
         try {
             boolean result = dataDictService.updateDataDict(dataDict);
             if (!result) {

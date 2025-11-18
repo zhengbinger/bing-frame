@@ -1,6 +1,5 @@
 package com.bing.framework.common;
 
-import com.bing.framework.common.ErrorCode;
 import lombok.Data;
 import java.io.Serializable;
 

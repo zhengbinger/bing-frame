@@ -23,10 +23,10 @@ public interface DataDictService extends IService<DataDict> {
 
     /**
      * 根据字典编码查询字典
-     * @param dictCode 字典编码
+     * @param code 字典编码
      * @return 字典对象
      */
-    DataDict getDataDictByDictCode(String dictCode);
+    DataDict getDataDictByCode(String code);
 
     /**
      * 查询所有字典

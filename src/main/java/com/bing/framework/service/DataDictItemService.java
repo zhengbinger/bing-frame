@@ -30,25 +30,25 @@ public interface DataDictItemService extends IService<DataDictItem> {
 
     /**
      * 根据字典编码查询字典项列表
-     * @param dictCode 字典编码
+     * @param code 字典编码
      * @return 字典项列表
      */
-    List<DataDictItem> getDataDictItemsByDictCode(String dictCode);
+    List<DataDictItem> getDataDictItemsByCode(String code);
 
     /**
      * 根据字典编码查询启用的字典项列表
-     * @param dictCode 字典编码
+     * @param code 字典编码
      * @return 启用的字典项列表
      */
-    List<DataDictItem> getEnabledDataDictItemsByDictCode(String dictCode);
+    List<DataDictItem> getEnabledDataDictItemsByCode(String code);
 
     /**
-     * 根据字典ID和项值查询字典项
-     * @param dictId 字典ID
-     * @param itemValue 项值
+     * 根据字典编码和项值查询字典项
+     * @param code 字典编码
+     * @param value 项值
      * @return 字典项对象
      */
-    DataDictItem getDataDictItemByDictIdAndItemValue(Long dictId, String itemValue);
+    DataDictItem getDataDictItemByCodeAndValue(String code, String value);
 
     /**
      * 根据字典编码和项值查询字典项

@@ -25,33 +25,25 @@ public interface DataDictItemMapper extends BaseMapper<DataDictItem> {
 
     /**
      * 根据字典编码查询字典项列表
-     * @param dictCode 字典编码
+     * @param code 字典编码
      * @return 字典项列表
      */
-    List<DataDictItem> selectByDictCode(String dictCode);
+    List<DataDictItem> selectByCode(String code);
 
     /**
      * 根据字典编码查询启用的字典项列表
-     * @param dictCode 字典编码
+     * @param code 字典编码
      * @return 启用的字典项列表
      */
-    List<DataDictItem> selectEnabledItemsByDictCode(String dictCode);
-
-    /**
-     * 根据字典ID和项值查询字典项
-     * @param dictId 字典ID
-     * @param itemValue 项值
-     * @return 字典项对象
-     */
-    DataDictItem selectByDictIdAndItemValue(Long dictId, String itemValue);
+    List<DataDictItem> selectEnabledItemsByCode(String code);
 
     /**
      * 根据字典编码和项值查询字典项
-     * @param dictCode 字典编码
-     * @param itemValue 项值
+     * @param code 字典编码
+     * @param value 项值
      * @return 字典项对象
      */
-    DataDictItem selectByDictCodeAndItemValue(String dictCode, String itemValue);
+    DataDictItem selectByCodeAndValue(String code, String value);
 
     /**
      * 批量删除字典项
