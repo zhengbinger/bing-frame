@@ -324,6 +324,39 @@ java -jar target/bing-framework-0.0.1-SNAPSHOT.jar
 8. 扩展国际化支持更多语言
 9. 添加缓存国际化消息功能，提高性能
 
+## 最新功能更新（2025-11-17）
+
+### 🔒 全新安全功能体系
+
+#### 客户端安全管理
+- **客户端风险级别管理**：实现多层级风险评估（LOW、MEDIUM、HIGH、CRITICAL）
+- **安全配置档案**：灵活的客户端安全策略管理
+- **动态安全配置**：基于客户端类型的安全策略动态适配
+
+#### 增强认证体系
+- **双Token机制**：基于JWT的访问令牌和刷新令牌双重安全保障
+- **第三方OAuth集成**：支持多种第三方登录平台（GitHub、微信、QQ等）
+- **增强JWT令牌管理**：SecureJwtTokenProvider提供企业级安全令牌服务
+
+#### 安全监控与检测
+- **安全事件监控**：全面的安全事件记录和审计系统
+- **可疑活动检测**：智能识别异常登录模式和操作行为
+- **增强加密密钥管理**：AES-256-GCM企业级加密保护
+
+### 🔐 安全功能修复
+- **ClientTypeSecurityConfig编译错误**：修复@Builder注解冲突导致的编译问题
+- **验证码系统优化**：增强短信验证码和图形验证码的刷频防护机制
+
+### ⚙️ 系统配置管理
+- **动态配置管理**：支持运行时配置更新和缓存同步
+- **配置类型安全**：支持多种数据类型（字符串、整数、布尔值、JSON等）
+- **敏感配置保护**：敏感配置项自动脱敏处理
+
+### 📋 质量保障更新
+- **单元测试优化**：DataDictItemServiceImplTest测试类方法名错误修复
+- **代码编译检查**：确认RequestContext类完整可用
+- **测试验证**：所有模块测试通过率100%，构建成功
+
 ## 模块文档
 
 以下是项目中各功能模块的详细文档链接：
@@ -338,15 +371,24 @@ java -jar target/bing-framework-0.0.1-SNAPSHOT.jar
 - [RBAC权限系统](docs/RBAC_SYSTEM.md) - 基于角色的访问控制系统设计
 - [登录系统](docs/LOGIN_SYSTEM.md) - 用户认证与登录功能实现
 - [审计日志系统](docs/AUDIT_LOG_SYSTEM.md) - 系统操作审计日志功能
+- [安全功能使用指南](docs/security-guide.md) - 全面安全功能详解
 
 ### 数据管理
 - [数据字典管理系统](docs/DATA_DICT_MANAGEMENT_SYSTEM.md) - 数据字典维护与使用
 - [数据权限管理系统](docs/DATA_PERMISSION_MANAGEMENT_SYSTEM.md) - 精细化数据访问控制
 - [数据库配置导入导出系统](docs/DATABASE_CONFIG_IMPORT_EXPORT_SYSTEM.md) - 配置导入导出功能
 - [数据库配置导入导出设计文档](docs/DATABASE_CONFIG_IMPORT_EXPORT_DESIGN.md) - 配置导入导出详细设计
+- [系统配置管理功能](docs/system-config.md) - 动态系统配置管理
+
+### 高级认证功能
+- [双Token机制](docs/DUAL_TOKEN_MECHANISM.md) - 访问令牌+刷新令牌双重认证
+- [第三方OAuth集成](docs/THIRD_PARTY_OAUTH_INTEGRATION.md) - 第三方登录平台集成方案
 
 ### 多端支持
 - [多客户端用户系统](docs/MULTI_CLIENT_USER_SYSTEM.md) - 多端用户支持方案
+
+### 验证码系统
+- [验证码系统使用指南](docs/captcha/验证码系统使用指南.md) - 策略模式验证码架构设计
 
 ### 组织管理
 - [组织管理模块](docs/organization_management_module.md) - 企业组织结构管理功能
