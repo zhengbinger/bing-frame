@@ -1,11 +1,8 @@
 package com.bing.framework.security.integration;
 
-import com.bing.framework.config.BingProperties;
-import com.bing.framework.exception.BusinessException;
 import com.bing.framework.interceptor.EnhancedSecurityInterceptor;
 import com.bing.framework.security.*;
 import com.bing.framework.service.WhiteListService;
-import com.bing.framework.util.IpUtil;
 import com.bing.framework.util.RequestContextUtil;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -20,8 +17,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.HashSet;

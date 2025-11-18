@@ -2,7 +2,6 @@ package com.bing.framework.service.impl;
 
 import com.bing.framework.entity.Organization;
 import com.bing.framework.mapper.OrganizationMapper;
-import com.bing.framework.service.OrganizationService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;

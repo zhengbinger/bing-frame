@@ -3,7 +3,6 @@ package com.bing.framework.service;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.bing.framework.entity.WhiteList;
 
-import java.util.List;
 import java.util.Set;
 
 /**

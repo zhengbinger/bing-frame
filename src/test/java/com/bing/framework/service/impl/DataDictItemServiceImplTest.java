@@ -40,9 +40,9 @@ public class DataDictItemServiceImplTest {
         testDataDictItem = new DataDictItem();
         testDataDictItem.setId(1L);
         testDataDictItem.setDictId(1L);
-        testDataDictItem.setDictCode("GENDER");
-        testDataDictItem.setItemValue("1");
-        testDataDictItem.setItemText("男");
+        testDataDictItem.setDictId(1L);
+        testDataDictItem.setValue("1");
+        testDataDictItem.setLabel("男");
         testDataDictItem.setDescription("男性");
         testDataDictItem.setSort(1);
         testDataDictItem.setStatus(1);
@@ -58,7 +58,7 @@ public class DataDictItemServiceImplTest {
 
         // 验证结果
         Assertions.assertNotNull(result);
-        Assertions.assertEquals("1", result.getItemValue());
+        Assertions.assertEquals("1", result.getValue());
         verify(dataDictItemMapper, times(1)).selectById(1L);
     }
 
@@ -81,58 +81,44 @@ public class DataDictItemServiceImplTest {
     public void testGetDataDictItemsByDictCode() {
         // 模拟Mapper行为
         List<DataDictItem> itemList = Collections.singletonList(testDataDictItem);
-        when(dataDictItemMapper.selectByDictCode("GENDER")).thenReturn(itemList);
+        when(dataDictItemMapper.selectByCode("GENDER")).thenReturn(itemList);
 
         // 执行测试
-        List<DataDictItem> result = dataDictItemService.getDataDictItemsByDictCode("GENDER");
+        List<DataDictItem> result = dataDictItemService.getDataDictItemsByCode("GENDER");
 
         // 验证结果
         Assertions.assertNotNull(result);
         Assertions.assertEquals(1, result.size());
-        verify(dataDictItemMapper, times(1)).selectByDictCode("GENDER");
+        verify(dataDictItemMapper, times(1)).selectByCode("GENDER");
     }
 
     @Test
     public void testGetEnabledDataDictItemsByDictCode() {
         // 模拟Mapper行为
         List<DataDictItem> itemList = Collections.singletonList(testDataDictItem);
-        when(dataDictItemMapper.selectEnabledItemsByDictCode("GENDER")).thenReturn(itemList);
+        when(dataDictItemMapper.selectEnabledItemsByCode("GENDER")).thenReturn(itemList);
 
         // 执行测试
-        List<DataDictItem> result = dataDictItemService.getEnabledDataDictItemsByDictCode("GENDER");
+        List<DataDictItem> result = dataDictItemService.getEnabledDataDictItemsByCode("GENDER");
 
         // 验证结果
         Assertions.assertNotNull(result);
         Assertions.assertEquals(1, result.size());
-        verify(dataDictItemMapper, times(1)).selectEnabledItemsByDictCode("GENDER");
-    }
-
-    @Test
-    public void testGetDataDictItemByDictIdAndItemValue() {
-        // 模拟Mapper行为
-        when(dataDictItemMapper.selectByDictIdAndItemValue(1L, "1")).thenReturn(testDataDictItem);
-
-        // 执行测试
-        DataDictItem result = dataDictItemService.getDataDictItemByDictIdAndItemValue(1L, "1");
-
-        // 验证结果
-        Assertions.assertNotNull(result);
-        Assertions.assertEquals("男", result.getItemText());
-        verify(dataDictItemMapper, times(1)).selectByDictIdAndItemValue(1L, "1");
+        verify(dataDictItemMapper, times(1)).selectEnabledItemsByCode("GENDER");
     }
 
     @Test
     public void testGetDataDictItemByDictCodeAndItemValue() {
         // 模拟Mapper行为
-        when(dataDictItemMapper.selectByDictCodeAndItemValue("GENDER", "1")).thenReturn(testDataDictItem);
+        when(dataDictItemMapper.selectByCodeAndValue("GENDER", "1")).thenReturn(testDataDictItem);
 
         // 执行测试
         DataDictItem result = dataDictItemService.getDataDictItemByDictCodeAndItemValue("GENDER", "1");
 
         // 验证结果
         Assertions.assertNotNull(result);
-        Assertions.assertEquals("男", result.getItemText());
-        verify(dataDictItemMapper, times(1)).selectByDictCodeAndItemValue("GENDER", "1");
+        Assertions.assertEquals("男", result.getLabel());
+        verify(dataDictItemMapper, times(1)).selectByCodeAndValue("GENDER", "1");
     }
 
     @Test

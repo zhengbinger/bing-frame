@@ -2,12 +2,9 @@ package com.bing.framework.interceptor;
 
 import com.bing.framework.common.ErrorCode;
 import com.bing.framework.exception.BusinessException;
-import com.bing.framework.security.SecurityEvent;
-import com.bing.framework.security.SuspiciousActivity;
 import com.bing.framework.security.SecureTokenValidationResult;
 import com.bing.framework.security.SecureJwtTokenProvider;
 import com.bing.framework.service.WhiteListService;
-import com.bing.framework.util.IpUtil;
 import com.bing.framework.util.RequestContextUtil;
 import io.jsonwebtoken.Claims;
 import org.junit.jupiter.api.BeforeEach;
@@ -19,10 +16,6 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.time.LocalDateTime;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;

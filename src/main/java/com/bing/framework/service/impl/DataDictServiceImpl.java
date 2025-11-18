@@ -1,8 +1,9 @@
 package com.bing.framework.service.impl;
 
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.bing.framework.common.ErrorCode;
 import com.bing.framework.entity.DataDict;
+import com.bing.framework.exception.BusinessException;
 import com.bing.framework.mapper.DataDictMapper;
 import com.bing.framework.service.DataDictItemService;
 import com.bing.framework.service.DataDictService;
@@ -64,7 +65,7 @@ public class DataDictServiceImpl extends ServiceImpl<DataDictMapper, DataDict> i
     public boolean saveDataDict(DataDict dataDict) {
         if (isDictCodeExists(dataDict.getCode(), null)) {
             log.error("字典编码已存在: {}", dataDict.getCode());
-            throw new BusinessException("字典编码已存在");
+            throw new BusinessException(ErrorCode.BUSINESS_ERROR, "字典编码已存在");
         }
         log.info("新增字典: {}", dataDict.getName());
         return baseMapper.insert(dataDict) > 0;
@@ -76,7 +77,7 @@ public class DataDictServiceImpl extends ServiceImpl<DataDictMapper, DataDict> i
     public boolean updateDataDict(DataDict dataDict) {
         if (isDictCodeExists(dataDict.getCode(), dataDict.getId())) {
             log.error("字典编码已存在: {}", dataDict.getCode());
-            throw new BusinessException("字典编码已存在");
+            throw new BusinessException(ErrorCode.BUSINESS_ERROR, "字典编码已存在");
         }
         log.info("更新字典: {}", dataDict.getName());
         return baseMapper.updateById(dataDict) > 0;
@@ -89,11 +90,11 @@ public class DataDictServiceImpl extends ServiceImpl<DataDictMapper, DataDict> i
         DataDict dataDict = getDataDictById(id);
         if (dataDict == null) {
             log.error("字典不存在: {}", id);
-            throw new RuntimeException("字典不存在");
+            throw new BusinessException(ErrorCode.BUSINESS_ERROR, "字典不存在");
         }
         // 先删除关联的字典项
         dataDictItemService.deleteDataDictItemsByDictId(id);
-        log.info("删除字典: {}", dataDict.getDictName());
+        log.info("删除字典: {}", dataDict.getName());
         return baseMapper.deleteById(id) > 0;
     }
 
@@ -121,7 +122,7 @@ public class DataDictServiceImpl extends ServiceImpl<DataDictMapper, DataDict> i
     }
 
     @Override
-    private boolean isDictCodeExists(String code, Long excludeId) {
+    public boolean isDictCodeExists(String code, Long excludeId) {
         int count = dataDictMapper.checkDictCodeExists(code, excludeId);
         return count > 0;
     }

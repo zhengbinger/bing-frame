@@ -1,7 +1,5 @@
 package com.bing.framework.config;
 
-import java.util.Arrays;
-import java.util.HashMap;
 import java.util.Map;
 
 import lombok.Data;

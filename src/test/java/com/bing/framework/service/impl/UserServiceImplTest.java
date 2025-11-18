@@ -1,7 +1,6 @@
 package com.bing.framework.service.impl;
 
 import com.bing.framework.common.ErrorCode;
-import com.bing.framework.common.Result;
 import com.bing.framework.entity.User;
 import com.bing.framework.exception.BusinessException;
 import com.bing.framework.mapper.UserMapper;
@@ -15,7 +14,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import static org.mockito.Mockito.*;

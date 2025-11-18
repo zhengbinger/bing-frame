@@ -43,8 +43,8 @@ public class DataDictServiceImplTest {
         MockitoAnnotations.openMocks(this);
         testDataDict = new DataDict();
         testDataDict.setId(1L);
-        testDataDict.setDictCode("GENDER");
-        testDataDict.setDictName("性别");
+        testDataDict.setCode("GENDER");
+        testDataDict.setName("性别");
         testDataDict.setDescription("用户性别字典");
         testDataDict.setStatus(1);
     }
@@ -59,22 +59,22 @@ public class DataDictServiceImplTest {
 
         // 验证结果
         Assertions.assertNotNull(result);
-        Assertions.assertEquals("GENDER", result.getDictCode());
+        Assertions.assertEquals("GENDER", result.getCode());
         verify(dataDictMapper, times(1)).selectById(1L);
     }
 
     @Test
     public void testGetDataDictByDictCode_Success() {
         // 模拟Mapper行为
-        when(dataDictMapper.selectByDictCode("GENDER")).thenReturn(testDataDict);
+        when(dataDictMapper.selectByCode("GENDER")).thenReturn(testDataDict);
 
         // 执行测试
-        DataDict result = dataDictService.getDataDictByDictCode("GENDER");
+        DataDict result = dataDictService.getDataDictByCode("GENDER");
 
         // 验证结果
         Assertions.assertNotNull(result);
-        Assertions.assertEquals("性别", result.getDictName());
-        verify(dataDictMapper, times(1)).selectByDictCode("GENDER");
+        Assertions.assertEquals("性别", result.getName());
+        verify(dataDictMapper, times(1)).selectByCode("GENDER");
     }
 
     @Test

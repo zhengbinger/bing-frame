@@ -2,7 +2,6 @@ package com.bing.framework.service.impl;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.bing.framework.dto.RoleDTO;
-import com.bing.framework.entity.Permission;
 import com.bing.framework.entity.Role;
 import com.bing.framework.entity.RolePermission;
 import com.bing.framework.entity.UserRole;

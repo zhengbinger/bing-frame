@@ -10,8 +10,6 @@ import org.springframework.web.bind.annotation.*;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
-
 import com.bing.framework.common.ErrorCode;
 import com.bing.framework.common.Result;
 import com.bing.framework.entity.Organization;

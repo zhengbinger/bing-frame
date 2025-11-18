@@ -9,7 +9,6 @@ import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -77,9 +76,6 @@ public class AuthController {
 
     @Autowired
     private JwtUtil jwtUtil;
-    
-    @Autowired
-    private RedisTemplate<String, Object> redisTemplate;
     
     @Autowired
     private RedisUtil redisUtil;

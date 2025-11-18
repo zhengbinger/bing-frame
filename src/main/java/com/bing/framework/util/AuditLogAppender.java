@@ -12,7 +12,6 @@ import org.springframework.context.ApplicationContextAware;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.concurrent.Executor;
 
@@ -32,7 +31,6 @@ public class AuditLogAppender extends AppenderBase<ILoggingEvent> implements App
     // 静态的ApplicationContext引用
     private static ApplicationContext applicationContext;
     private static Executor auditLogExecutor;
-    private static final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
     
     /**
      * 静态方法，用于直接设置ApplicationContext
