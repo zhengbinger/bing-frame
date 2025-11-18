@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="900" height="600" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <style>
+      .title { font-family: Arial, sans-serif; font-size: 18px; font-weight: bold; fill: #2c3e50; }
+      .subtitle { font-family: Arial, sans-serif; font-size: 12px; fill: #34495e; }
+      .text { font-family: Arial, sans-serif; font-size: 10px; fill: #2c3e50; }
+      .layer { stroke: #34495e; stroke-width: 2; }
+      .frontend { fill: #3498db; }
+      .gateway { fill: #9b59b6; }
+      .service { fill: #2ecc71; }
+      .business { fill: #f39c12; }
+      .data { fill: #e74c3c; }
+      .cache { fill: #1abc9c; }
+      .database { fill: #8e44ad; }
+    </style>
+  </defs>
+
+  <!-- 标题 -->
+  <text x="450" y="25" class="title" text-anchor="middle">系统通知推送系统架构图</text>
+  
+  <!-- 前端层 -->
+  <rect x="50" y="50" width="150" height="80" class="layer frontend" rx="5"/>
+  <text x="125" y="80" class="subtitle" text-anchor="middle" fill="white">Web前端</text>
+  <text x="125" y="100" class="text" text-anchor="middle" fill="white">React/Vue.js</text>
+  
+  <rect x="230" y="50" width="150" height="80" class="layer frontend" rx="5"/>
+  <text x="305" y="80" class="subtitle" text-anchor="middle" fill="white">移动端APP</text>
+  <text x="305" y="100" class="text" text-anchor="middle" fill="white">iOS/Android</text>
+  
+  <rect x="410" y="50" width="150" height="80" class="layer frontend" rx="5"/>
+  <text x="485" y="80" class="subtitle" text-anchor="middle" fill="white">管理后台</text>
+  <text x="485" y="100" class="text" text-anchor="middle" fill="white">Admin System</text>
+
+  <!-- 连接线 -->
+  <line x1="125" y1="130" x2="125" y2="150" stroke="#34495e" stroke-width="2"/>
+  <line x1="305" y1="130" x2="305" y2="150" stroke="#34495e" stroke-width="2"/>
+  <line x1="485" y1="130" x2="485" y2="150" stroke="#34495e" stroke-width="2"/>
+
+  <!-- API网关 -->
+  <rect x="100" y="150" width="400" height="60" class="layer gateway" rx="5"/>
+  <text x="300" y="175" class="subtitle" text-anchor="middle" fill="white">API Gateway</text>
+  <text x="300" y="190" class="text" text-anchor="middle" fill="white">Spring Cloud Gateway - 统一入口 | 路由转发 | 负载均衡</text>
+
+  <!-- 连接线 -->
+  <line x1="250" y1="210" x2="250" y2="240" stroke="#34495e" stroke-width="2"/>
+  <line x1="350" y1="210" x2="350" y2="240" stroke="#34495e" stroke-width="2"/>
+
+  <!-- 服务层 -->
+  <rect x="50" y="240" width="200" height="80" class="layer service" rx="5"/>
+  <text x="150" y="265" class="subtitle" text-anchor="middle">通知服务层</text>
+  <text x="150" y="285" class="text" text-anchor="middle">Notification Service</text>
+  <text x="150" y="300" class="text" text-anchor="middle">• 通知管理 • 推送调度</text>
+
+  <rect x="280" y="240" width="200" height="80" class="layer service" rx="5"/>
+  <text x="380" y="265" class="subtitle" text-anchor="middle">消息服务层</text>
+  <text x="380" y="285" class="text" text-anchor="middle">Message Service</text>
+  <text x="380" y="300" class="text" text-anchor="middle">• 消息处理 • 状态管理</text>
+
+  <rect x="510" y="240" width="200" height="80" class="layer service" rx="5"/>
+  <text x="610" y="265" class="subtitle" text-anchor="middle">模板服务层</text>
+  <text x="610" y="285" class="text" text-anchor="middle">Template Service</text>
+  <text x="610" y="300" class="text" text-anchor="middle">• 模板管理 • 内容渲染</text>
+
+  <!-- 连接线 -->
+  <line x1="150" y1="320" x2="150" y2="340" stroke="#34495e" stroke-width="2"/>
+  <line x1="380" y1="320" x2="380" y2="340" stroke="#34495e" stroke-width="2"/>
+  <line x1="610" y1="320" x2="610" y2="340" stroke="#34495e" stroke-width="2"/>
+
+  <!-- 业务逻辑层 -->
+  <rect x="100" y="340" width="450" height="70" class="layer business" rx="5"/>
+  <text x="325" y="365" class="subtitle" text-anchor="middle">业务逻辑层</text>
+  <text x="325" y="385" class="text" text-anchor="middle">通知处理器 • 消息推送器 • 通知推送器 • WebSocket实时通信</text>
+
+  <!-- 连接线 -->
+  <line x1="200" y1="410" x2="200" y2="440" stroke="#34495e" stroke-width="2"/>
+  <line x1="325" y1="410" x2="325" y2="440" stroke="#34495e" stroke-width="2"/>
+  <line x1="450" y1="410" x2="450" y2="440" stroke="#34495e" stroke-width="2"/>
+
+  <!-- 数据层 -->
+  <rect x="50" y="440" width="150" height="80" class="layer data" rx="5"/>
+  <text x="125" y="465" class="subtitle" text-anchor="middle">数据访问层</text>
+  <text x="125" y="485" class="text" text-anchor="middle">MyBatis Plus</text>
+  <text x="125" y="500" class="text" text-anchor="middle">• 数据持久化</text>
+
+  <rect x="230" y="440" width="150" height="80" class="layer cache" rx="5"/>
+  <text x="305" y="465" class="subtitle" text-anchor="middle">缓存层</text>
+  <text x="305" y="485" class="text" text-anchor="middle">Redis Cache</text>
+  <text x="305" y="500" class="text" text-anchor="middle">• 热点数据 • 会话状态</text>
+
+  <rect x="410" y="440" width="150" height="80" class="layer service" rx="5"/>
+  <text x="485" y="465" class="subtitle" text-anchor="middle">消息队列</text>
+  <text x="485" y="485" class="text" text-anchor="middle">RabbitMQ</text>
+  <text x="485" y="500" class="text" text-anchor="middle">• 异步处理</text>
+
+  <rect x="590" y="440" width="150" height="80" class="layer database" rx="5"/>
+  <text x="665" y="465" class="subtitle" text-anchor="middle">数据库层</text>
+  <text x="665" y="485" class="text" text-anchor="middle">MySQL + MongoDB</text>
+  <text x="665" y="500" class="text" text-anchor="middle">• 主数据存储 • 文档存储</text>
+
+  <!-- 右侧特性说明 -->
+  <rect x="780" y="50" width="100" height="470" fill="#ecf0f1" stroke="#bdc3c7" stroke-width="1" rx="5"/>
+  <text x="830" y="75" class="title" text-anchor="middle" font-size="14">系统特性</text>
+  <text x="790" y="105" class="text" font-size="9">• WebSocket实时通信</text>
+  <text x="790" y="125" class="text" font-size="9">• 多渠道推送支持</text>
+  <text x="790" y="145" class="text" font-size="9">• 异步消息处理</text>
+  <text x="790" y="165" class="text" font-size="9">• 分布式缓存</text>
+  <text x="790" y="185" class="text" font-size="9">• 微服务架构</text>
+  <text x="790" y="205" class="text" font-size="9">• 高可用设计</text>
+  <text x="790" y="225" class="text" font-size="9">• 权限控制</text>
+  <text x="790" y="245" class="text" font-size="9">• 内容安全</text>
+  <text x="790" y="265" class="text" font-size="9">• 性能优化</text>
+  <text x="790" y="285" class="text" font-size="9">• 多端同步</text>
+  <text x="790" y="305" class="text" font-size="9">• 模板系统</text>
+  <text x="790" y="325" class="text" font-size="9">• 通知集成</text>
+  <text x="790" y="345" class="text" font-size="9">• 监控告警</text>
+  <text x="790" y="365" class="text" font-size="9">• 运维支持</text>
+  <text x="790" y="385" class="text" font-size="9">• 扩展性强</text>
+  <text x="790" y="405" class="text" font-size="9">• 易于维护</text>
+  <text x="790" y="425" class="text" font-size="9">• 安全可靠</text>
+  <text x="790" y="445" class="text" font-size="9">• 灵活配置</text>
+  <text x="790" y="465" class="text" font-size="9">• 实时推送</text>
+  <text x="790" y="485" class="text" font-size="9">• 高性能设计</text>
+</svg>
