@@ -1,7 +1,9 @@
 package com.bing.framework.service.impl;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.bing.framework.common.ErrorCode;
 import com.bing.framework.entity.DataDictItem;
+import com.bing.framework.exception.BusinessException;
 import com.bing.framework.mapper.DataDictItemMapper;
 import com.bing.framework.service.DataDictItemService;
 import lombok.extern.slf4j.Slf4j;
@@ -42,41 +44,37 @@ public class DataDictItemServiceImpl extends ServiceImpl<DataDictItemMapper, Dat
     }
 
     @Override
-    @Cacheable(value = "dataDictItem", key = "'dictCode:' + #dictCode")
-    public List<DataDictItem> getDataDictItemsByDictCode(String dictCode) {
-        log.debug("查询字典编码: {} 的所有字典项", dictCode);
-        return dataDictItemMapper.selectByDictCode(dictCode);
+    @Cacheable(value = "dataDictItem", key = "'code:' + #code")
+    public List<DataDictItem> getDataDictItemsByCode(String code) {
+        return dataDictItemMapper.selectByCode(code);
     }
 
     @Override
-    @Cacheable(value = "dataDictItem", key = "'enabled:' + #dictCode")
-    public List<DataDictItem> getEnabledDataDictItemsByDictCode(String dictCode) {
-        log.debug("查询字典编码: {} 的启用字典项", dictCode);
-        return dataDictItemMapper.selectEnabledItemsByDictCode(dictCode);
+    @Cacheable(value = "dataDictItem", key = "'enabled:' + #code")
+    public List<DataDictItem> getEnabledDataDictItemsByCode(String code) {
+        return dataDictItemMapper.selectEnabledItemsByCode(code);
     }
 
     @Override
-    public DataDictItem getDataDictItemByDictIdAndItemValue(Long dictId, String itemValue) {
-        log.debug("查询字典ID: {}, 项值: {} 的字典项", dictId, itemValue);
-        return dataDictItemMapper.selectByDictIdAndItemValue(dictId, itemValue);
+    public DataDictItem getDataDictItemByCodeAndValue(String code, String value) {
+        return dataDictItemMapper.selectByCodeAndValue(code, value);
     }
 
     @Override
     public DataDictItem getDataDictItemByDictCodeAndItemValue(String dictCode, String itemValue) {
-        log.debug("查询字典编码: {}, 项值: {} 的字典项", dictCode, itemValue);
-        return dataDictItemMapper.selectByDictCodeAndItemValue(dictCode, itemValue);
+        // 复用已有的方法，避免重复代码
+        return getDataDictItemByCodeAndValue(dictCode, itemValue);
     }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
     @CacheEvict(value = "dataDictItem", allEntries = true)
     public boolean saveDataDictItem(DataDictItem dataDictItem) {
-        // 检查字典项值是否已存在
-        if (isItemValueExists(dataDictItem.getDictId(), dataDictItem.getItemValue(), null)) {
-            log.error("字典项值已存在: {}", dataDictItem.getItemValue());
-            throw new RuntimeException("字典项值已存在");
+        if (isItemValueExists(dataDictItem.getDictId(), dataDictItem.getValue(), null)) {
+            log.error("字典项值已存在: {}", dataDictItem.getValue());
+            throw new BusinessException(ErrorCode.BUSINESS_ERROR, "字典项值已存在");
         }
-        log.info("新增字典项: {}", dataDictItem.getItemText());
+        log.info("新增字典项: {}", dataDictItem.getLabel());
         return baseMapper.insert(dataDictItem) > 0;
     }
 
@@ -84,12 +82,11 @@ public class DataDictItemServiceImpl extends ServiceImpl<DataDictItemMapper, Dat
     @Transactional(rollbackFor = Exception.class)
     @CacheEvict(value = "dataDictItem", allEntries = true)
     public boolean updateDataDictItem(DataDictItem dataDictItem) {
-        // 检查字典项值是否已存在（排除当前ID）
-        if (isItemValueExists(dataDictItem.getDictId(), dataDictItem.getItemValue(), dataDictItem.getId())) {
-            log.error("字典项值已存在: {}", dataDictItem.getItemValue());
-            throw new RuntimeException("字典项值已存在");
+        if (isItemValueExists(dataDictItem.getDictId(), dataDictItem.getValue(), dataDictItem.getId())) {
+            log.error("字典项值已存在: {}", dataDictItem.getValue());
+            throw new BusinessException(ErrorCode.BUSINESS_ERROR, "字典项值已存在");
         }
-        log.info("更新字典项: {}", dataDictItem.getItemText());
+        log.info("更新字典项: {}", dataDictItem.getLabel());
         return baseMapper.updateById(dataDictItem) > 0;
     }
 
@@ -100,9 +97,9 @@ public class DataDictItemServiceImpl extends ServiceImpl<DataDictItemMapper, Dat
         DataDictItem item = getDataDictItemById(id);
         if (item == null) {
             log.error("字典项不存在: {}", id);
-            throw new RuntimeException("字典项不存在");
+            throw new BusinessException(ErrorCode.BUSINESS_ERROR, "字典项不存在");
         }
-        log.info("删除字典项: {}", item.getItemText());
+        log.info("删除字典项: {}", item.getLabel());
         return baseMapper.deleteById(id) > 0;
     }
 
