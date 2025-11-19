@@ -143,7 +143,24 @@ public class CacheConfig extends CachingConfigurerSupport {
     public CacheManager cacheManager(RedisConnectionFactory factory) {
         if (!redisEnabled) {
             log.warn("Redis未启用，使用本地内存缓存作为降级方案");
-            return new org.springframework.cache.support.SimpleCacheManager();
+            // 创建SimpleCacheManager并指定缓存名称
+            org.springframework.cache.support.SimpleCacheManager simpleCacheManager = 
+                new org.springframework.cache.support.SimpleCacheManager();
+            
+            // 创建缓存实例列表
+            java.util.List<org.springframework.cache.Cache> caches = new java.util.ArrayList<>();
+            
+            // 需要管理的缓存名称
+            String[] cacheNames = {"userList", "user", "auditLogCache", "whiteListCache", "configCache", "tempCache"};
+            
+            for (String cacheName : cacheNames) {
+                // 直接创建ConcurrentMapCache实例
+                caches.add(new org.springframework.cache.concurrent.ConcurrentMapCache(cacheName));
+            }
+            
+            simpleCacheManager.setCaches(caches);
+            simpleCacheManager.afterPropertiesSet();
+            return simpleCacheManager;
         }
         
         try {
@@ -178,8 +195,25 @@ public class CacheConfig extends CachingConfigurerSupport {
             return cacheManager;
             
         } catch (Exception e) {
-            log.error("Redis缓存管理器初始化失败，将使用本地缓存作为降级方案", e);
-            return new org.springframework.cache.support.SimpleCacheManager();
+            log.info("Redis暂时无法连接");
+            // 创建SimpleCacheManager并指定缓存名称
+            org.springframework.cache.support.SimpleCacheManager simpleCacheManager = 
+                new org.springframework.cache.support.SimpleCacheManager();
+            
+            // 创建缓存实例列表
+            java.util.List<org.springframework.cache.Cache> caches = new java.util.ArrayList<>();
+            
+            // 需要管理的缓存名称
+            String[] cacheNames = {"userList", "user", "auditLogCache", "whiteListCache", "configCache", "tempCache"};
+            
+            for (String cacheName : cacheNames) {
+                // 直接创建ConcurrentMapCache实例
+                caches.add(new org.springframework.cache.concurrent.ConcurrentMapCache(cacheName));
+            }
+            
+            simpleCacheManager.setCaches(caches);
+            simpleCacheManager.afterPropertiesSet();
+            return simpleCacheManager;
         }
     }
 
@@ -200,15 +234,9 @@ public class CacheConfig extends CachingConfigurerSupport {
     }
 
     /**
-     * 高可用缓存服务Bean
+     * 高可用缓存服务配置（通过自动装配配置）
+     * CacheService类本身有@Component注解，这里不需要再定义@Bean
      */
-    @Bean
-    public CacheService cacheService(UnifiedCacheManager unifiedCacheManager) {
-        CacheService cacheService = new CacheService();
-        cacheService.setUnifiedCacheManager(unifiedCacheManager);
-        log.info("初始化高可用缓存服务");
-        return cacheService;
-    }
     
     /**
      * 缓存错误处理器
@@ -237,13 +265,13 @@ public class CacheConfig extends CachingConfigurerSupport {
             @Override
             public void handleCacheClearError(RuntimeException exception, org.springframework.cache.Cache cache) {
                 String cacheName = cache != null ? cache.getName() : "unknown";
-                log.error("Redis缓存清除异常 - 缓存名称: {}", cacheName, exception);
+                log.info("Redis暂时无法连接");
             }
 
             private void handleCacheError(RuntimeException exception, org.springframework.cache.Cache cache, Object key) {
                 String cacheName = cache != null ? cache.getName() : "unknown";
                 String keyStr = key != null ? key.toString() : "unknown";
-                log.error("Redis缓存操作异常 - 缓存名称: {}, 键: {}", cacheName, keyStr, exception);
+                log.info("Redis暂时无法连接");
             }
         };
     }
@@ -282,7 +310,7 @@ public class CacheConfig extends CachingConfigurerSupport {
                 // 这里只是记录状态，实际的连接检查通过UnifiedCacheManager的定期检查线程来完成
                 log.debug("Redis连接状态检查完成");
             } catch (Exception e) {
-                log.error("Redis连接检查失败", e);
+                log.info("Redis暂时无法连接");
             }
         }
     }

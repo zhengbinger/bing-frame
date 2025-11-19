@@ -101,6 +101,8 @@ public class UnifiedCacheManager {
         
         try {
             if (redisUtil != null) {
+                log.info("开始重连Redis操作，测试连接可用性...");
+                
                 // 尝试ping Redis
                 redisUtil.set(REDIS_TEST_KEY, "test", 10, TimeUnit.SECONDS);
                 Object testValue = redisUtil.get(REDIS_TEST_KEY);
@@ -108,10 +110,17 @@ public class UnifiedCacheManager {
                 
                 if ("test".equals(testValue)) {
                     nowRedisAvailable = true;
+                    log.info("Redis连接测试成功，Redis服务可用");
+                } else {
+                    nowRedisAvailable = false;
+                    log.info("Redis连接测试失败，返回值不匹配，使用本地缓存");
                 }
+            } else {
+                log.info("RedisUtil未初始化，使用本地缓存");
+                nowRedisAvailable = false;
             }
         } catch (Exception e) {
-            log.debug("Redis连接测试失败", e);
+            log.info("Redis暂时无法连接");
             nowRedisAvailable = false;
         }
         
@@ -127,7 +136,7 @@ public class UnifiedCacheManager {
             if (nowRedisAvailable) {
                 log.info("Redis连接已恢复，切换到Redis缓存");
             } else {
-                log.warn("Redis连接不可用，切换到本地缓存");
+                log.info("Redis连接暂时不可用，继续使用本地缓存，程序正常运行不受影响");
             }
         } else if (!previousType.equals(newCacheType)) {
             log.info("缓存类型切换: {} -> {}", previousType, newCacheType);
@@ -156,17 +165,8 @@ public class UnifiedCacheManager {
                 return memoryCache.put(key, value, ttlMinutes);
             }
         } catch (Exception e) {
-            log.error("设置缓存失败，键: {}, 当前缓存类型: {}", key, currentCacheType.get(), e);
-            
-            // 如果Redis操作失败，尝试切换到本地缓存
-            if (redisAvailable.get()) {
-                log.warn("Redis操作失败，尝试切换到本地缓存");
-                redisAvailable.set(false);
-                currentCacheType.set("MEMORY");
-                return memoryCache.put(key, value, ttlMinutes);
-            }
-            
-            return false;
+            log.info("Redis暂时无法连接");
+            return memoryCache.put(key, value, ttlMinutes);
         }
     }
     
@@ -186,17 +186,8 @@ public class UnifiedCacheManager {
                 return memoryCache.get(key);
             }
         } catch (Exception e) {
-            log.error("获取缓存失败，键: {}, 当前缓存类型: {}", key, currentCacheType.get(), e);
-            
-            // 如果Redis操作失败，尝试切换到本地缓存
-            if (redisAvailable.get()) {
-                log.warn("Redis操作失败，尝试从本地缓存获取");
-                redisAvailable.set(false);
-                currentCacheType.set("MEMORY");
-                return memoryCache.get(key);
-            }
-            
-            return null;
+            log.info("Redis暂时无法连接");
+            return memoryCache.get(key);
         }
     }
     
@@ -216,17 +207,8 @@ public class UnifiedCacheManager {
                 return memoryCache.remove(key);
             }
         } catch (Exception e) {
-            log.error("删除缓存失败，键: {}, 当前缓存类型: {}", key, currentCacheType.get(), e);
-            
-            // 如果Redis操作失败，尝试切换到本地缓存
-            if (redisAvailable.get()) {
-                log.warn("Redis操作失败，尝试从本地缓存删除");
-                redisAvailable.set(false);
-                currentCacheType.set("MEMORY");
-                return memoryCache.remove(key);
-            }
-            
-            return false;
+            log.info("Redis暂时无法连接");
+            return memoryCache.remove(key);
         }
     }
     
@@ -250,17 +232,8 @@ public class UnifiedCacheManager {
                 return memoryCache.remove(keys);
             }
         } catch (Exception e) {
-            log.error("批量删除缓存失败，键数量: {}, 当前缓存类型: {}", keys.length, currentCacheType.get(), e);
-            
-            // 如果Redis操作失败，尝试切换到本地缓存
-            if (redisAvailable.get()) {
-                log.warn("Redis操作失败，尝试从本地缓存批量删除");
-                redisAvailable.set(false);
-                currentCacheType.set("MEMORY");
-                return memoryCache.remove(keys);
-            }
-            
-            return 0;
+            log.info("Redis暂时无法连接");
+            return memoryCache.remove(keys);
         }
     }
     
@@ -280,8 +253,8 @@ public class UnifiedCacheManager {
                 return memoryCache.containsKey(key);
             }
         } catch (Exception e) {
-            log.error("检查缓存存在性失败，键: {}, 当前缓存类型: {}", key, currentCacheType.get(), e);
-            return false;
+            log.info("Redis暂时无法连接");
+            return memoryCache.containsKey(key);
         }
     }
     
@@ -299,7 +272,7 @@ public class UnifiedCacheManager {
                 memoryCache.clear();
             }
         } catch (Exception e) {
-            log.error("清空缓存失败，当前缓存类型: {}", currentCacheType.get(), e);
+            log.info("Redis暂时无法连接");
         }
     }
     
@@ -380,7 +353,7 @@ public class UnifiedCacheManager {
                 memoryCache.clearExpired();
             }
         } catch (Exception e) {
-            log.error("清理过期缓存失败，当前缓存类型: {}", currentCacheType.get(), e);
+            log.info("Redis暂时无法连接");
         }
     }
     
@@ -401,8 +374,8 @@ public class UnifiedCacheManager {
                 return memoryCache.size();
             }
         } catch (Exception e) {
-            log.error("获取缓存大小失败，当前缓存类型: {}", currentCacheType.get(), e);
-            return 0;
+            log.info("Redis暂时无法连接");
+            return memoryCache.size();
         }
     }
     
