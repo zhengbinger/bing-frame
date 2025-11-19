@@ -92,21 +92,22 @@ public class AuditLogBufferManager {
                     auditLogMapper.insertBatch(logsToSave);
                     log.debug("成功批量写入{}条审计日志", logsToSave.size());
                 } catch (Exception e) {
-                    log.error("批量写入审计日志失败", e);
-                    // 尝试将失败的日志重新放入队列
+                    log.error("批量写入审计日志失败，将保留在缓冲队列中", e);
+                    // 写入失败时，将日志重新放入队列尾部
                     for (AuditLog log : logsToSave) {
                         bufferQueue.offer(log);
+                    }
+                    // 添加短暂延迟，避免快速重试
+                    try {
+                        Thread.sleep(1000);
+                    } catch (InterruptedException ie) {
+                        Thread.currentThread().interrupt();
                     }
                 }
             }
         } finally {
             // 重置刷新标记
             isFlushing.set(false);
-            
-            // 如果还有日志需要写入，递归调用
-            if (!bufferQueue.isEmpty() && isFlushing.compareAndSet(false, true)) {
-                flushBuffer();
-            }
         }
     }
     
@@ -134,14 +135,29 @@ public class AuditLogBufferManager {
     @PreDestroy
     public void flushOnShutdown() {
         log.info("应用关闭，正在刷新审计日志缓冲池");
-        while (!bufferQueue.isEmpty()) {
+        
+        int maxAttempts = 3; // 最大重试次数
+        int attempts = 0;
+        
+        while (!bufferQueue.isEmpty() && attempts < maxAttempts) {
             flushBuffer();
+            attempts++;
+            
+            // 短暂等待，让数据库操作完成
             try {
-                Thread.sleep(100);
+                Thread.sleep(200);
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();
+                break;
+            }
+            
+            // 如果仍然有数据，且不是第一次尝试，说明可能数据库有问题
+            if (!bufferQueue.isEmpty() && attempts == maxAttempts) {
+                log.warn("刷新审计日志缓冲池失败，仍有{}条日志未写入", bufferQueue.size());
+                // 可以选择在这里将剩余数据写入日志文件或做其他处理
             }
         }
+        
         log.info("审计日志缓冲池刷新完成");
     }
 }
