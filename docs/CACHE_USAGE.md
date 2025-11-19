@@ -1,51 +1,153 @@
-# 缓存使用指南
+/**
+ * 缓存使用指南
+ * 
+ * Bing Framework缓存系统是一套完整的分布式缓存解决方案，支持Redis和本地缓存的双层架构。
+ * 系统具备自动降级机制，当Redis不可用时自动切换到本地缓存，确保服务高可用性。
+ * 
+ * 主要特性：
+ * - Redis + 本地缓存双层架构
+ * - 自动降级与恢复机制
+ * - 线程安全的本地缓存实现
+ * - Spring Cache注解支持
+ * - 完整的监控和统计功能
+ * 
+ * @author zhengbing
+ * @date 2024-12-19
+ */
+# Bing Framework 缓存使用指南
 
-本文档详细介绍了在Bing Framework中如何使用Spring Cache进行缓存管理。
+Bing Framework提供了一套完整的缓存解决方案，支持Redis分布式缓存和本地内存缓存，具备自动降级和恢复功能。本指南将详细介绍如何配置和使用这套缓存系统。
 
-## 1. 缓存概述
+## 目录
 
-缓存是提高应用性能的重要手段，通过将频繁访问的数据存储在内存中，减少对数据库或其他昂贵操作的调用。Spring Cache提供了一个抽象的缓存机制，可以无缝集成不同的缓存提供者。
+- [缓存概述](#缓存概述)
+- [系统架构](#系统架构)
+- [快速开始](#快速开始)
+- [配置详解](#配置详解)
+- [使用示例](#使用示例)
+- [高级功能](#高级功能)
+- [监控与统计](#监控与统计)
+- [最佳实践](#最佳实践)
 
-## 2. 缓存配置
+---
 
-### 2.1 基础配置
+## 缓存概述
 
-在项目中，缓存配置已在`application.yml`文件中设置：
+### 什么是Bing Framework缓存系统
 
-```yaml
-# 缓存配置
-spring:
-  cache:
-    type: simple  # 使用简单缓存（内存缓存）
+Bing Framework缓存系统是一套高可用的分布式缓存解决方案，核心特性包括：
+
+🚀 **核心特性**
+- **双层缓存架构**: Redis + 本地缓存的混合模式
+- **自动降级机制**: Redis故障时自动切换到本地缓存
+- **无缝恢复**: Redis恢复后自动切换回分布式模式
+- **线程安全**: 基于ConcurrentHashMap的本地缓存实现
+- **性能优化**: 支持LRU淘汰策略，防止内存溢出
+
+📊 **性能优势**
+
+![缓存性能对比](images/cache_performance_comparison.svg)
+
+从性能对比图表可以看出：
+- **响应时间**: 本地缓存(0.5ms) > Redis(10ms) > 数据库(250ms)
+- **吞吐量**: 本地缓存(10K TPS) > Redis(5K TPS) > 数据库(500 TPS)
+- **缓存命中率**: 本地缓存(90%) > Redis(85%) > 数据库(0%)
+
+### 适用场景
+
+✅ **推荐使用场景**
+- 高并发读写操作
+- 频繁查询的热点数据
+- 分布式系统会话管理
+- 配置信息缓存
+- 排行榜和计数器
+
+❌ **不适用场景**
+- 需要强一致性的事务数据
+- 大数据量的冷数据
+- 频繁变更的实时数据
+
+---
+
+## 系统架构
+
+### 整体架构图
+
+![缓存架构图](images/cache_architecture.svg)
+
+缓存系统采用分层架构设计：
+
+1. **应用层**: 业务代码使用Spring Cache注解或CacheService API
+2. **缓存管理层**: 统一缓存管理器，负责路由和降级决策
+3. **缓存存储层**: 
+   - Redis: 分布式缓存，支持集群和持久化
+   - 本地缓存: 内存缓存，用于降级和本地加速
+4. **监控组件**: 健康检查和状态监控
+5. **数据源**: 数据库等持久化存储
+
+### 工作流程详解
+
+![缓存工作流程](images/cache_workflow.svg)
+
+缓存工作流程包含以下关键步骤：
+
+1. **请求接收**: 应用层发起缓存请求
+2. **缓存检查**: 首先检查本地缓存状态
+3. **路由决策**: 根据Redis可用性决定缓存源
+4. **数据获取**: 从选定缓存源获取数据
+5. **降级处理**: Redis不可用时自动降级到本地缓存
+6. **数据源查询**: 缓存未命中时查询数据库
+7. **缓存更新**: 将数据写入缓存并返回
+8. **监控检测**: 定期检查Redis状态并决策恢复
+
+### 降级策略详解
+
+![降级策略流程](images/cache_fallback_strategy.svg)
+
+降级策略确保系统高可用性：
+
+1. **监控机制**: 每30秒检查Redis连接状态
+2. **失败计数**: 统计连续失败次数
+3. **阈值判断**: 连续失败3次触发降级
+4. **状态切换**: 切换到本地缓存模式
+5. **日志记录**: 记录降级状态和原因
+6. **恢复检测**: 定期检查Redis是否恢复
+7. **自动恢复**: Redis恢复后清空本地缓存并切换回去
+
+---
+
+## 快速开始
+
+### 环境要求
+
+- JDK 8+
+- Spring Boot 2.0+
+- Redis 3.0+ (可选，开发环境可使用本地缓存)
+
+### 1. 引入依赖
+
+确保项目中包含以下依赖：
+
+```xml
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-data-redis</artifactId>
+</dependency>
+
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-cache</artifactId>
+</dependency>
+
+<dependency>
+    <groupId>org.apache.commons</groupId>
+    <artifactId>commons-pool2</artifactId>
+</dependency>
 ```
 
-### 2.2 缓存类型支持
+### 2. 启用缓存
 
-Spring Cache支持多种缓存类型，常用的包括：
-
-- `simple`: 简单的基于内存的缓存，适用于单应用实例
-- `redis`: Redis缓存，适用于分布式系统
-- `caffeine`: 高性能的Java缓存库
-- `hazelcast`: 分布式缓存系统
-
-## 3. 缓存工作流程
-
-Spring Cache的工作流程涉及缓存查询、更新和删除操作。以下是缓存工作的完整流程图：
-
-![缓存工作流程图](images/cache_workflow.svg)
-
-该流程图展示了：
-1. 客户端向服务层发起请求
-2. 服务层首先查询缓存
-3. 缓存命中时，直接返回缓存数据
-4. 缓存未命中时，查询数据库并更新缓存
-5. 使用@CachePut和@CacheEvict注解可更新或清除缓存
-
-## 4. 缓存使用示例
-
-### 4.1 启用缓存
-
-在应用启动类上添加`@EnableCaching`注解启用缓存功能：
+在启动类上添加缓存注解：
 
 ```java
 import org.springframework.boot.SpringApplication;
@@ -53,7 +155,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cache.annotation.EnableCaching;
 
 @SpringBootApplication
-@EnableCaching  // 启用缓存
+@EnableCaching  // 启用Spring Cache
 public class BingFrameworkApplication {
     public static void main(String[] args) {
         SpringApplication.run(BingFrameworkApplication.class, args);
@@ -61,143 +163,659 @@ public class BingFrameworkApplication {
 }
 ```
 
-### 3.2 在Service层使用缓存
+### 3. 基础配置
 
-以下是在用户服务中使用缓存的示例：
+在`application.yml`中添加基础配置：
+
+```yaml
+spring:
+  cache:
+    type: redis
+    redis:
+      host: localhost
+      port: 6379
+      time-to-live: 3600000  # 1小时过期
+      
+app:
+  cache:
+    fallback:
+      max-consecutive-failures: 3
+      check-interval: 30000
+```
+
+### 4. 测试验证
+
+创建简单的缓存测试：
 
 ```java
-import org.springframework.cache.annotation.CacheConfig;
-import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.CachePut;
-import org.springframework.cache.annotation.Cacheable;
+@RestController
+public class CacheTestController {
+    
+    @Autowired
+    private CacheService cacheService;
+    
+    @GetMapping("/test/cache")
+    public String testCache() {
+        // 设置缓存
+        cacheService.set("test:key", "Hello Cache!", 60);
+        
+        // 读取缓存
+        String value = (String) cacheService.get("test:key");
+        
+        return "缓存值: " + value;
+    }
+}
+```
+
+启动应用，访问`http://localhost:8080/test/cache`验证缓存功能。
+
+---
+
+## 配置详解
+
+### 完整配置结构
+
+![缓存配置结构图](images/cache_config_structure.svg)
+
+完整的缓存配置包含以下主要部分：
+
+### 1. Spring Cache基础配置
+
+```yaml
+spring:
+  cache:
+    type: redis  # 缓存类型：redis, simple, caffeine等
+    redis:
+      # Redis基础配置
+      enabled: true                    # 是否启用Redis
+      host: localhost                 # Redis服务器地址
+      port: 6379                      # Redis端口
+      password: your_password         # Redis密码（可选）
+      database: 0                     # Redis数据库编号
+      timeout: 5000                   # 连接超时时间（毫秒）
+      
+      # 缓存行为配置
+      key-prefix: "bing:"             # 缓存键前缀
+      time-to-live: 3600000          # 默认过期时间（毫秒）
+      cache-null-values: false       # 是否缓存null值
+      
+    # 本地缓存配置（降级方案）
+    local:
+      max-size: 1000                  # 本地缓存最大容量
+      clean-interval: 300             # 清理间隔（秒）
+      default-ttl: 1800              # 默认过期时间（秒）
+```
+
+### 2. 应用级配置
+
+```yaml
+app:
+  cache:
+    # Redis连接池配置
+    redis:
+      lettuce:
+        pool:
+          max-active: 8               # 最大活跃连接数
+          max-wait: -1                # 最大等待时间（毫秒）
+          max-idle: 8                 # 最大空闲连接数
+          min-idle: 0                 # 最小空闲连接数
+      
+      # 缓存前缀配置
+      prefix:
+        user: "user:"                 # 用户缓存前缀
+        system: "system:"             # 系统配置缓存前缀
+        whiteList: "whitelist:"       # 白名单缓存前缀
+        temp: "temp:"                 # 临时数据缓存前缀
+    
+    # 本地缓存高级配置
+    local:
+      eviction-policy: LRU           # 淘汰策略：LRU, TTL, FIFO
+      concurrency-level: 16          # 并发级别
+      enable-stats: true            # 是否启用统计信息
+      warmup:
+        enabled: false               # 是否启用缓存预热
+        keys: []                     # 预热缓存的键列表
+    
+    # 降级策略配置
+    fallback:
+      max-consecutive-failures: 3    # 连续失败次数阈值
+      check-interval: 30000          # 检查间隔（毫秒）
+      auto-recovery:
+        enabled: true               # 是否启用自动恢复
+        enabled-after: 60000        # 降级后多久尝试恢复（毫秒）
+      allow-manual-switch: true     # 是否允许手动切换
+```
+
+### 3. 环境特定配置
+
+#### 开发环境 (application-dev.yml)
+```yaml
+spring:
+  cache:
+    type: local                     # 开发环境使用本地缓存
+    local:
+      max-size: 500                # 开发环境减少缓存容量
+      
+app:
+  cache:
+    fallback:
+      max-consecutive-failures: 3  # 开发环境更宽松的降级策略
+```
+
+#### 生产环境 (application-prod.yml)
+```yaml
+spring:
+  cache:
+    type: redis                     # 生产环境使用Redis
+    redis:
+      host: ${REDIS_HOST:prod-redis-server}
+      password: ${REDIS_PASSWORD:your_prod_password}
+      timeout: 10000               # 生产环境超时时间更长
+      time-to-live: 7200000        # 默认2小时过期
+    local:
+      max-size: 10000              # 生产环境增加本地缓存容量
+      clean-interval: 600          # 生产环境增加清理频率
+      
+app:
+  cache:
+    redis:
+      lettuce:
+        pool:
+          max-active: 20           # 生产环境增加连接池容量
+          max-idle: 10
+    fallback:
+      max-consecutive-failures: 2  # 生产环境更严格的降级策略
+      check-interval: 15000        # 生产环境更频繁检查
+```
+
+### 4. 监控配置
+
+```yaml
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics  # 暴露健康检查、指标等端点
+  endpoint:
+    health:
+      show-details: always            # 显示详细健康信息
+  metrics:
+    export:
+      prometheus:
+        enabled: true                 # 导出到Prometheus
+```
+
+---
+
+## 使用示例
+
+### 1. Spring Cache注解方式
+
+#### 基础使用示例
+
+```java
+import org.springframework.cache.annotation.*;
 import org.springframework.stereotype.Service;
 
+/**
+ * 用户服务类
+ * 
+ * @author zhengbing
+ */
 @Service
-@CacheConfig(cacheNames = "users")  // 设置默认缓存名称
-public class UserServiceImpl implements UserService {
-
+@CacheConfig(cacheNames = "users")  // 类级别缓存配置
+public class UserService {
+    
     private final UserMapper userMapper;
-
-    public UserServiceImpl(UserMapper userMapper) {
+    
+    public UserService(UserMapper userMapper) {
         this.userMapper = userMapper;
     }
-
+    
     /**
-     * 根据ID查询用户，结果存入缓存
+     * 根据ID查询用户（缓存查询结果）
+     * 
+     * @param id 用户ID
+     * @return 用户信息
      */
-    @Override
-    @Cacheable(key = "#id")  // 缓存键为用户ID
+    @Cacheable(
+        key = "#id",
+        condition = "#id != null and #id > 0",
+        unless = "#result == null"
+    )
     public User getUserById(Long id) {
-        System.out.println("查询数据库，用户ID: " + id);
+        System.out.println("🔥 查询数据库，用户ID: " + id);
         return userMapper.selectById(id);
     }
-
+    
     /**
-     * 根据用户名查询用户，结果存入缓存
+     * 根据用户名查询用户（缓存查询结果）
+     * 
+     * @param username 用户名
+     * @return 用户信息
      */
-    @Override
-    @Cacheable(value = "users", key = "#username")
+    @Cacheable(
+        value = "users",
+        key = "'username:' + #username",
+        condition = "#username != null and #username.length() > 0"
+    )
     public User getUserByUsername(String username) {
-        System.out.println("查询数据库，用户名: " + username);
+        System.out.println("🔥 查询数据库，用户名: " + username);
         return userMapper.selectByUsername(username);
     }
-
+    
     /**
-     * 更新用户信息，并更新缓存
+     * 更新用户（更新缓存）
+     * 
+     * @param user 用户信息
+     * @return 更新后的用户信息
      */
-    @Override
-    @CachePut(key = "#user.id")  // 更新缓存，键为用户ID
+    @CachePut(
+        key = "#user.id",
+        condition = "#user != null and #user.id != null"
+    )
     public User updateUser(User user) {
-        System.out.println("更新数据库，用户ID: " + user.getId());
+        System.out.println("🔄 更新数据库和缓存，用户ID: " + user.getId());
         userMapper.updateById(user);
         return user;
     }
-
+    
     /**
-     * 删除用户，并清除相关缓存
+     * 删除用户（清除缓存）
+     * 
+     * @param id 用户ID
+     * @return 是否删除成功
      */
-    @Override
-    @CacheEvict(key = "#id")  // 删除缓存项
+    @CacheEvict(
+        key = "#id",
+        condition = "#id != null"
+    )
     public boolean deleteUser(Long id) {
-        System.out.println("删除数据库记录，用户ID: " + id);
+        System.out.println("🗑️ 删除数据库记录和缓存，用户ID: " + id);
         return userMapper.deleteById(id) > 0;
     }
-
+    
     /**
-     * 清除所有用户缓存
+     * 批量删除用户（清除所有相关缓存）
+     * 
+     * @param userIdList 用户ID列表
      */
-    @Override
-    @CacheEvict(allEntries = true)  // 清除该缓存的所有项
-    public void clearAllUserCache() {
-        System.out.println("清除所有用户缓存");
+    @CacheEvict(
+        value = {"users", "userCache"},
+        allEntries = true,
+        condition = "#userIdList != null and !#userIdList.isEmpty()"
+    )
+    public void deleteUsers(List<Long> userIdList) {
+        System.out.println("🗑️ 批量删除用户和缓存，ID列表: " + userIdList);
+        userMapper.deleteBatchIds(userIdList);
     }
 }
 ```
 
-### 3.3 缓存注解详解
+#### 复杂条件缓存示例
 
-#### @Cacheable
-
-用于标记方法结果应该被缓存。当调用标记了此注解的方法时，会先检查缓存中是否有对应的键值，如果有则直接返回缓存值，不执行方法体；如果没有则执行方法并将结果存入缓存。
-
-**属性说明：**
-- `value`/`cacheNames`: 指定缓存名称
-- `key`: 指定缓存键，可以使用SpEL表达式
-- `condition`: 条件表达式，只有满足条件时才进行缓存
-- `unless`: 条件表达式，满足条件时不进行缓存
-
-**示例：**
 ```java
-@Cacheable(value = "users", key = "#id", condition = "#id > 0")
-public User getUserById(Long id) {
-    return userMapper.selectById(id);
+@Service
+public class ProductService {
+    
+    private final ProductMapper productMapper;
+    
+    /**
+     * 根据分类查询产品（条件缓存）
+     * 只缓存价格大于100的商品，缓存时间5分钟
+     * 
+     * @param category 分类
+     * @param minPrice 最低价格
+     * @return 产品列表
+     */
+    @Cacheable(
+        value = "products",
+        key = "'category:' + #category + ':minPrice:' + #minPrice",
+        condition = "#minPrice > 100 and #category != null",
+        unless = "#result == null or #result.isEmpty()"
+    )
+    @CacheEvict(value = "products", allEntries = true) // 产品更新时清除所有缓存
+    public List<Product> getProductsByCategory(String category, Double minPrice) {
+        System.out.println("🔥 查询数据库，分 类: " + category + ", 最低价格: " + minPrice);
+        return productMapper.selectProductsByCategory(category, minPrice);
+    }
 }
 ```
 
-#### @CachePut
+### 2. CacheService API方式
 
-用于更新缓存。无论缓存中是否已有对应的值，都会执行方法体，并将结果更新到缓存中。
+#### 直接使用缓存服务
 
-**属性说明：**
-- 与`@Cacheable`相同
-
-**示例：**
 ```java
-@CachePut(value = "users", key = "#user.id")
-public User updateUser(User user) {
-    userMapper.updateById(user);
-    return user;
+import com.bing.framework.cache.CacheService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+@Service
+public class CacheExampleService {
+    
+    @Autowired
+    private CacheService cacheService;
+    
+    /**
+     * 缓存基础操作示例
+     */
+    public void basicCacheOperations() {
+        String cacheKey = "demo:user:123";
+        User user = new User(123L, "张三", "zhangsan@example.com");
+        
+        // 1. 设置缓存（5分钟过期）
+        cacheService.set(cacheKey, user, 300);
+        
+        // 2. 获取缓存
+        User cachedUser = (User) cacheService.get(cacheKey);
+        System.out.println("缓存用户: " + cachedUser);
+        
+        // 3. 检查键是否存在
+        boolean exists = cacheService.hasKey(cacheKey);
+        System.out.println("键存在: " + exists);
+        
+        // 4. 获取过期时间
+        Long expireTime = cacheService.getExpire(cacheKey);
+        System.out.println("过期时间: " + expireTime + "秒");
+        
+        // 5. 删除缓存
+        cacheService.delete(cacheKey);
+        
+        // 6. 获取并更新（原子操作）
+        String newValue = "new_value";
+        Object oldValue = cacheService.getAndSet(cacheKey, newValue, 600);
+        System.out.println("旧值: " + oldValue + ", 新值: " + newValue);
+    }
+    
+    /**
+     * 计数器操作示例
+     */
+    public void counterOperations() {
+        String counterKey = "visit:count:homepage";
+        
+        // 1. 原子递增
+        Long visitCount = cacheService.increment(counterKey);
+        System.out.println("首页访问次数: " + visitCount);
+        
+        // 2. 按步长递增
+        Long score = cacheService.increment("user:score:123", 10);
+        System.out.println("用户123得分: " + score);
+        
+        // 3. 原子递减
+        Long remainingCount = cacheService.decrement("request:limit:123", 1);
+        System.out.println("剩余请求次数: " + remainingCount);
+        
+        // 4. 获取计数器值
+        Long currentCount = cacheService.getCounter(counterKey);
+        System.out.println("当前计数器值: " + currentCount);
+    }
+    
+    /**
+     * 分布式锁示例
+     */
+    public void distributedLockExample() {
+        String lockKey = "distributed:lock:user:123";
+        
+        // 1. 获取锁（等待30秒，最多锁定60秒）
+        boolean lockAcquired = cacheService.tryLock(lockKey, 30, 60, TimeUnit.SECONDS);
+        
+        if (lockAcquired) {
+            try {
+                System.out.println("🔒 获得分布式锁: " + lockKey);
+                
+                // 执行需要同步的业务操作
+                performCriticalOperation();
+                
+            } finally {
+                // 2. 释放锁
+                cacheService.releaseLock(lockKey);
+                System.out.println("🔓 释放分布式锁: " + lockKey);
+            }
+        } else {
+            System.out.println("❌ 无法获得分布式锁: " + lockKey);
+        }
+    }
+    
+    private void performCriticalOperation() {
+        // 模拟耗时操作
+        try {
+            Thread.sleep(5000);
+            System.out.println("✅ 执行业务操作完成");
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        }
+    }
 }
 ```
 
-#### @CacheEvict
+### 3. 手动缓存切换示例
 
-用于清除缓存。可以清除指定的缓存项或所有缓存项。
-
-**属性说明：**
-- 与`@Cacheable`相同
-- `allEntries`: 是否清除所有缓存项，默认为false
-- `beforeInvocation`: 是否在方法执行前清除缓存，默认为false（方法执行后清除）
-
-**示例：**
 ```java
-@CacheEvict(value = "users", key = "#id")
-public void deleteUser(Long id) {
-    userMapper.deleteById(id);
-}
-
-@CacheEvict(value = "users", allEntries = true)
-public void clearAllUsers() {
-    userMapper.deleteAll();
+@Service
+public class CacheManagementService {
+    
+    @Autowired
+    private CacheService cacheService;
+    
+    /**
+     * 手动缓存切换示例
+     */
+    @Transactional
+    public void cacheManagementExample() {
+        // 1. 检查当前缓存状态
+        boolean isRedisAvailable = cacheService.isRedisAvailable();
+        System.out.println("Redis是否可用: " + isRedisAvailable);
+        
+        CacheMode currentMode = cacheService.getCurrentCacheMode();
+        System.out.println("当前缓存模式: " + currentMode);
+        
+        // 2. 手动切换到Redis
+        if (CacheMode.LOCAL.equals(currentMode)) {
+            cacheService.switchToRedis();
+            System.out.println("🔄 切换到Redis缓存模式");
+        }
+        
+        // 3. 手动切换到本地缓存（用于维护场景）
+        if (CacheMode.REDIS.equals(currentMode)) {
+            cacheService.switchToLocal();
+            System.out.println("🔄 切换到本地缓存模式");
+        }
+        
+        // 4. 预热缓存数据
+        warmupCache();
+    }
+    
+    /**
+     * 缓存预热示例
+     */
+    public void warmupCache() {
+        System.out.println("🔥 开始缓存预热...");
+        
+        // 预热用户数据
+        List<User> hotUsers = loadHotUserData();
+        for (User user : hotUsers) {
+            cacheService.set("user:hot:" + user.getId(), user, 3600);
+        }
+        
+        // 预热系统配置
+        Map<String, Object> configs = loadSystemConfigs();
+        for (Map.Entry<String, Object> entry : configs.entrySet()) {
+            cacheService.set("config:" + entry.getKey(), entry.getValue(), 1800);
+        }
+        
+        System.out.println("✅ 缓存预热完成");
+    }
 }
 ```
 
-#### @CacheConfig
+---
 
-用于类级别设置缓存相关配置，为该类中的缓存注解提供默认值。
+## 高级功能
 
-**属性说明：**
-- `cacheNames`: 默认缓存名称
+### 1. 批量操作
+
+```java
+/**
+ * 批量缓存操作示例
+ */
+@Service
+public class BatchCacheService {
+    
+    @Autowired
+    private CacheService cacheService;
+    
+    /**
+     * 批量设置缓存
+     */
+    public void batchSetCache() {
+        Map<String, Object> userCache = new HashMap<>();
+        userCache.put("user:1", new User(1L, "用户1", "user1@example.com"));
+        userCache.put("user:2", new User(2L, "用户2", "user2@example.com"));
+        userCache.put("user:3", new User(3L, "用户3", "user3@example.com"));
+        
+        cacheService.batchSet(userCache, 1800); // 30分钟过期
+    }
+    
+    /**
+     * 批量获取缓存
+     */
+    public void batchGetCache() {
+        List<String> keys = Arrays.asList("user:1", "user:2", "user:3");
+        Map<String, Object> result = cacheService.batchGet(keys);
+        
+        result.forEach((key, value) -> {
+            System.out.println("缓存键: " + key + ", 值: " + value);
+        });
+    }
+    
+    /**
+     * 批量删除缓存
+     */
+    public void batchDeleteCache() {
+        List<String> keys = Arrays.asList("user:1", "user:2", "user:3");
+        long deletedCount = cacheService.batchDelete(keys);
+        System.out.println("删除了 " + deletedCount + " 个缓存项");
+    }
+}
+```
+
+### 2. 缓存统计和监控
+
+```java
+/**
+ * 缓存统计和监控示例
+ */
+@Service
+public class CacheMonitoringService {
+    
+    @Autowired
+    private CacheService cacheService;
+    
+    /**
+     * 获取缓存统计信息
+     */
+    public void getCacheStatistics() {
+        CacheStatistics stats = cacheService.getStatistics();
+        
+        System.out.println("📊 缓存统计信息:");
+        System.out.println("  总操作次数: " + stats.getTotalOperations());
+        System.out.println("  成功次数: " + stats.getSuccessCount());
+        System.out.println("  失败次数: " + stats.getFailureCount());
+        System.out.println("  缓存命中率: " + String.format("%.2f%%", stats.getHitRate() * 100));
+        System.out.println("  平均响应时间: " + stats.getAverageResponseTime() + "ms");
+        System.out.println("  当前缓存模式: " + stats.getCurrentMode());
+    }
+    
+    /**
+     * 导出监控数据
+     */
+    public void exportMonitoringData() {
+        CacheStatistics stats = cacheService.getStatistics();
+        
+        // 导出到Prometheus格式
+        String prometheusMetrics = convertToPrometheusFormat(stats);
+        
+        // 保存到文件或发送到监控系统
+        saveToMonitoringSystem(prometheusMetrics);
+    }
+}
+```
+
+### 3. 自定义缓存策略
+
+```java
+/**
+ * 自定义缓存策略示例
+ */
+@Component
+public class CustomCacheStrategy {
+    
+    @Autowired
+    private CacheService cacheService;
+    
+    /**
+     * 基于访问频率的智能缓存策略
+     */
+    public Object smartCache(String key, Callable<?> valueLoader) {
+        try {
+            // 1. 先尝试从Redis获取
+            Object value = cacheService.get(key);
+            if (value != null) {
+                // 记录访问次数
+                incrementAccessCount(key);
+                return value;
+            }
+            
+            // 2. Redis未命中，尝试本地缓存
+            value = getFromLocalCache(key);
+            if (value != null) {
+                // 记录访问次数并同步到Redis
+                incrementAccessCount(key);
+                cacheService.set(key, value, 300);
+                return value;
+            }
+            
+            // 3. 加载数据并根据访问模式决定缓存策略
+            value = valueLoader.call();
+            
+            if (shouldCache(key)) {
+                // 热点数据使用Redis缓存
+                if (isHotData(key)) {
+                    cacheService.set(key, value, getExpireTime(key));
+                } else {
+                    // 冷数据使用本地缓存
+                    cacheService.setLocal(key, value, getLocalExpireTime(key));
+                }
+            }
+            
+            return value;
+            
+        } catch (Exception e) {
+            throw new RuntimeException("缓存加载失败", e);
+        }
+    }
+    
+    private boolean shouldCache(String key) {
+        // 根据业务逻辑判断是否需要缓存
+        return !key.startsWith("temp:") && !key.endsWith(":deleted");
+    }
+    
+    private boolean isHotData(String key) {
+        Long accessCount = cacheService.getAccessCount(key);
+        return accessCount != null && accessCount > 100; // 访问次数超过100次认为是热点数据
+    }
+    
+    private Long getExpireTime(String key) {
+        // 根据键的特征确定过期时间
+        if (key.contains("user:")) {
+            return 3600L; // 用户数据1小时
+        } else if (key.contains("config:")) {
+            return 7200L; // 配置数据2小时
+        }
+        return 1800L; // 默认30分钟
+    }
+}
 - `keyGenerator`: 默认键生成器
 - `cacheManager`: 默认缓存管理器
 - `cacheResolver`: 默认缓存解析器

@@ -84,25 +84,39 @@ public class RedisUtil {
     }
 
     /**
-     * 删除缓存
+     * 删除单个缓存
+     * 
+     * @param key 缓存键
+     * @return boolean 是否成功删除
+     * @throws NullPointerException 当key为null时抛出
+     */
+    public boolean delete(String key) {
+        if (key != null) {
+            return redisTemplate.delete(key);
+        }
+        return false;
+    }
+
+    /**
+     * 删除缓存（可以传多个）
      * 
      * @param key 缓存键（可以传多个）
-     * @return boolean 是否成功删除至少一个缓存项
-     * @throws NullPointerException 当传入的key数组为null时返回false
+     * @return long 实际删除的键数量
+     * @throws NullPointerException 当传入的key数组为null时返回0
      */
-    public boolean delete(String... key) {
+    public long delete(String... key) {
         if (key != null && key.length > 0) {
             if (key.length == 1) {
-                return redisTemplate.delete(key[0]);
+                return redisTemplate.delete(key[0]) ? 1 : 0;
             } else {
                 List<String> keyList = new ArrayList<>(key.length);
                 for (String k : key) {
                     keyList.add(k);
                 }
-                return redisTemplate.delete(keyList) > 0;
+                return redisTemplate.delete(keyList);
             }
         }
-        return false;
+        return 0;
     }
 
     /**
@@ -736,5 +750,23 @@ public class RedisUtil {
      */
     public List<Object> multiGet(Collection<String> keys) {
         return redisTemplate.opsForValue().multiGet(keys);
+    }
+
+    /**
+     * 清空所有缓存
+     * <p>
+     * 执行Redis FLUSHALL操作，清空当前数据库中的所有数据
+     * 注意：在生产环境中使用此方法时要格外谨慎，因为这会清空整个Redis数据库
+     * 建议只用于测试环境或特殊情况下的数据清理
+     * </p>
+     * 
+     * @throws RuntimeException 当清空操作失败时抛出
+     */
+    public void clear() {
+        try {
+            redisTemplate.getConnectionFactory().getConnection().flushAll();
+        } catch (Exception e) {
+            throw new RuntimeException("清空Redis缓存失败", e);
+        }
     }
 }

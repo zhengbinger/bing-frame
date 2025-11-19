@@ -1,0 +1,365 @@
+# ===============================================
+# 缓存配置示例 - 高可用Redis + 本地缓存双层架构
+# ===============================================
+# 
+# 本配置文件展示了如何配置完整的缓存系统，包括：
+# - Redis分布式缓存
+# - 本地缓存（降级方案）
+# - 自动降级机制
+# - 环境特定配置
+# - 监控和健康检查
+# 
+# 使用方法：
+# 1. 复制此文件为基础配置
+# 2. 根据环境选择相应的配置段
+# 3. 自定义相关参数
+
+# ===============================================
+# 基础配置模板 (使用YAML锚点避免重复)
+# ===============================================
+
+# Redis基础配置模板
+redis_config: &redis_config
+  host: localhost
+  port: 6379
+  password: ""              # 生产环境使用环境变量管理
+  database: 0
+  timeout: 5000
+  enabled: true
+  key-prefix: "bing:"
+  time-to-live: 3600000     # 1小时（毫秒）
+  cache-null-values: false
+
+# 本地缓存配置模板
+local_config: &local_config
+  max-size: 1000
+  clean-interval: 300       # 5分钟（秒）
+  default-ttl: 1800         # 30分钟（秒）
+
+# Redis连接池配置模板
+lettuce_pool_config: &lettuce_pool_config
+  max-active: 8
+  max-idle: 8
+  min-idle: 0
+  max-wait: -1
+
+# 降级策略配置模板
+fallback_config: &fallback_config
+  max-consecutive-failures: 3
+  check-interval: 30000     # 30秒（毫秒）
+  allow-auto-recovery: true
+  recovery-delay: 60000     # 1分钟（毫秒）
+  allow-manual-switch: true
+
+# Spring Cache基础配置模板
+spring_cache_config: &spring_cache_config
+  type: redis
+  redis:
+    <<: *redis_config              # 使用Redis配置模板
+    lettuce:
+      pool: *lettuce_pool_config   # 使用连接池配置模板
+
+# 应用缓存基础配置模板
+app_cache_config: &app_cache_config
+  redis:
+    lettuce:
+      pool: *lettuce_pool_config   # 使用连接池配置模板
+  
+  local:
+    <<: *local_config              # 使用本地缓存配置模板
+  
+  fallback: *fallback_config       # 使用降级策略配置模板
+  
+  prefix:
+    user: "user:"
+    system: "system:"
+    whiteList: "whitelist:"
+    temp: "temp:"
+
+# ===============================================
+# 主配置 (适用于开发环境)
+# ===============================================
+spring:
+  <<: *spring_cache_config         # 使用Spring Cache配置模板
+
+# 应用缓存配置
+app:
+  cache:
+    <<: *app_cache_config           # 使用应用缓存配置模板
+    
+    # 高级配置部分（可选启用）
+    # 性能调优配置
+    local:
+      <<: *local_config                     # 继承本地缓存基础配置
+      # 容量策略
+      eviction-policy: LRU                  # 淘汰策略（LRU/TTL/FIFO）
+      
+      # 性能调优
+      concurrency-level: 16                 # 并发级别
+      
+      # 统计信息
+      enable-stats: true                    # 是否启用统计信息
+      
+      # 缓存预热
+      warmup:
+        enabled: false                      # 是否启用缓存预热
+        keys: []                            # 预热缓存的键列表
+    
+    # 分布式锁配置
+    lock:
+      default-expire-time: 60               # 默认锁过期时间（秒）
+      wait-timeout: 30                      # 锁等待超时时间（秒）
+      fair-lock: false                      # 是否使用公平锁
+    
+    # 防护机制配置
+    penetration:
+      enable-empty-cache: true              # 是否启用空值缓存
+      empty-cache-ttl: 300                  # 空值缓存TTL（秒）
+    
+    avalanche:
+      random-expiration-range: 600          # 过期时间随机化范围（秒）
+      enable-distributed-lock: true         # 是否使用分布式锁
+    
+    breakdown:
+      enable-mutex-lock: true               # 是否使用互斥锁
+      mutex-expire-time: 60                 # 互斥锁过期时间（秒）
+    
+    # 缓存分区配置（可选）
+    user-cache:
+      ttl: 3600                             # 1小时过期
+      max-size: 5000                        # 5000条用户缓存
+      enable-stats: true
+    
+    config-cache:
+      ttl: 1800                             # 30分钟过期
+      max-size: 1000                        # 1000条配置缓存
+      enable-stats: true
+    
+    temp-cache:
+      ttl: 300                              # 5分钟过期
+      max-size: 2000                        # 2000条临时缓存
+      auto-cleanup: true                    # 自动清理
+
+# ===============================================
+# 环境特定配置
+# ===============================================
+
+# 开发环境配置 (application-dev.yml)
+---
+# 开发环境Spring配置
+spring:
+  type: redis
+  redis:
+    <<: *redis_config
+    host: localhost                 # 本地Redis
+    password: ""                    # 无密码
+    timeout: 3000                   # 开发环境较短超时时间
+    lettuce:
+      pool: *lettuce_pool_config
+
+# 开发环境应用配置
+app:
+  cache:
+    <<: *app_cache_config             # 使用基础配置模板
+    
+    # 开发环境特定调整
+    local:
+      max-size: 500                   # 开发环境较小容量
+      default-ttl: 900                # 15分钟过期时间
+    
+    fallback:
+      max-consecutive-failures: 5     # 开发环境更宽松的降级策略
+      check-interval: 60000           # 1分钟检查一次
+
+# 生产环境配置 (application-prod.yml)
+---
+# 生产环境Spring配置
+spring:
+  type: redis
+  redis:
+    <<: *redis_config
+    host: ${REDIS_HOST:prod-redis-server}    # 环境变量或默认值
+    password: ${REDIS_PASSWORD:prod_password} # 环境变量管理敏感信息
+    timeout: 10000                          # 生产环境更长超时时间
+    time-to-live: 7200000                   # 2小时（毫秒）
+    lettuce:
+      pool:
+        max-active: 20                      # 生产环境增加连接池大小
+        max-idle: 10
+        min-idle: 5
+
+# 生产环境应用配置
+app:
+  cache:
+    <<: *app_cache_config             # 使用基础配置模板
+    
+    # 生产环境特定调整
+    local:
+      max-size: 10000                         # 生产环境增加本地缓存容量
+      clean-interval: 600                     # 10分钟清理一次
+      default-ttl: 3600                       # 1小时过期时间
+    
+    fallback:
+      max-consecutive-failures: 2             # 生产环境更严格的降级策略
+      check-interval: 15000                   # 15秒检查一次（更频繁）
+
+# Redis集群环境配置 (application-cluster.yml)
+---
+# 集群环境Spring配置
+spring:
+  type: redis
+  redis:
+    <<: *redis_config
+    timeout: 8000
+    # Redis集群配置（取消注释使用集群）
+    cluster:
+      nodes:
+        - redis-node-1:6379
+        - redis-node-2:6379
+        - redis-node-3:6379
+      max-redirects: 3
+    
+    # Redis哨兵模式（取消注释使用哨兵）
+    # sentinel:
+    #   master: mymaster
+    #   nodes:
+    #     - sentinel-1:26379
+    #     - sentinel-2:26379
+    lettuce:
+      pool: *lettuce_pool_config
+
+# 集群环境应用配置
+app:
+  cache:
+    <<: *app_cache_config             # 使用基础配置模板
+    
+    # 集群环境特定调整
+    local:
+      max-size: 5000                  # 集群环境中等容量
+      default-ttl: 1800               # 30分钟过期时间
+    
+    fallback:
+      max-consecutive-failures: 2     # 集群环境中等严格策略
+      check-interval: 20000           # 20秒检查一次
+
+# ===============================================
+# 监控和健康检查配置
+# ===============================================
+
+# 监控和健康检查配置
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics,prometheus  # 暴露健康检查和指标端点
+  endpoint:
+    health:
+      show-details: always  # 显示详细健康信息
+  metrics:
+    export:
+      prometheus:
+        enabled: true        # 导出Prometheus指标
+
+# 日志配置
+logging:
+  level:
+    com.bing.framework.cache: DEBUG  # 缓存相关日志输出到DEBUG级别
+    org.springframework.cache: INFO   # Spring缓存日志
+
+# Knife4j接口文档配置
+knife4j:
+  enable: true
+  settings:
+    language: zh-CN
+  basic:
+    enable: false
+
+# ===============================================
+# 使用说明
+# ===============================================
+
+# 1. 环境配置文件：
+#    - application.yml: 主配置（开发环境）
+#    - application-dev.yml: 开发环境配置
+#    - application-prod.yml: 生产环境配置
+#    - application-cluster.yml: 集群环境配置
+
+# 2. 环境变量使用：
+#    - REDIS_HOST: Redis服务器地址
+#    - REDIS_PASSWORD: Redis密码
+#    - 其他敏感配置建议使用环境变量
+
+# 3. 配置优化建议：
+#    - 根据实际内存大小调整local.max-size
+#    - 根据网络状况调整timeout参数
+#    - 生产环境启用所有防护机制
+
+# 4. 监控指标：
+#    - 访问 http://localhost:8080/actuator/health 查看健康状态
+#    - 访问 http://localhost:8080/actuator/metrics 查看详细指标
+#    - 访问 http://localhost:8080/actuator/prometheus 查看Prometheus指标
+
+# ===============================================
+# 故障排除
+# ===============================================
+
+# 1. 降级问题：
+#    - 检查max-consecutive-failures是否设置过小
+#    - 确认Redis连接是否正常
+#    - 查看日志确认降级和恢复过程
+
+# 2. 性能问题：
+#    - 调整local.max-size避免频繁淘汰
+#    - 优化time-to-live避免频繁刷新
+#    - 监控内存使用情况
+
+# 3. 数据一致性：
+#    - 重要数据更新后及时清理缓存
+#    - 考虑使用分布式锁保证一致性
+#    - 定期检查缓存和数据库数据一致性
+
+# ===============================================
+# 配置切换指南
+# ===============================================
+
+# 手动切换缓存模式示例：
+# 
+# @RestController
+# public class CacheController {
+#     @Autowired
+#     private CacheService cacheService;
+#     
+#     @PostMapping("/cache/switch/redis")
+#     public Result switchToRedis() {
+#         cacheService.switchToRedis();
+#         return Result.success("已切换到Redis缓存");
+#     }
+#     
+#     @PostMapping("/cache/switch/local") 
+#     public Result switchToLocal() {
+#         cacheService.switchToLocal();
+#         return Result.success("已切换到本地缓存");
+#     }
+#     
+#     @GetMapping("/cache/stats")
+#     public Result getCacheStats() {
+#         return Result.success(cacheService.getStatistics());
+#     }
+# }
+
+# 使用Spring Cache注解示例：
+#
+# @Cacheable(value = "userCache", key = "#userId")
+# public User getUserById(String userId) {
+#     return userRepository.findById(userId);
+# }
+#
+# @CachePut(value = "userCache", key = "#user.id")
+# public User updateUser(User user) {
+#     return userRepository.save(user);
+# }
+#
+# @CacheEvict(value = "userCache", key = "#userId")
+# public void deleteUser(String userId) {
+#     userRepository.deleteById(userId);
+# }

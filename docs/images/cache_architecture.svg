@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="800" height="600" xmlns="http://www.w3.org/2000/svg">
+  <!-- 定义样式 -->
+  <defs>
+    <style>
+      .title { font-family: Arial, sans-serif; font-size: 18px; font-weight: bold; fill: #333; }
+      .component { font-family: Arial, sans-serif; font-size: 14px; fill: #fff; }
+      .label { font-family: Arial, sans-serif; font-size: 12px; fill: #666; }
+      .arrow { stroke: #4CAF50; stroke-width: 2; fill: none; marker-end: url(#arrowhead); }
+      .redis { fill: #FF5722; }
+      .local { fill: #2196F3; }
+      .service { fill: #4CAF50; }
+      .db { fill: #FF9800; }
+    </style>
+    <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#4CAF50" />
+    </marker>
+  </defs>
+  
+  <!-- 标题 -->
+  <text x="400" y="30" text-anchor="middle" class="title">Bing Framework 缓存架构图</text>
+  
+  <!-- 应用层 -->
+  <rect x="300" y="80" width="200" height="60" fill="#4CAF50" rx="5"/>
+  <text x="400" y="115" text-anchor="middle" class="component">应用层 (Application)</text>
+  
+  <!-- 缓存管理层 -->
+  <rect x="300" y="180" width="200" height="80" fill="#9C27B0" rx="5"/>
+  <text x="400" y="210" text-anchor="middle" class="component">统一缓存管理器</text>
+  <text x="400" y="230" text-anchor="middle" class="component">CacheService</text>
+  <text x="400" y="250" text-anchor="middle" class="label">(支持自动降级)</text>
+  
+  <!-- Redis缓存 -->
+  <rect x="100" y="300" width="150" height="60" fill="#FF5722" rx="5"/>
+  <text x="175" y="325" text-anchor="middle" class="component">Redis缓存</text>
+  <text x="175" y="345" text-anchor="middle" class="label">分布式缓存</text>
+  
+  <!-- 本地缓存 -->
+  <rect x="550" y="300" width="150" height="60" fill="#2196F3" rx="5"/>
+  <text x="625" y="325" text-anchor="middle" class="component">本地缓存</text>
+  <text x="625" y="345" text-anchor="middle" class="label">内存缓存</text>
+  
+  <!-- 数据库 -->
+  <rect x="300" y="450" width="200" height="60" fill="#FF9800" rx="5"/>
+  <text x="400" y="475" text-anchor="middle" class="component">数据源 (Database)</text>
+  <text x="400" y="495" text-anchor="middle" class="label">MySQL/其他DB</text>
+  
+  <!-- 监控组件 -->
+  <rect x="50" y="180" width="150" height="60" fill="#607D8B" rx="5"/>
+  <text x="125" y="205" text-anchor="middle" class="component">监控组件</text>
+  <text x="125" y="225" text-anchor="middle" class="label">健康检查</text>
+  
+  <!-- 连接箭头 -->
+  <!-- 应用层到缓存管理器 -->
+  <path d="M 380 140 L 380 180" class="arrow"/>
+  <path d="M 420 140 L 420 180" class="arrow"/>
+  
+  <!-- 缓存管理器到Redis -->
+  <path d="M 300 220 L 250 280 L 250 300" class="arrow"/>
+  
+  <!-- 缓存管理器到本地缓存 -->
+  <path d="M 500 220 L 550 280 L 550 300" class="arrow"/>
+  
+  <!-- 缓存管理器到数据库 -->
+  <path d="M 380 260 L 380 350 L 400 350 L 400 450" class="arrow"/>
+  <path d="M 420 260 L 420 350 L 400 350 L 400 450" class="arrow"/>
+  
+  <!-- 监控到缓存管理器 -->
+  <path d="M 200 210 L 300 210" class="arrow" stroke="#607D8B"/>
+  
+  <!-- 状态指示器 -->
+  <circle cx="175" cy="380" r="15" fill="#4CAF50"/>
+  <text x="175" y="385" text-anchor="middle" fill="white" font-size="10">正常</text>
+  
+  <circle cx="625" cy="380" r="15" fill="#FF9800"/>
+  <text x="625" y="385" text-anchor="middle" fill="white" font-size="10">备用</text>
+  
+  <!-- 图例 -->
+  <rect x="50" y="520" width="700" height="60" fill="#f5f5f5" rx="5"/>
+  <text x="60" y="540" class="label">图例：</text>
+  
+  <rect x="120" y="525" width="20" height="15" fill="#4CAF50"/>
+  <text x="150" y="537" class="label">服务组件</text>
+  
+  <rect x="220" y="525" width="20" height="15" fill="#FF5722"/>
+  <text x="250" y="537" class="label">Redis缓存</text>
+  
+  <rect x="330" y="525" width="20" height="15" fill="#2196F3"/>
+  <text x="360" y="537" class="label">本地缓存</text>
+  
+  <rect x="440" y="525" width="20" height="15" fill="#FF9800"/>
+  <text x="470" y="537" class="label">数据源</text>
+  
+  <rect x="550" y="525" width="20" height="15" fill="#607D8B"/>
+  <text x="580" y="537" class="label">监控组件</text>
+</svg>

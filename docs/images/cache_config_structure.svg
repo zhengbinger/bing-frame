@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="1000" height="700" xmlns="http://www.w3.org/2000/svg">
+  <!-- 定义样式 -->
+  <defs>
+    <style>
+      .title { font-family: Arial, sans-serif; font-size: 18px; font-weight: bold; fill: #333; }
+      .section { font-family: Arial, sans-serif; font-size: 14px; font-weight: bold; fill: #fff; }
+      .property { font-family: Arial, sans-serif; font-size: 11px; fill: #333; }
+      .value { font-family: Arial, sans-serif; font-size: 10px; fill: #666; font-style: italic; }
+      .yaml-key { fill: #D32F2F; font-weight: bold; }
+      .yaml-value { fill: #388E3C; }
+      .yaml-comment { fill: #757575; font-style: italic; }
+      .redis { fill: #FF5722; }
+      .local { fill: #2196F3; }
+      .app { fill: #4CAF50; }
+      .management { fill: #9C27B0; }
+    </style>
+  </defs>
+  
+  <!-- 标题 -->
+  <text x="500" y="30" text-anchor="middle" class="title">缓存配置结构图</text>
+  
+  <!-- Spring Cache 配置块 -->
+  <rect x="50" y="70" width="900" height="120" fill="#E3F2FD" stroke="#2196F3" stroke-width="2" rx="5"/>
+  <text x="60" y="90" class="section" fill="#1976D2">spring.cache 配置</text>
+  
+  <!-- Redis 配置 -->
+  <rect x="80" y="110" width="200" height="70" class="redis" rx="3"/>
+  <text x="180" y="130" text-anchor="middle" class="section">Redis 配置</text>
+  <text x="90" y="150" class="property">type: redis</text>
+  <text x="90" y="165" class="property">host: localhost</text>
+  <text x="90" y="180" class="value">缓存服务器地址</text>
+  
+  <!-- 本地缓存配置 -->
+  <rect x="300" y="110" width="200" height="70" class="local" rx="3"/>
+  <text x="400" y="130" text-anchor="middle" class="section">Local 配置</text>
+  <text x="310" y="150" class="property">max-size: 1000</text>
+  <text x="310" y="165" class="property">clean-interval: 300</text>
+  <text x="310" y="180" class="value">本地缓存参数</text>
+  
+  <!-- App 配置块 -->
+  <rect x="50" y="220" width="900" height="150" fill="#E8F5E8" stroke="#4CAF50" stroke-width="2" rx="5"/>
+  <text x="60" y="240" class="section" fill="#2E7D32">app.cache 配置</text>
+  
+  <!-- Redis连接池配置 -->
+  <rect x="80" y="260" width="250" height="100" fill="#FFEBEE" stroke="#FF5722" stroke-width="1" rx="3"/>
+  <text x="205" y="280" text-anchor="middle" class="property">redis.lettuce.pool</text>
+  <text x="90" y="300" class="property">max-active: 8</text>
+  <text x="90" y="315" class="property">max-idle: 8</text>
+  <text x="90" y="330" class="property">min-idle: 0</text>
+  <text x="90" y="345" class="value">连接池参数</text>
+  
+  <!-- 缓存前缀配置 -->
+  <rect x="350" y="260" width="200" height="100" fill="#FFF3E0" stroke="#FF9800" stroke-width="1" rx="3"/>
+  <text x="450" y="280" text-anchor="middle" class="property">redis.prefix</text>
+  <text x="360" y="300" class="property">user: "user:"</text>
+  <text x="360" y="315" class="property">system: "system:"</text>
+  <text x="360" y="330" class="property">whiteList: "whitelist:"</text>
+  <text x="360" y="345" class="value">缓存键前缀</text>
+  
+  <!-- 降级策略配置 -->
+  <rect x="570" y="260" width="300" height="100" fill="#F3E5F5" stroke="#9C27B0" stroke-width="1" rx="3"/>
+  <text x="720" y="280" text-anchor="middle" class="property">fallback</text>
+  <text x="580" y="300" class="property">max-consecutive-failures: 3</text>
+  <text x="580" y="315" class="property">check-interval: 30000</text>
+  <text x="580" y="330" class="property">auto-recovery.enabled: true</text>
+  <text x="580" y="345" class="value">降级恢复参数</text>
+  
+  <!-- Management 配置块 -->
+  <rect x="50" y="400" width="900" height="80" fill="#F3E5F5" stroke="#9C27B0" stroke-width="2" rx="5"/>
+  <text x="60" y="420" class="section" fill="#7B1FA2">management.endpoints 配置</text>
+  <text x="80" y="445" class="property">exposure.include: health,info,metrics</text>
+  <text x="80" y="465" class="value">监控端点配置</text>
+  
+  <!-- 环境配置块 -->
+  <rect x="50" y="510" width="900" height="150" fill="#FFF8E1" stroke="#FF9800" stroke-width="2" rx="5"/>
+  <text x="60" y="530" class="section" fill="#F57C00">环境特定配置</text>
+  
+  <!-- 开发环境 -->
+  <rect x="80" y="550" width="200" height="100" fill="#E3F2FD" stroke="#1976D2" stroke-width="1" rx="3"/>
+  <text x="180" y="570" text-anchor="middle" class="property">开发环境 (dev)</text>
+  <text x="90" y="590" class="yaml-key">spring.cache.type:</text><text x="200" y="590" class="yaml-value"> local</text>
+  <text x="90" y="605" class="yaml-key">local.max-size:</text><text x="200" y="605" class="yaml-value"> 500</text>
+  <text x="90" y="620" class="yaml-key">fallback.max-consecutive-failures:</text><text x="280" y="620" class="yaml-value"> 3</text>
+  <text x="90" y="635" class="yaml-comment"># 使用本地缓存，避免外部依赖</text>
+  
+  <!-- 生产环境 -->
+  <rect x="300" y="550" width="250" height="100" fill="#FFEBEE" stroke="#D32F2F" stroke-width="1" rx="3"/>
+  <text x="425" y="570" text-anchor="middle" class="property">生产环境 (prod)</text>
+  <text x="310" y="590" class="yaml-key">spring.cache.type:</text><text x="430" y="590" class="yaml-value"> redis</text>
+  <text x="310" y="605" class="yaml-key">spring.cache.redis.host:</text><text x="450" y="605" class="yaml-value"> ${REDIS_HOST}</text>
+  <text x="310" y="620" class="yaml-key">redis.lettuce.pool.max-active:</text><text x="480" y="620" class="yaml-value"> 20</text>
+  <text x="310" y="635" class="yaml-comment"># 使用Redis，支持分布式部署</text>
+  
+  <!-- 测试环境 -->
+  <rect x="570" y="550" width="200" height="100" fill="#E8F5E8" stroke="#388E3C" stroke-width="1" rx="3"/>
+  <text x="670" y="570" text-anchor="middle" class="property">测试环境 (test)</text>
+  <text x="580" y="590" class="yaml-key">spring.cache.type:</text><text x="700" y="590" class="yaml-value"> simple</text>
+  <text x="580" y="605" class="yaml-key">local.max-size:</text><text x="700" y="605" class="yaml-value"> 200</text>
+  <text x="580" y="620" class="yaml-key">fallback.max-consecutive-failures:</text><text x="750" y="620" class="yaml-value"> 2</text>
+  <text x="580" y="635" class="yaml-comment"># 使用简单缓存，快速测试</text>
+  
+  <!-- 配置说明框 -->
+  <rect x="50" y="30" width="900" height="680" fill="none" stroke="#E0E0E0" stroke-width="1" stroke-dasharray="5,5" rx="5"/>
+  
+  <!-- 图例 -->
+  <rect x="800" y="80" width="140" height="180" fill="#f5f5f5" stroke="#ccc" rx="3"/>
+  <text x="870" y="100" text-anchor="middle" class="property">配置类型图例</text>
+  
+  <rect x="810" y="110" width="20" height="15" class="redis"/>
+  <text x="840" y="122" class="value">Redis相关</text>
+  
+  <rect x="810" y="135" width="20" height="15" class="local"/>
+  <text x="840" y="147" class="value">本地缓存</text>
+  
+  <rect x="810" y="160" width="20" height="15" class="app"/>
+  <text x="840" y="172" class="value">应用配置</text>
+  
+  <rect x="810" y="185" width="20" height="15" class="management"/>
+  <text x="840" y="197" class="value">监控管理</text>
+  
+  <rect x="810" y="210" width="20" height="15" fill="#E3F2FD" stroke="#2196F3"/>
+  <text x="840" y="222" class="value">Spring配置</text>
+  
+  <rect x="810" y="235" width="20" height="15" fill="#E8F5E8" stroke="#4CAF50"/>
+  <text x="840" y="247" class="value">应用配置</text>
+</svg>
