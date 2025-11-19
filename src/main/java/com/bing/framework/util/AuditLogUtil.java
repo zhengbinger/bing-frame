@@ -15,6 +15,8 @@ import lombok.extern.slf4j.Slf4j;
 
 import com.bing.framework.entity.AuditLog;
 import com.bing.framework.service.AuditLogService;
+import com.bing.framework.util.AuditLogUserCache.CachedUserInfo;
+import java.util.Map;
 
 /**
  * 审计日志工具类
@@ -32,10 +34,12 @@ public class AuditLogUtil {
     private static AuditLogUtil instance;
     
     private final AuditLogService auditLogService;
+    private final AuditLogUserCache userCache;
     
     @Autowired
-    public AuditLogUtil(AuditLogService auditLogService) {
+    public AuditLogUtil(AuditLogService auditLogService, AuditLogUserCache userCache) {
         this.auditLogService = auditLogService;
+        this.userCache = userCache;
         // 初始化静态实例，支持静态方法调用
         AuditLogUtil.instance = this;
     }
@@ -114,9 +118,10 @@ public class AuditLogUtil {
             auditLog.setErrorMessage(errorMessage);
         }
         
-        // 获取用户信息（需要根据实际认证机制修改）
-        auditLog.setUserId(null);
-        auditLog.setUsername(getCurrentUsername());
+        // 获取用户信息（优化：使用缓存机制）
+        UserInfo currentUserInfo = getCurrentUserInfo();
+        auditLog.setUserId(currentUserInfo.getUserId());
+        auditLog.setUsername(currentUserInfo.getUsername());
         
         return auditLog;
     }
@@ -184,22 +189,96 @@ public class AuditLogUtil {
     }
     
     /**
-     * 获取当前用户名
+     * 获取当前用户信息（使用缓存优化）
      * 
-     * @return 用户名
+     * @return 用户信息对象
      */
-    private static String getCurrentUsername() {
+    private UserInfo getCurrentUserInfo() {
+        try {
+            // 尝试从请求头获取用户ID
+            Long userId = getUserIdFromRequest();
+            if (userId != null) {
+                // 使用缓存获取用户信息
+                CachedUserInfo cachedUserInfo = userCache.getUserInfo(userId);
+                if (cachedUserInfo != null) {
+                    return new UserInfo(cachedUserInfo.getUserId(), cachedUserInfo.getUsername(), 
+                                      cachedUserInfo.getDisplayName(), cachedUserInfo.getEmail());
+                }
+            }
+            
+            // 缓存未命中或无用户ID，返回默认用户信息
+            return new UserInfo(null, "anonymous", "匿名用户", "anonymous@example.com");
+            
+        } catch (Exception e) {
+            log.warn("获取用户信息失败，返回默认用户", e);
+            return new UserInfo(null, "anonymous", "匿名用户", "anonymous@example.com");
+        }
+    }
+    
+    /**
+     * 从请求中获取用户ID
+     * 
+     * @return 用户ID
+     */
+    private Long getUserIdFromRequest() {
         try {
             ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
             if (attributes != null) {
                 HttpServletRequest request = attributes.getRequest();
-                String username = request.getHeader("X-User-Name");
-                if (username != null && !username.isEmpty()) {
-                    return username;
+                
+                // 尝试从各种可能的头信息获取用户ID
+                String userIdStr = request.getHeader("X-User-Id");
+                if (userIdStr == null || userIdStr.isEmpty()) {
+                    userIdStr = request.getHeader("User-Id");
+                }
+                if (userIdStr == null || userIdStr.isEmpty()) {
+                    userIdStr = request.getHeader("userId");
+                }
+                
+                if (userIdStr != null && !userIdStr.isEmpty()) {
+                    try {
+                        return Long.valueOf(userIdStr);
+                    } catch (NumberFormatException e) {
+                        log.warn("无效的用户ID格式: {}", userIdStr);
+                    }
                 }
             }
         } catch (Exception e) {
-            // 忽略异常
+            log.warn("解析用户ID失败", e);
+        }
+        return null;
+    }
+    
+    /**
+     * 用户信息数据类
+     */
+    private static class UserInfo {
+        private final Long userId;
+        private final String username;
+        private final String displayName;
+        private final String email;
+        
+        public UserInfo(Long userId, String username, String displayName, String email) {
+            this.userId = userId;
+            this.username = username;
+            this.displayName = displayName;
+            this.email = email;
+        }
+        
+        public Long getUserId() { return userId; }
+        public String getUsername() { return username; }
+        public String getDisplayName() { return displayName; }
+        public String getEmail() { return email; }
+    }
+    
+    /**
+     * 获取当前用户名（兼容性方法）
+     * 
+     * @return 用户名
+     */
+    private static String getCurrentUsername() {
+        if (instance != null) {
+            return instance.getCurrentUserInfo().getUsername();
         }
         return "anonymous";
     }

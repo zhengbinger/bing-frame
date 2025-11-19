@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bing.framework.mapper.AuditLogMapper">
+
+    <resultMap id="BaseResultMap" type="com.bing.framework.entity.AuditLog">
+        <id column="id" property="id" jdbcType="BIGINT"/>
+        <result column="user_id" property="userId" jdbcType="BIGINT"/>
+        <result column="username" property="username" jdbcType="VARCHAR"/>
+        <result column="ip_address" property="ipAddress" jdbcType="VARCHAR"/>
+        <result column="operation_time" property="operationTime" jdbcType="TIMESTAMP"/>
+        <result column="module" property="module" jdbcType="VARCHAR"/>
+        <result column="operation_type" property="operationType" jdbcType="VARCHAR"/>
+        <result column="description" property="description" jdbcType="VARCHAR"/>
+        <result column="request_params" property="requestParams" jdbcType="VARCHAR"/>
+        <result column="result" property="result" jdbcType="VARCHAR"/>
+        <result column="error_message" property="errorMessage" jdbcType="VARCHAR"/>
+        <result column="execution_time" property="executionTime" jdbcType="BIGINT"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id, user_id, username, ip_address, operation_time, module, operation_type, description, request_params, result, error_message, execution_time
+    </sql>
+
+    <!-- 批量插入审计日志 -->
+    <insert id="insertBatch" parameterType="java.util.List">
+        INSERT INTO audit_log (
+            user_id, username, ip_address, operation_time, module, 
+            operation_type, description, request_params, result, error_message, execution_time
+        ) VALUES
+        <foreach collection="list" item="item" separator=",">
+            (
+                #{item.userId,jdbcType=BIGINT},
+                #{item.username,jdbcType=VARCHAR},
+                #{item.ipAddress,jdbcType=VARCHAR},
+                #{item.operationTime,jdbcType=TIMESTAMP},
+                #{item.module,jdbcType=VARCHAR},
+                #{item.operationType,jdbcType=VARCHAR},
+                #{item.description,jdbcType=VARCHAR},
+                #{item.requestParams,jdbcType=VARCHAR},
+                #{item.result,jdbcType=VARCHAR},
+                #{item.errorMessage,jdbcType=VARCHAR},
+                #{item.executionTime,jdbcType=BIGINT}
+            )
+        </foreach>
+    </insert>
+
+</mapper>

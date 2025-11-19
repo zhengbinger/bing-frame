@@ -1,7 +1,7 @@
 # 开发环境配置
 spring:
   datasource:
-    url: jdbc:mysql://localhost:3306/bing?useUnicode=true&characterEncoding=UTF-8&serverTimezone=UTC
+    url: jdbc:mysql://localhost:3306/bing?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai&allowMultiQueries=true&useSSL=false&rewriteBatchedStatements=true
     username: root
     password: Zb@123
     driver-class-name: com.mysql.cj.jdbc.Driver

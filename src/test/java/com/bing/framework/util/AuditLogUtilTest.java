@@ -22,6 +22,9 @@ class AuditLogUtilTest {
     @Mock
     private AuditLogService auditLogService;
     
+    @Mock
+    private AuditLogUserCache auditLogUserCache;
+    
     private AutoCloseable closeable;
 
     @BeforeEach
@@ -33,7 +36,7 @@ class AuditLogUtilTest {
         RequestContextHolder.setRequestAttributes(null);
         
         // 创建并设置 AuditLogUtil 实例用于测试
-        AuditLogUtil auditLogUtil = new AuditLogUtil(auditLogService);
+        AuditLogUtil auditLogUtil = new AuditLogUtil(auditLogService, auditLogUserCache);
         AuditLogUtil.setInstance(auditLogUtil);
     }
 

@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="900" height="700" viewBox="0 0 900 700" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <style>
+      .normal { fill: #e8f5e8; stroke: #4caf50; stroke-width: 2; }
+      .error { fill: #ffebee; stroke: #f44336; stroke-width: 2; }
+      .protection { fill: #fff3e0; stroke: #ff9800; stroke-width: 2; }
+      .arrow { stroke: #424242; stroke-width: 2; fill: none; marker-end: url(#arrowhead); }
+      .error-arrow { stroke: #f44336; stroke-width: 2; fill: none; marker-end: url(#error-arrowhead); }
+      .text { font-family: Arial, sans-serif; font-size: 13px; fill: #424242; text-anchor: middle; }
+      .title { font-family: Arial, sans-serif; font-size: 16px; font-weight: bold; fill: #1976d2; text-anchor: middle; }
+      .step { font-family: Arial, sans-serif; font-size: 12px; fill: #1976d2; font-weight: bold; }
+    </style>
+    <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#424242" />
+    </marker>
+    <marker id="error-arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#f44336" />
+    </marker>
+  </defs>
+  
+  <!-- 标题 -->
+  <text x="450" y="30" class="title">死循环防护机制工作原理</text>
+  
+  <!-- 步骤1: 异常检测 -->
+  <rect x="50" y="80" width="130" height="60" class="normal" rx="5"/>
+  <text x="115" y="115" class="text"><tspan class="step">1. 异常检测</tspan><tspan x="115" dy="16">检测数据库</tspan><tspan x="115" dy="16">连接异常</tspan></text>
+  
+  <!-- 步骤2: 防护启动 -->
+  <rect x="250" y="80" width="130" height="60" class="protection" rx="5"/>
+  <text x="315" y="115" class="text"><tspan class="step">2. 防护启动</tspan><tspan x="315" dy="16">启用死循环</tspan><tspan x="315" dy="16">防护机制</tspan></text>
+  
+  <!-- 步骤3: 延迟重试 -->
+  <rect x="450" y="80" width="130" height="60" class="error" rx="5"/>
+  <text x="515" y="115" class="text"><tspan class="step">3. 延迟重试</tspan><tspan x="515" dy="16">添加1秒延迟</tspan><tspan x="515" dy="16">避免快速重试</tspan></text>
+  
+  <!-- 步骤4: 数据保留 -->
+  <rect x="650" y="80" width="130" height="60" class="normal" rx="5"/>
+  <text x="715" y="115" class="text"><tspan class="step">4. 数据保留</tspan><tspan x="715" dy="16">保留数据在</tspan><tspan x="715" dy="16">缓冲队列中</tspan></text>
+  
+  <!-- 步骤5: 状态重置 -->
+  <rect x="250" y="250" width="130" height="60" class="protection" rx="5"/>
+  <text x="315" y="285" class="text"><tspan class="step">5. 状态重置</tspan><tspan x="315" dy="16">设置重试</tspan><tspan x="315" dy="16">次数限制</tspan></text>
+  
+  <!-- 正常流程 -->
+  <rect x="450" y="250" width="130" height="60" class="normal" rx="5"/>
+  <text x="515" y="285" class="text"><tspan class="step">正常流程</tspan><tspan x="515" dy="16">数据库正常时</tspan><tspan x="515" dy="16">批量写入成功</tspan></text>
+  
+  <!-- 监控机制 -->
+  <rect x="650" y="250" width="130" height="60" class="protection" rx="5"/>
+  <text x="715" y="285" class="text"><tspan class="step">监控机制</tspan><tspan x="715" dy="16">实时监控</tspan><tspan x="715" dy="16">队列状态</tspan></text>
+  
+  <!-- 边界条件 -->
+  <rect x="450" y="420" width="130" height="60" class="error" rx="5"/>
+  <text x="515" y="455" class="text"><tspan class="step">边界条件</tspan><tspan x="515" dy="16">限制重试次数</tspan><tspan x="515" dy="16">避免无限循环</tspan></text>
+  
+  <!-- 恢复机制 -->
+  <rect x="650" y="420" width="130" height="60" class="normal" rx="5"/>
+  <text x="715" y="455" class="text"><tspan class="step">恢复机制</tspan><tspan x="715" dy="16">数据库恢复后</tspan><tspan x="715" dy="16">自动继续处理</tspan></text>
+  
+  <!-- 资源保护 -->
+  <rect x="250" y="550" width="130" height="60" class="protection" rx="5"/>
+  <text x="315" y="585" class="text"><tspan class="step">资源保护</tspan><tspan x="315" dy="16">防止系统</tspan><tspan x="315" dy="16">资源耗尽</tspan></text>
+  
+  <!-- 优雅降级 -->
+  <rect x="450" y="550" width="130" height="60" class="protection" rx="5"/>
+  <text x="515" y="585" class="text"><tspan class="step">优雅降级</tspan><tspan x="515" dy="16">极端情况下</tspan><tspan x="515" dy="16">降级处理</tspan></text>
+  
+  <!-- 主要流程箭头 -->
+  <line x1="180" y1="110" x2="250" y2="110" class="arrow"/>
+  <line x1="380" y1="110" x2="450" y2="110" class="arrow"/>
+  <line x1="580" y1="110" x2="650" y2="110" class="arrow"/>
+  <line x1="715" y1="140" x2="715" y2="250" class="arrow"/>
+  <line x1="315" y1="140" x2="315" y2="250" class="arrow"/>
+  <line x1="580" y1="280" x2="650" y2="280" class="arrow"/>
+  
+  <!-- 错误处理箭头 -->
+  <line x1="515" y1="140" x2="515" y2="420" class="error-arrow" stroke-dasharray="5,5"/>
+  <line x1="515" y1="480" x2="515" y2="550" class="arrow"/>
+  <line x1="315" y1="310" x2="315" y2="550" class="arrow"/>
+  
+  <!-- 监控循环 -->
+  <line x1="715" y1="310" x2="715" y2="180" class="arrow" stroke-dasharray="5,5"/>
+  <line x1="715" y1="180" x2="180" y2="180" class="arrow" stroke-dasharray="5,5"/>
+  <line x1="180" y1="180" x2="180" y2="110" class="arrow" stroke-dasharray="5,5"/>
+  
+  <!-- 恢复流程 -->
+  <line x1="715" y1="480" x2="715" y2="550" class="arrow"/>
+  <line x1="715" y1="550" x2="580" y2="550" class="arrow"/>
+  
+  <!-- 说明文字 -->
+  <text x="450" y="640" class="text">防护原理：通过移除递归调用、添加延迟重试、限制重试次数等方式防止死循环</text>
+  <text x="450" y="660" class="text">安全保障：确保在数据库异常时系统仍能稳定运行，数据不丢失</text>
+</svg>

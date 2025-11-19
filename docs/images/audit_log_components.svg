@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600" width="800" height="600">
+  <defs>
+    <style>
+      .title { font-family: Arial, sans-serif; font-size: 18px; font-weight: bold; fill: #333; }
+      .component { font-family: Arial, sans-serif; font-size: 12px; fill: #333; }
+      .entity-box { fill: #e3f2fd; stroke: #1976d2; stroke-width: 2; rx: 5; }
+      .service-box { fill: #f3e5f5; stroke: #7b1fa2; stroke-width: 2; rx: 5; }
+      .util-box { fill: #e8f5e8; stroke: #388e3c; stroke-width: 2; rx: 5; }
+      .aspect-box { fill: #fff3e0; stroke: #f57c00; stroke-width: 2; rx: 5; }
+      .config-box { fill: #fce4ec; stroke: #c2185b; stroke-width: 2; rx: 5; }
+      .arrow { stroke: #666; stroke-width: 2; marker-end: url(#arrowhead); }
+      .dashed-arrow { stroke: #999; stroke-width: 2; stroke-dasharray: 5,5; marker-end: url(#arrowhead); }
+    </style>
+    <marker id="arrowhead" markerWidth="10" markerHeight="7" 
+            refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#666" />
+    </marker>
+  </defs>
+  
+  <!-- Title -->
+  <text x="400" y="25" class="title" text-anchor="middle">审计日志系统核心组件关系图</text>
+  
+  <!-- Entity Layer -->
+  <rect x="50" y="80" width="200" height="60" class="entity-box"/>
+  <text x="150" y="100" class="component" text-anchor="middle">AuditLog</text>
+  <text x="150" y="120" class="component" text-anchor="middle" font-size="10">实体类</text>
+  <text x="150" y="135" class="component" text-anchor="middle" font-size="9">定义审计日志数据结构</text>
+  
+  <!-- Mapper Layer -->
+  <rect x="50" y="180" width="200" height="60" class="entity-box"/>
+  <text x="150" y="200" class="component" text-anchor="middle">AuditLogMapper</text>
+  <text x="150" y="220" class="component" text-anchor="middle" font-size="10">数据库访问层</text>
+  <text x="150" y="235" class="component" text-anchor="middle" font-size="9">提供CRUD操作</text>
+  
+  <!-- Service Layer -->
+  <rect x="50" y="300" width="200" height="80" class="service-box"/>
+  <text x="150" y="320" class="component" text-anchor="middle">AuditLogService</text>
+  <text x="150" y="340" class="component" text-anchor="middle" font-size="10">业务逻辑层</text>
+  <text x="150" y="355" class="component" text-anchor="middle" font-size="9">• 同步记录日志</text>
+  <text x="150" y="370" class="component" text-anchor="middle" font-size="9">• 异步记录日志</text>
+  
+  <!-- Buffer Manager -->
+  <rect x="50" y="420" width="200" height="70" class="service-box"/>
+  <text x="150" y="440" class="component" text-anchor="middle">AuditLogBufferManager</text>
+  <text x="150" y="460" class="component" text-anchor="middle" font-size="10">缓冲池管理器</text>
+  <text x="150" y="475" class="component" text-anchor="middle" font-size="9">• 批量写入</text>
+  <text x="150" y="490" class="component" text-anchor="middle" font-size="9">• 死循环防护</text>
+  
+  <!-- Aspect Layer -->
+  <rect x="300" y="180" width="200" height="60" class="aspect-box"/>
+  <text x="400" y="200" class="component" text-anchor="middle">AuditLogAspect</text>
+  <text x="400" y="220" class="component" text-anchor="middle" font-size="10">AOP切面</text>
+  <text x="400" y="235" class="component" text-anchor="middle" font-size="9">自动拦截Controller</text>
+  
+  <!-- Util Layer -->
+  <rect x="300" y="300" width="200" height="60" class="util-box"/>
+  <text x="400" y="320" class="component" text-anchor="middle">AuditLogUtil</text>
+  <text x="400" y="340" class="component" text-anchor="middle" font-size="10">工具类</text>
+  <text x="400" y="355" class="component" text-anchor="middle" font-size="9">手动记录业务日志</text>
+  
+  <!-- Appender -->
+  <rect x="300" y="420" width="200" height="70" class="util-box"/>
+  <text x="400" y="440" class="component" text-anchor="middle">AuditLogAppender</text>
+  <text x="400" y="460" class="component" text-anchor="middle" font-size="10">Logback Appender</text>
+  <text x="400" y="475" class="component" text-anchor="middle" font-size="9">• 自定义输出器</text>
+  <text x="400" y="490" class="component" text-anchor="middle" font-size="9">• 日志写入数据库</text>
+  
+  <!-- Async Config -->
+  <rect x="550" y="180" width="200" height="60" class="config-box"/>
+  <text x="650" y="200" class="component" text-anchor="middle">AsyncLogConfig</text>
+  <text x="650" y="220" class="component" text-anchor="middle" font-size="10">异步配置</text>
+  <text x="650" y="235" class="component" text-anchor="middle" font-size="9">专用线程池配置</text>
+  
+  <!-- Audit Log Level -->
+  <rect x="550" y="300" width="200" height="80" class="config-box"/>
+  <text x="650" y="320" class="component" text-anchor="middle">@AuditLogLevel</text>
+  <text x="650" y="340" class="component" text-anchor="middle" font-size="10">审计级别注解</text>
+  <text x="650" y="355" class="component" text-anchor="middle" font-size="9">• FULL/BASIC/MINIMAL</text>
+  <text x="650" y="370" class="component" text-anchor="middle" font-size="9">• ignore = true/false</text>
+  
+  <!-- Database -->
+  <rect x="550" y="450" width="200" height="70" class="entity-box"/>
+  <text x="650" y="470" class="component" text-anchor="middle">audit_log</text>
+  <text x="650" y="490" class="component" text-anchor="middle" font-size="10">MySQL数据库表</text>
+  <text x="650" y="505" class="component" text-anchor="middle" font-size="9">存储审计日志数据</text>
+  
+  <!-- Connections -->
+  <!-- Mapper to Service -->
+  <line x1="150" y1="240" x2="150" y2="300" class="arrow"/>
+  <!-- Service to Buffer -->
+  <line x1="150" y1="380" x2="150" y2="420" class="arrow"/>
+  <!-- Service to Mapper -->
+  <line x1="250" y1="340" x2="280" y2="340" class="arrow"/>
+  <!-- Aspect to Service -->
+  <line x1="300" y1="210" x2="250" y2="330" class="arrow"/>
+  <!-- Util to Service -->
+  <line x1="300" y1="330" x2="250" y2="340" class="arrow"/>
+  <!-- Service to Appender -->
+  <line x1="250" y1="360" x2="300" y2="455" class="arrow"/>
+  <!-- Config to Service -->
+  <line x1="550" y1="210" x2="280" y2="340" class="dashed-arrow"/>
+  <!-- Annotation to Aspect -->
+  <line x1="550" y1="340" x2="500" y2="210" class="dashed-arrow"/>
+  <!-- Buffer to Database -->
+  <line x1="250" y1="485" x2="550" y2="485" class="arrow"/>
+  <!-- Appender to Database -->
+  <line x1="500" y1="485" x2="550" y2="485" class="arrow"/>
+  
+  <!-- Layer Labels -->
+  <text x="20" y="115" class="component" font-size="10">实体层</text>
+  <text x="20" y="215" class="component" font-size="10">数据访问层</text>
+  <text x="20" y="335" class="component" font-size="10">业务逻辑层</text>
+  <text x="20" y="455" class="component" font-size="10">管理层</text>
+  <text x="275" y="115" class="component" font-size="10">切面层</text>
+  <text x="275" y="235" class="component" font-size="10">工具层</text>
+  <text x="520" y="115" class="component" font-size="10">配置层</text>
+</svg>
