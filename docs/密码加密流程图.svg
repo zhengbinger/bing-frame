@@ -1,0 +1,513 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>密码加密流程图 - SVG版本</title>
+    <style>
+        body {
+            font-family: 'Microsoft YaHei', Arial, sans-serif;
+            margin: 20px;
+            background-color: #f5f5f5;
+            line-height: 1.4;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        h1 {
+            color: #2c3e50;
+            text-align: center;
+            margin-bottom: 40px;
+            font-size: 28px;
+        }
+        
+        .diagram-section {
+            margin: 50px 0;
+            page-break-inside: avoid;
+        }
+        
+        .diagram-title {
+            font-size: 22px;
+            color: #2c3e50;
+            text-align: center;
+            margin-bottom: 20px;
+            font-weight: bold;
+        }
+        
+        svg {
+            width: 100%;
+            height: auto;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            margin: 20px 0;
+        }
+        
+        .text-main {
+            font-family: 'Microsoft YaHei', Arial, sans-serif;
+            font-size: 14px;
+            font-weight: bold;
+        }
+        
+        .text-small {
+            font-family: 'Microsoft YaHei', Arial, sans-serif;
+            font-size: 12px;
+        }
+        
+        .text-large {
+            font-family: 'Microsoft YaHei', Arial, sans-serif;
+            font-size: 16px;
+            font-weight: bold;
+        }
+        
+        .export-info {
+            background: #ecf0f1;
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 40px;
+            border-left: 4px solid #3498db;
+        }
+        
+        @media print {
+            .diagram-section {
+                page-break-inside: avoid;
+            }
+            .container {
+                box-shadow: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔐 配置密码加密技术流程图 - SVG版本</h1>
+        
+        <!-- 1. 总体架构流程 -->
+        <div class="diagram-section">
+            <div class="diagram-title">1. 总体架构流程</div>
+            <svg viewBox="0 0 1200 400" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                    <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="0%">
+                        <stop offset="0%" style="stop-color:#667eea;stop-opacity:1" />
+                        <stop offset="100%" style="stop-color:#764ba2;stop-opacity:1" />
+                    </linearGradient>
+                    <linearGradient id="grad2" x1="0%" y1="0%" x2="100%" y2="0%">
+                        <stop offset="0%" style="stop-color:#ff6b6b;stop-opacity:1" />
+                        <stop offset="100%" style="stop-color:#ee5a24;stop-opacity:1" />
+                    </linearGradient>
+                    <linearGradient id="grad3" x1="0%" y1="0%" x2="100%" y2="0%">
+                        <stop offset="0%" style="stop-color:#4834d4;stop-opacity:1" />
+                        <stop offset="100%" style="stop-color:#686de0;stop-opacity:1" />
+                    </linearGradient>
+                </defs>
+                
+                <!-- 背景 -->
+                <rect width="1200" height="400" fill="url(#grad1)" rx="10"/>
+                
+                <!-- 上半部分：加密流程 -->
+                <g id="encryption-flow">
+                    <!-- 敏感配置数据 -->
+                    <rect x="50" y="50" width="140" height="60" rx="8" fill="white" stroke="#333" stroke-width="2"/>
+                    <text x="120" y="70" class="text-main" text-anchor="middle">敏感配置数据</text>
+                    <text x="120" y="90" class="text-small" text-anchor="middle" fill="#666">(明文密码)</text>
+                    
+                    <!-- 箭头1 -->
+                    <path d="M 190 80 L 240 80" stroke="#2ecc71" stroke-width="3" fill="none" marker-end="url(#arrowhead)"/>
+                    <text x="215" y="75" class="text-small" fill="#2ecc71">→</text>
+                    
+                    <!-- AES-GCM加密 -->
+                    <rect x="240" y="50" width="140" height="60" rx="8" fill="url(#grad2)" stroke="#333" stroke-width="2"/>
+                    <text x="310" y="70" class="text-main" text-anchor="middle" fill="white">AES-GCM加密</text>
+                    <text x="310" y="90" class="text-small" text-anchor="middle" fill="white">(256位密钥)</text>
+                    
+                    <!-- 箭头2 -->
+                    <path d="M 380 80 L 430 80" stroke="#2ecc71" stroke-width="3" fill="none"/>
+                    <text x="405" y="75" class="text-small" fill="#2ecc71">→</text>
+                    
+                    <!-- 加密后数据 -->
+                    <rect x="430" y="50" width="140" height="60" rx="8" fill="white" stroke="#333" stroke-width="2"/>
+                    <text x="500" y="70" class="text-main" text-anchor="middle">加密后数据</text>
+                    <text x="500" y="90" class="text-small" text-anchor="middle" fill="#666">(密文+IV)</text>
+                    
+                    <!-- 箭头3 -->
+                    <path d="M 570 80 L 620 80" stroke="#2ecc71" stroke-width="3" fill="none"/>
+                    <text x="595" y="75" class="text-small" fill="#2ecc71">→</text>
+                    
+                    <!-- 配置文件存储 -->
+                    <rect x="620" y="50" width="140" height="60" rx="8" fill="white" stroke="#333" stroke-width="2"/>
+                    <text x="690" y="70" class="text-main" text-anchor="middle">配置文件存储</text>
+                    <text x="690" y="90" class="text-small" text-anchor="middle" fill="#666">(ENC()格式)</text>
+                </g>
+                
+                <!-- 下箭头 -->
+                <g id="down-arrow">
+                    <path d="M 690 130 L 690 180" stroke="#3498db" stroke-width="3" fill="none"/>
+                    <text x="710" y="160" class="text-large" fill="#3498db">↓</text>
+                </g>
+                
+                <!-- 下半部分：解密流程 -->
+                <g id="decryption-flow">
+                    <!-- 业务逻辑使用 -->
+                    <rect x="50" y="220" width="140" height="60" rx="8" fill="white" stroke="#333" stroke-width="2"/>
+                    <text x="120" y="240" class="text-main" text-anchor="middle">业务逻辑使用</text>
+                    <text x="120" y="260" class="text-small" text-anchor="middle" fill="#666">(内存明文)</text>
+                    
+                    <!-- 箭头左1 -->
+                    <path d="M 190 250 L 240 250" stroke="#f39c12" stroke-width="3" fill="none" marker-end="url(#arrowhead-rev)"/>
+                    <text x="215" y="245" class="text-small" fill="#f39c12">←</text>
+                    
+                    <!-- AES-GCM解密 -->
+                    <rect x="240" y="220" width="140" height="60" rx="8" fill="url(#grad3)" stroke="#333" stroke-width="2"/>
+                    <text x="310" y="240" class="text-main" text-anchor="middle" fill="white">AES-GCM解密</text>
+                    <text x="310" y="260" class="text-small" text-anchor="middle" fill="white">(256位密钥)</text>
+                    
+                    <!-- 箭头左2 -->
+                    <path d="M 380 250 L 430 250" stroke="#f39c12" stroke-width="3" fill="none"/>
+                    <text x="405" y="245" class="text-small" fill="#f39c12">←</text>
+                    
+                    <!-- 解析ENC()格式 -->
+                    <rect x="430" y="220" width="140" height="60" rx="8" fill="white" stroke="#333" stroke-width="2"/>
+                    <text x="500" y="235" class="text-main" text-anchor="middle">解析ENC()格式</text>
+                    <text x="500" y="255" class="text-small" text-anchor="middle" fill="#666">(分离IV+密文)</text>
+                    
+                    <!-- 箭头左3 -->
+                    <path d="M 570 250 L 620 250" stroke="#f39c12" stroke-width="3" fill="none"/>
+                    <text x="595" y="245" class="text-small" fill="#f39c12">←</text>
+                    
+                    <!-- 读取配置文件 -->
+                    <rect x="620" y="220" width="140" height="60" rx="8" fill="white" stroke="#333" stroke-width="2"/>
+                    <text x="690" y="240" class="text-main" text-anchor="middle">读取配置文件</text>
+                    <text x="690" y="260" class="text-small" text-anchor="middle" fill="#666">(application.yml)</text>
+                </g>
+                
+                <!-- 箭头定义 -->
+                <defs>
+                    <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+                        <polygon points="0 0, 10 3.5, 0 7" fill="#2ecc71" />
+                    </marker>
+                    <marker id="arrowhead-rev" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+                        <polygon points="10 0, 0 3.5, 10 7" fill="#f39c12" />
+                    </marker>
+                </defs>
+            </svg>
+        </div>
+        
+        <!-- 2. 密钥派生流程 -->
+        <div class="diagram-section">
+            <div class="diagram-title">2. 密钥派生流程 (PBKDF2)</div>
+            <svg viewBox="0 0 1000 300" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                    <linearGradient id="grad4" x1="0%" y1="0%" x2="100%" y2="0%">
+                        <stop offset="0%" style="stop-color:#667eea;stop-opacity:1" />
+                        <stop offset="100%" style="stop-color:#764ba2;stop-opacity:1" />
+                    </linearGradient>
+                </defs>
+                
+                <!-- 背景 -->
+                <rect width="1000" height="300" fill="url(#grad4)" rx="10"/>
+                
+                <!-- 输入框 -->
+                <rect x="50" y="100" width="250" height="120" rx="8" fill="#ecf0f1" stroke="#3498db" stroke-width="4"/>
+                <text x="175" y="125" class="text-large" text-anchor="middle" fill="#2c3e50">输入</text>
+                <rect x="70" y="140" width="210" height="25" rx="4" fill="white" stroke="#ddd"/>
+                <text x="175" y="157" class="text-small" text-anchor="middle">用户密码 (Password)</text>
+                <rect x="70" y="175" width="210" height="25" rx="4" fill="white" stroke="#ddd"/>
+                <text x="175" y="192" class="text-small" text-anchor="middle">随机盐值 (32字节)</text>
+                
+                <!-- 箭头 -->
+                <path d="M 320 160 L 420 160" stroke="#2ecc71" stroke-width="4" fill="none" marker-end="url(#arrowhead)"/>
+                <text x="370" y="155" class="text-small" fill="#2ecc71" font-size="14">→</text>
+                
+                <!-- PBKDF2处理框 -->
+                <rect x="420" y="80" width="250" height="160" rx="8" fill="#ecf0f1" stroke="#e74c3c" stroke-width="4"/>
+                <text x="545" y="105" class="text-large" text-anchor="middle" fill="#2c3e50">PBKDF2处理</text>
+                <rect x="440" y="120" width="210" height="25" rx="4" fill="white" stroke="#ddd"/>
+                <text x="545" y="137" class="text-small" text-anchor="middle">迭代次数: 100,000次</text>
+                <rect x="440" y="155" width="210" height="25" rx="4" fill="white" stroke="#ddd"/>
+                <text x="545" y="172" class="text-small" text-anchor="middle">HMAC-SHA256算法</text>
+                <rect x="440" y="190" width="210" height="25" rx="4" fill="white" stroke="#ddd"/>
+                <text x="545" y="207" class="text-small" text-anchor="middle">输出长度: 256位</text>
+                
+                <!-- 箭头 -->
+                <path d="M 690 160 L 790 160" stroke="#2ecc71" stroke-width="4" fill="none" marker-end="url(#arrowhead)"/>
+                <text x="740" y="155" class="text-small" fill="#2ecc71" font-size="14">→</text>
+                
+                <!-- 输出框 -->
+                <rect x="790" y="100" width="160" height="120" rx="8" fill="#ecf0f1" stroke="#27ae60" stroke-width="4"/>
+                <text x="870" y="125" class="text-large" text-anchor="middle" fill="#2c3e50">输出</text>
+                <rect x="810" y="140" width="120" height="25" rx="4" fill="white" stroke="#ddd"/>
+                <text x="870" y="157" class="text-small" text-anchor="middle">派生密钥</text>
+                <text x="870" y="170" class="text-small" text-anchor="middle">(256位)</text>
+                <rect x="810" y="185" width="120" height="25" rx="4" fill="white" stroke="#ddd"/>
+                <text x="870" y="202" class="text-small" text-anchor="middle">用于AES加密</text>
+            </svg>
+        </div>
+        
+        <!-- 3. AES-GCM加密处理过程 -->
+        <div class="diagram-section">
+            <div class="diagram-title">3. AES-GCM加密处理过程</div>
+            <svg viewBox="0 0 1200 350" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                    <linearGradient id="grad5" x1="0%" y1="0%" x2="100%" y2="0%">
+                        <stop offset="0%" style="stop-color:#667eea;stop-opacity:1" />
+                        <stop offset="100%" style="stop-color:#764ba2;stop-opacity:1" />
+                    </linearGradient>
+                </defs>
+                
+                <!-- 背景 -->
+                <rect width="1200" height="350" fill="url(#grad5)" rx="10"/>
+                
+                <!-- 步骤1: 生成随机IV -->
+                <g id="step1">
+                    <rect x="50" y="50" width="220" height="120" rx="8" fill="#3498db" opacity="0.2" stroke="#3498db" stroke-width="3"/>
+                    <text x="160" y="75" class="text-large" text-anchor="middle" fill="#2c3e50">步骤1: 生成随机IV</text>
+                    <rect x="70" y="90" width="180" height="25" rx="4" fill="white" stroke="#ddd"/>
+                    <text x="160" y="107" class="text-small" text-anchor="middle">初始化向量 (12字节)</text>
+                    <rect x="70" y="125" width="180" height="25" rx="4" fill="white" stroke="#ddd"/>
+                    <text x="160" y="142" class="text-small" text-anchor="middle">确保每次加密唯一性</text>
+                </g>
+                
+                <!-- 箭头1 -->
+                <path d="M 290 110 L 340 110" stroke="#2ecc71" stroke-width="3" fill="none" marker-end="url(#arrowhead)"/>
+                
+                <!-- 步骤2: AES-256加密 -->
+                <g id="step2">
+                    <rect x="340" y="50" width="220" height="120" rx="8" fill="#e74c3c" opacity="0.2" stroke="#e74c3c" stroke-width="3"/>
+                    <text x="450" y="75" class="text-large" text-anchor="middle" fill="#2c3e50">步骤2: AES-256加密</text>
+                    <rect x="360" y="90" width="180" height="25" rx="4" fill="white" stroke="#ddd"/>
+                    <text x="450" y="107" class="text-small" text-anchor="middle">明文数据加密</text>
+                    <rect x="360" y="125" width="180" height="25" rx="4" fill="white" stroke="#ddd"/>
+                    <text x="450" y="142" class="text-small" text-anchor="middle">使用GCM模式</text>
+                </g>
+                
+                <!-- 箭头2 -->
+                <path d="M 580 110 L 630 110" stroke="#2ecc71" stroke-width="3" fill="none" marker-end="url(#arrowhead)"/>
+                
+                <!-- 步骤3: 生成认证标签 -->
+                <g id="step3">
+                    <rect x="630" y="50" width="220" height="120" rx="8" fill="#f39c12" opacity="0.2" stroke="#f39c12" stroke-width="3"/>
+                    <text x="740" y="75" class="text-large" text-anchor="middle" fill="#2c3e50">步骤3: 生成认证标签</text>
+                    <rect x="650" y="90" width="180" height="25" rx="4" fill="white" stroke="#ddd"/>
+                    <text x="740" y="107" class="text-small" text-anchor="middle">消息认证码 (16字节)</text>
+                    <rect x="650" y="125" width="180" height="25" rx="4" fill="white" stroke="#ddd"/>
+                    <text x="740" y="142" class="text-small" text-anchor="middle">防止数据篡改</text>
+                </g>
+                
+                <!-- 箭头3 -->
+                <path d="M 870 110 L 920 110" stroke="#2ecc71" stroke-width="3" fill="none" marker-end="url(#arrowhead)"/>
+                
+                <!-- 步骤4: 拼接输出 -->
+                <g id="step4">
+                    <rect x="920" y="50" width="220" height="120" rx="8" fill="#27ae60" opacity="0.2" stroke="#27ae60" stroke-width="3"/>
+                    <text x="1030" y="75" class="text-large" text-anchor="middle" fill="#2c3e50">步骤4: 拼接输出</text>
+                    <rect x="940" y="90" width="180" height="25" rx="4" fill="white" stroke="#ddd"/>
+                    <text x="1030" y="107" class="text-small" text-anchor="middle">IV + 密文 + 认证标签</text>
+                    <rect x="940" y="125" width="180" height="25" rx="4" fill="white" stroke="#ddd"/>
+                    <text x="1030" y="142" class="text-small" text-anchor="middle">Base64编码</text>
+                </g>
+                
+                <!-- 下箭头 -->
+                <path d="M 1030 190 L 1030 240" stroke="#3498db" stroke-width="3" fill="none" marker-end="url(#arrowhead-down)"/>
+                
+                <!-- 最终输出 -->
+                <rect x="920" y="240" width="220" height="80" rx="8" fill="#2ecc71" opacity="0.2" stroke="#2ecc71" stroke-width="3"/>
+                <text x="1030" y="265" class="text-large" text-anchor="middle" fill="#2c3e50">最终输出格式</text>
+                <text x="1030" y="285" class="text-small" text-anchor="middle">ENC(Base64编码数据)</text>
+                
+                <!-- 箭头定义 -->
+                <defs>
+                    <marker id="arrowhead-down" markerWidth="10" markerHeight="7" refX="5" refY="3.5" orient="auto">
+                        <polygon points="0 0, 10 3.5, 0 7" fill="#3498db" />
+                    </marker>
+                </defs>
+            </svg>
+        </div>
+        
+        <!-- 4. Spring Boot配置解析流程 -->
+        <div class="diagram-section">
+            <div class="diagram-title">4. Spring Boot配置解析流程</div>
+            <svg viewBox="0 0 1200 400" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                    <linearGradient id="grad6" x1="0%" y1="0%" x2="100%" y2="0%">
+                        <stop offset="0%" style="stop-color:#667eea;stop-opacity:1" />
+                        <stop offset="100%" style="stop-color:#764ba2;stop-opacity:1" />
+                    </linearGradient>
+                </defs>
+                
+                <!-- 背景 -->
+                <rect width="1200" height="400" fill="url(#grad6)" rx="10"/>
+                
+                <!-- 主要流程 -->
+                <g id="main-flow">
+                    <!-- 读取配置源 -->
+                    <rect x="50" y="50" width="140" height="60" rx="8" fill="white" stroke="#333" stroke-width="2"/>
+                    <text x="120" y="70" class="text-main" text-anchor="middle">读取配置源</text>
+                    <text x="120" y="90" class="text-small" text-anchor="middle" fill="#666">(application.yml)</text>
+                    
+                    <!-- 箭头1 -->
+                    <path d="M 190 80 L 240 80" stroke="#2ecc71" stroke-width="3" fill="none" marker-end="url(#arrowhead)"/>
+                    
+                    <!-- PropertySource -->
+                    <rect x="240" y="50" width="140" height="60" rx="8" fill="white" stroke="#333" stroke-width="2"/>
+                    <text x="310" y="70" class="text-main" text-anchor="middle">PropertySource</text>
+                    <text x="310" y="90" class="text-small" text-anchor="middle" fill="#666">(处理器)</text>
+                    
+                    <!-- 箭头2 -->
+                    <path d="M 380 80 L 430 80" stroke="#2ecc71" stroke-width="3" fill="none" marker-end="url(#arrowhead)"/>
+                    
+                    <!-- EncryptedProperty -->
+                    <rect x="430" y="50" width="140" height="60" rx="8" fill="white" stroke="#333" stroke-width="2"/>
+                    <text x="500" y="65" class="text-main" text-anchor="middle">EncryptedProperty</text>
+                    <text x="500" y="85" class="text-small" text-anchor="middle" fill="#666">(Processor)</text>
+                    
+                    <!-- 箭头3 -->
+                    <path d="M 570 80 L 620 80" stroke="#2ecc71" stroke-width="3" fill="none" marker-end="url(#arrowhead)"/>
+                    
+                    <!-- 解密处理 -->
+                    <rect x="620" y="50" width="140" height="60" rx="8" fill="white" stroke="#333" stroke-width="2"/>
+                    <text x="690" y="70" class="text-main" text-anchor="middle">解密处理</text>
+                    <text x="690" y="90" class="text-small" text-anchor="middle" fill="#666">(逻辑)</text>
+                </g>
+                
+                <!-- 下箭头 -->
+                <path d="M 690 130 L 690 180" stroke="#3498db" stroke-width="3" fill="none" marker-end="url(#arrowhead-down)"/>
+                
+                <!-- 详细处理框 -->
+                <g id="detail-process">
+                    <!-- 解析ENC()格式 -->
+                    <rect x="50" y="220" width="220" height="120" rx="8" fill="#ecf0f1" stroke="#3498db" stroke-width="3"/>
+                    <text x="160" y="245" class="text-main" text-anchor="middle" fill="#2c3e50">解析ENC()格式</text>
+                    <rect x="70" y="260" width="180" height="25" rx="4" fill="white" stroke="#ddd"/>
+                    <text x="160" y="277" class="text-small" text-anchor="middle">提取加密数据</text>
+                    <rect x="70" y="295" width="180" height="25" rx="4" fill="white" stroke="#ddd"/>
+                    <text x="160" y="312" class="text-small" text-anchor="middle">格式验证</text>
+                    
+                    <!-- 缓存机制 -->
+                    <rect x="320" y="220" width="220" height="120" rx="8" fill="#ecf0f1" stroke="#f39c12" stroke-width="3"/>
+                    <text x="430" y="245" class="text-main" text-anchor="middle" fill="#2c3e50">缓存机制</text>
+                    <rect x="340" y="260" width="180" height="25" rx="4" fill="white" stroke="#ddd"/>
+                    <text x="430" y="277" class="text-small" text-anchor="middle">避免重复解密</text>
+                    <rect x="340" y="295" width="180" height="25" rx="4" fill="white" stroke="#ddd"/>
+                    <text x="430" y="312" class="text-small" text-anchor="middle">提升性能</text>
+                    
+                    <!-- AES-GCM解密 -->
+                    <rect x="590" y="220" width="220" height="120" rx="8" fill="#ecf0f1" stroke="#27ae60" stroke-width="3"/>
+                    <text x="700" y="245" class="text-main" text-anchor="middle" fill="#2c3e50">AES-GCM解密</text>
+                    <rect x="610" y="260" width="180" height="25" rx="4" fill="white" stroke="#ddd"/>
+                    <text x="700" y="277" class="text-small" text-anchor="middle">返回明文</text>
+                    <rect x="610" y="295" width="180" height="25" rx="4" fill="white" stroke="#ddd"/>
+                    <text x="700" y="312" class="text-small" text-anchor="middle">业务使用</text>
+                </g>
+            </svg>
+        </div>
+        
+        <!-- 5. 配置文件生命周期管理 -->
+        <div class="diagram-section">
+            <div class="diagram-title">5. 配置文件生命周期管理</div>
+            <svg viewBox="0 0 1200 400" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                    <linearGradient id="grad7" x1="0%" y1="0%" x2="100%" y2="0%">
+                        <stop offset="0%" style="stop-color:#667eea;stop-opacity:1" />
+                        <stop offset="100%" style="stop-color:#764ba2;stop-opacity:1" />
+                    </linearGradient>
+                </defs>
+                
+                <!-- 背景 -->
+                <rect width="1200" height="400" fill="url(#grad7)" rx="10"/>
+                
+                <!-- 主要生命周期流程 -->
+                <g id="lifecycle-flow">
+                    <!-- 密钥生成 -->
+                    <rect x="50" y="50" width="140" height="60" rx="8" fill="white" stroke="#333" stroke-width="2"/>
+                    <text x="120" y="70" class="text-main" text-anchor="middle">密钥生成</text>
+                    <text x="120" y="90" class="text-small" text-anchor="middle" fill="#666">(应用启动)</text>
+                    
+                    <!-- 箭头1 -->
+                    <path d="M 190 80 L 240 80" stroke="#2ecc71" stroke-width="3" fill="none" marker-end="url(#arrowhead)"/>
+                    
+                    <!-- 敏感数据加密 -->
+                    <rect x="240" y="50" width="140" height="60" rx="8" fill="white" stroke="#333" stroke-width="2"/>
+                    <text x="310" y="65" class="text-main" text-anchor="middle">敏感数据加密</text>
+                    <text x="310" y="85" class="text-small" text-anchor="middle" fill="#666">(部署阶段)</text>
+                    
+                    <!-- 箭头2 -->
+                    <path d="M 380 80 L 430 80" stroke="#2ecc71" stroke-width="3" fill="none" marker-end="url(#arrowhead)"/>
+                    
+                    <!-- 配置存储 -->
+                    <rect x="430" y="50" width="140" height="60" rx="8" fill="white" stroke="#333" stroke-width="2"/>
+                    <text x="500" y="70" class="text-main" text-anchor="middle">配置存储</text>
+                    <text x="500" y="90" class="text-small" text-anchor="middle" fill="#666">(配置文件)</text>
+                    
+                    <!-- 箭头3 -->
+                    <path d="M 570 80 L 620 80" stroke="#2ecc71" stroke-width="3" fill="none" marker-end="url(#arrowhead)"/>
+                    
+                    <!-- 运行时解密 -->
+                    <rect x="620" y="50" width="140" height="60" rx="8" fill="white" stroke="#333" stroke-width="2"/>
+                    <text x="690" y="65" class="text-main" text-anchor="middle">运行时解密</text>
+                    <text x="690" y="85" class="text-small" text-anchor="middle" fill="#666">(业务运行)</text>
+                </g>
+                
+                <!-- 下箭头 -->
+                <path d="M 690 130 L 690 180" stroke="#3498db" stroke-width="3" fill="none" marker-end="url(#arrowhead-down)"/>
+                
+                <!-- 详细管理方面 -->
+                <g id="management-aspects">
+                    <!-- 密钥管理 -->
+                    <rect x="50" y="220" width="220" height="120" rx="8" fill="#ecf0f1" stroke="#e74c3c" stroke-width="3"/>
+                    <text x="160" y="245" class="text-main" text-anchor="middle" fill="#2c3e50">密钥管理</text>
+                    <rect x="70" y="260" width="180" height="20" rx="4" fill="white" stroke="#ddd"/>
+                    <text x="160" y="275" class="text-small" text-anchor="middle">环境变量</text>
+                    <rect x="70" y="285" width="180" height="20" rx="4" fill="white" stroke="#ddd"/>
+                    <text x="160" y="300" class="text-small" text-anchor="middle">KMS系统</text>
+                    <rect x="70" y="310" width="180" height="20" rx="4" fill="white" stroke="#ddd"/>
+                    <text x="160" y="325" class="text-small" text-anchor="middle">密钥轮换</text>
+                    
+                    <!-- 部署工具 -->
+                    <rect x="320" y="220" width="220" height="120" rx="8" fill="#ecf0f1" stroke="#f39c12" stroke-width="3"/>
+                    <text x="430" y="245" class="text-main" text-anchor="middle" fill="#2c3e50">部署工具</text>
+                    <rect x="340" y="260" width="180" height="20" rx="4" fill="white" stroke="#ddd"/>
+                    <text x="430" y="275" class="text-small" text-anchor="middle">自动化脚本</text>
+                    <rect x="340" y="285" width="180" height="20" rx="4" fill="white" stroke="#ddd"/>
+                    <text x="430" y="300" class="text-small" text-anchor="middle">CI/CD集成</text>
+                    <rect x="340" y="310" width="180" height="20" rx="4" fill="white" stroke="#ddd"/>
+                    <text x="430" y="325" class="text-small" text-anchor="middle">一键部署</text>
+                    
+                    <!-- 版本控制 -->
+                    <rect x="590" y="220" width="220" height="120" rx="8" fill="#ecf0f1" stroke="#9b59b6" stroke-width="3"/>
+                    <text x="700" y="245" class="text-main" text-anchor="middle" fill="#2c3e50">版本控制</text>
+                    <rect x="610" y="260" width="180" height="20" rx="4" fill="white" stroke="#ddd"/>
+                    <text x="700" y="275" class="text-small" text-anchor="middle">安全管理</text>
+                    <rect x="610" y="285" width="180" height="20" rx="4" fill="white" stroke="#ddd"/>
+                    <text x="700" y="300" class="text-small" text-anchor="middle">审计日志</text>
+                    <rect x="610" y="310" width="180" height="20" rx="4" fill="white" stroke="#ddd"/>
+                    <text x="700" y="325" class="text-small" text-anchor="middle">合规性检查</text>
+                    
+                    <!-- 业务逻辑 -->
+                    <rect x="860" y="220" width="220" height="120" rx="8" fill="#ecf0f1" stroke="#27ae60" stroke-width="3"/>
+                    <text x="970" y="245" class="text-main" text-anchor="middle" fill="#2c3e50">业务逻辑</text>
+                    <rect x="880" y="260" width="180" height="20" rx="4" fill="white" stroke="#ddd"/>
+                    <text x="970" y="275" class="text-small" text-anchor="middle">内存明文</text>
+                    <rect x="880" y="285" width="180" height="20" rx="4" fill="white" stroke="#ddd"/>
+                    <text x="970" y="300" class="text-small" text-anchor="middle">数据使用</text>
+                    <rect x="880" y="310" width="180" height="20" rx="4" fill="white" stroke="#ddd"/>
+                    <text x="970" y="325" class="text-small" text-anchor="middle">性能监控</text>
+                </g>
+            </svg>
+        </div>
+        
+        <div class="export-info">
+            <h3>📄 SVG版本特性</h3>
+            <p><strong>矢量图形：</strong>无论缩放多大都不会失真，适合打印和高分辨率显示</p>
+            <p><strong>文件大小：</strong>相比HTML+CSS版本更轻量，加载更快</p>
+            <p><strong>兼容性：</strong>支持所有现代浏览器，可直接嵌入PDF或打印</p>
+            <p><strong>可编辑性：</strong>可以使用SVG编辑器进一步自定义样式和布局</p>
+        </div>
+    </div>
+</body>
+</html>
