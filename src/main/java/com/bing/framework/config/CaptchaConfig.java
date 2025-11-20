@@ -46,6 +46,11 @@ public class CaptchaConfig {
      */
     private final SmsCaptchaConfig sms = new SmsCaptchaConfig();
     
+    /**
+     * 滑动条验证码配置
+     */
+    private final SliderCaptchaConfig slider = new SliderCaptchaConfig();
+    
     public boolean isEnabled() {
         return enabled;
     }
@@ -84,6 +89,10 @@ public class CaptchaConfig {
     
     public SmsCaptchaConfig getSms() {
         return sms;
+    }
+    
+    public SliderCaptchaConfig getSlider() {
+        return slider;
     }
     
     /**
@@ -170,9 +179,163 @@ public class CaptchaConfig {
         public int getSendIntervalSeconds() {
             return sendIntervalSeconds;
         }
+    }
+    
+    /**
+     * 滑动条验证码配置内部类
+     */
+    public static class SliderCaptchaConfig {
         
-        public void setSendIntervalSeconds(int sendIntervalSeconds) {
-            this.sendIntervalSeconds = sendIntervalSeconds;
+        /**
+         * 滑动条总宽度
+         */
+        private int totalWidth = 300;
+        
+        /**
+         * 滑块宽度
+         */
+        private int sliderWidth = 60;
+        
+        /**
+         * 滑块高度
+         */
+        private int sliderHeight = 40;
+        
+        /**
+         * 默认容错范围（像素）
+         */
+        private int defaultTolerance = 5;
+        
+        /**
+         * 最小目标位置百分比（相对于滑动条宽度）
+         */
+        private double minTargetPercentage = 0.3;
+        
+        /**
+         * 最大目标位置百分比（相对于滑动条宽度）
+         */
+        private double maxTargetPercentage = 0.7;
+        
+        /**
+         * 是否启用图片模式（滑动条和背景显示图片）
+         */
+        private boolean enableImageMode = false;
+        
+        /**
+         * 滑动条滑块图片URL
+         */
+        private String sliderImageUrl;
+        
+        /**
+         * 背景图片URL
+         */
+        private String backgroundImageUrl;
+        
+        public int getTotalWidth() {
+            return totalWidth;
+        }
+        
+        public void setTotalWidth(int totalWidth) {
+            this.totalWidth = totalWidth;
+        }
+        
+        public int getSliderWidth() {
+            return sliderWidth;
+        }
+        
+        public void setSliderWidth(int sliderWidth) {
+            this.sliderWidth = sliderWidth;
+        }
+        
+        public int getSliderHeight() {
+            return sliderHeight;
+        }
+        
+        public void setSliderHeight(int sliderHeight) {
+            this.sliderHeight = sliderHeight;
+        }
+        
+        public int getDefaultTolerance() {
+            return defaultTolerance;
+        }
+        
+        public void setDefaultTolerance(int defaultTolerance) {
+            this.defaultTolerance = defaultTolerance;
+        }
+        
+        public double getMinTargetPercentage() {
+            return minTargetPercentage;
+        }
+        
+        public void setMinTargetPercentage(double minTargetPercentage) {
+            this.minTargetPercentage = minTargetPercentage;
+        }
+        
+        public double getMaxTargetPercentage() {
+            return maxTargetPercentage;
+        }
+        
+        public void setMaxTargetPercentage(double maxTargetPercentage) {
+            this.maxTargetPercentage = maxTargetPercentage;
+        }
+        
+        public boolean isEnableImageMode() {
+            return enableImageMode;
+        }
+        
+        public void setEnableImageMode(boolean enableImageMode) {
+            this.enableImageMode = enableImageMode;
+        }
+        
+        public String getSliderImageUrl() {
+            return sliderImageUrl;
+        }
+        
+        public void setSliderImageUrl(String sliderImageUrl) {
+            this.sliderImageUrl = sliderImageUrl;
+        }
+        
+        public String getBackgroundImageUrl() {
+            return backgroundImageUrl;
+        }
+        
+        public void setBackgroundImageUrl(String backgroundImageUrl) {
+            this.backgroundImageUrl = backgroundImageUrl;
+        }
+        
+        /**
+         * 计算最小目标位置（像素）
+         * 
+         * @return 最小目标位置
+         */
+        public int getMinTargetPosition() {
+            return (int) (totalWidth * minTargetPercentage);
+        }
+        
+        /**
+         * 计算最大目标位置（像素）
+         * 
+         * @return 最大目标位置
+         */
+        public int getMaxTargetPosition() {
+            return (int) (totalWidth * maxTargetPercentage);
+        }
+        
+        /**
+         * 检查配置是否有效
+         * 
+         * @return 是否有效
+         */
+        public boolean isValid() {
+            return totalWidth > 0 && 
+                   sliderWidth > 0 && 
+                   sliderHeight > 0 && 
+                   defaultTolerance >= 0 &&
+                   minTargetPercentage >= 0 && 
+                   minTargetPercentage <= 1 &&
+                   maxTargetPercentage >= 0 && 
+                   maxTargetPercentage <= 1 &&
+                   minTargetPercentage <= maxTargetPercentage;
         }
     }
 }

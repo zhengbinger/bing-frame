@@ -2,6 +2,11 @@ package com.bing.framework.controller;
 
 import com.bing.framework.config.AuditLogConfigProperties;
 import com.bing.framework.config.AuditLogDynamicConfigManager;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -29,6 +34,7 @@ import java.util.Map;
 @RequestMapping("/api/audit-log/config")
 @Validated
 @Slf4j
+@Api(tags = "审计日志配置管理", description = "审计日志配置管理相关接口")
 public class AuditLogConfigController {
     
     @Autowired
@@ -60,7 +66,8 @@ public class AuditLogConfigController {
      * 获取当前审计日志配置
      */
     @GetMapping("/current")
-    public ResponseEntity<?> getCurrentConfig(HttpServletRequest request) {
+    @ApiOperation(value = "获取当前审计日志配置", notes = "获取当前生效的审计日志配置参数，包括启用状态、异步配置、线程池参数等所有配置项")
+    public ResponseEntity<?> getCurrentConfig(@ApiParam(value = "HTTP请求对象", hidden = true) HttpServletRequest request) {
         try {
             AuditLogConfigProperties currentConfig = configManager.getCurrentConfig();
             log.info("获取当前审计日志配置，请求来源: {}", getClientInfo(request));
@@ -76,8 +83,17 @@ public class AuditLogConfigController {
      * 更新审计日志配置
      */
     @PostMapping("/update")
-    public ResponseEntity<?> updateConfig(@RequestBody Map<String, Object> configMap, 
-                                        HttpServletRequest request) {
+    @ApiOperation(value = "更新审计日志配置", notes = "根据提供的配置参数更新审计日志配置，支持动态配置更新、配置验证和变更记录")
+    @ApiResponses({
+        @ApiResponse(code = 200, message = "配置更新成功"),
+        @ApiResponse(code = 400, message = "参数错误或配置验证失败"),
+        @ApiResponse(code = 500, message = "系统内部错误")
+    })
+    public ResponseEntity<?> updateConfig(
+            @ApiParam(value = "配置参数字典，包含所有可更新的审计日志配置项", required = true) 
+            @RequestBody Map<String, Object> configMap, 
+            @ApiParam(value = "HTTP请求对象", hidden = true) 
+            HttpServletRequest request) {
         try {
             // 验证请求参数
             if (configMap == null || configMap.isEmpty()) {
@@ -123,9 +139,18 @@ public class AuditLogConfigController {
      * 获取配置变更历史
      */
     @GetMapping("/history")
-    public ResponseEntity<?> getConfigHistory(@RequestParam(defaultValue = "1") int page,
-                                            @RequestParam(defaultValue = "50") int size,
-                                            HttpServletRequest request) {
+    @ApiOperation(value = "获取配置变更历史", notes = "获取审计日志配置的变更历史记录，支持分页查询，包含变更人、变更时间、变更描述等信息")
+    @ApiResponses({
+        @ApiResponse(code = 200, message = "获取历史记录成功"),
+        @ApiResponse(code = 500, message = "系统内部错误")
+    })
+    public ResponseEntity<?> getConfigHistory(
+            @ApiParam(value = "页码，从1开始", example = "1", defaultValue = "1") 
+            @RequestParam(defaultValue = "1") int page,
+            @ApiParam(value = "每页记录数", example = "50", defaultValue = "50") 
+            @RequestParam(defaultValue = "50") int size,
+            @ApiParam(value = "HTTP请求对象", hidden = true) 
+            HttpServletRequest request) {
         try {
             List<AuditLogDynamicConfigManager.ConfigHistory> historyList = configManager.getConfigHistory();
             
@@ -163,8 +188,17 @@ public class AuditLogConfigController {
      * 回滚配置到指定版本
      */
     @PostMapping("/rollback")
-    public ResponseEntity<?> rollbackConfig(@RequestBody Map<String, Object> rollbackMap,
-                                          HttpServletRequest request) {
+    @ApiOperation(value = "回滚配置到指定版本", notes = "将审计日志配置回滚到历史版本，支持配置版本管理和快速配置恢复")
+    @ApiResponses({
+        @ApiResponse(code = 200, message = "配置回滚成功"),
+        @ApiResponse(code = 400, message = "参数错误或目标版本不存在"),
+        @ApiResponse(code = 500, message = "系统内部错误")
+    })
+    public ResponseEntity<?> rollbackConfig(
+            @ApiParam(value = "回滚参数，包含目标版本号和回滚原因", required = true) 
+            @RequestBody Map<String, Object> rollbackMap,
+            @ApiParam(value = "HTTP请求对象", hidden = true) 
+            HttpServletRequest request) {
         try {
             // 验证请求参数
             if (!rollbackMap.containsKey("targetVersion")) {
@@ -218,7 +252,12 @@ public class AuditLogConfigController {
      * 获取配置变更统计信息
      */
     @GetMapping("/statistics")
-    public ResponseEntity<?> getConfigStatistics(HttpServletRequest request) {
+    @ApiOperation(value = "获取配置变更统计信息", notes = "获取审计日志配置的变更统计信息，包括总变更次数、最近变更、按用户统计等")
+    @ApiResponses({
+        @ApiResponse(code = 200, message = "获取统计信息成功"),
+        @ApiResponse(code = 500, message = "系统内部错误")
+    })
+    public ResponseEntity<?> getConfigStatistics(@ApiParam(value = "HTTP请求对象", hidden = true) HttpServletRequest request) {
         try {
             AuditLogDynamicConfigManager.ConfigChangeStatistics statistics = configManager.getConfigChangeStatistics();
             log.info("获取配置统计信息，请求来源: {}", getClientInfo(request));
@@ -242,7 +281,12 @@ public class AuditLogConfigController {
      * 检查是否有未同步的配置变更
      */
     @GetMapping("/check-changes")
-    public ResponseEntity<?> checkConfigChanges(HttpServletRequest request) {
+    @ApiOperation(value = "检查是否有未同步的配置变更", notes = "检查当前是否存在未同步到外部系统的配置变更，返回布尔值表示检查结果")
+    @ApiResponses({
+        @ApiResponse(code = 200, message = "检查完成"),
+        @ApiResponse(code = 500, message = "系统内部错误")
+    })
+    public ResponseEntity<?> checkConfigChanges(@ApiParam(value = "HTTP请求对象", hidden = true) HttpServletRequest request) {
         try {
             boolean hasChanges = configManager.hasUnsyncedChanges();
             log.debug("检查配置变更状态，请求来源: {}", getClientInfo(request));
@@ -261,6 +305,11 @@ public class AuditLogConfigController {
      * 导出配置数据
      */
     @GetMapping("/export")
+    @ApiOperation(value = "导出配置数据", notes = "将当前审计日志配置导出为JSON格式文件，支持配置备份和迁移")
+    @ApiResponses({
+        @ApiResponse(code = 200, message = "配置导出成功，返回JSON文件"),
+        @ApiResponse(code = 500, message = "系统内部错误")
+    })
     public ResponseEntity<?> exportConfig() {
         try {
             AuditLogConfigProperties currentConfig = configManager.getCurrentConfig();
@@ -288,8 +337,17 @@ public class AuditLogConfigController {
      * 从JSON导入配置
      */
     @PostMapping("/import")
-    public ResponseEntity<?> importConfig(@RequestBody Map<String, Object> importMap,
-                                        HttpServletRequest request) {
+    @ApiOperation(value = "从JSON导入配置", notes = "从JSON格式的配置文件导入审计日志配置，支持配置迁移和批量配置更新")
+    @ApiResponses({
+        @ApiResponse(code = 200, message = "配置导入成功"),
+        @ApiResponse(code = 400, message = "JSON格式错误或配置验证失败"),
+        @ApiResponse(code = 500, message = "系统内部错误")
+    })
+    public ResponseEntity<?> importConfig(
+            @ApiParam(value = "导入参数，包含JSON配置字符串和变更描述", required = true) 
+            @RequestBody Map<String, Object> importMap,
+            @ApiParam(value = "HTTP请求对象", hidden = true) 
+            HttpServletRequest request) {
         try {
             // 验证请求参数
             if (!importMap.containsKey("jsonConfig")) {
@@ -332,8 +390,16 @@ public class AuditLogConfigController {
      * 获取配置验证结果
      */
     @PostMapping("/validate")
-    public ResponseEntity<?> validateConfig(@RequestBody AuditLogConfigProperties config,
-                                          HttpServletRequest request) {
+    @ApiOperation(value = "获取配置验证结果", notes = "验证提供的审计日志配置参数是否合法，返回验证结果和相关信息")
+    @ApiResponses({
+        @ApiResponse(code = 200, message = "验证完成，返回验证结果"),
+        @ApiResponse(code = 500, message = "系统内部错误")
+    })
+    public ResponseEntity<?> validateConfig(
+            @ApiParam(value = "需要验证的审计日志配置对象", required = true) 
+            @RequestBody AuditLogConfigProperties config,
+            @ApiParam(value = "HTTP请求对象", hidden = true) 
+            HttpServletRequest request) {
         try {
             // 这里应该调用配置验证逻辑
             // 为简化示例，返回固定的验证结果
@@ -357,8 +423,17 @@ public class AuditLogConfigController {
      * 重置配置为默认值
      */
     @PostMapping("/reset")
-    public ResponseEntity<?> resetConfig(@RequestBody Map<String, Object> resetMap,
-                                       HttpServletRequest request) {
+    @ApiOperation(value = "重置配置为默认值", notes = "将审计日志配置重置为系统默认值，适用于快速恢复默认配置的场景")
+    @ApiResponses({
+        @ApiResponse(code = 200, message = "配置重置成功"),
+        @ApiResponse(code = 400, message = "重置操作失败"),
+        @ApiResponse(code = 500, message = "系统内部错误")
+    })
+    public ResponseEntity<?> resetConfig(
+            @ApiParam(value = "重置参数，可包含重置原因说明", required = false) 
+            @RequestBody Map<String, Object> resetMap,
+            @ApiParam(value = "HTTP请求对象", hidden = true) 
+            HttpServletRequest request) {
         try {
             String user = getCurrentUser(request);
             String reason = (String) resetMap.get("reason");

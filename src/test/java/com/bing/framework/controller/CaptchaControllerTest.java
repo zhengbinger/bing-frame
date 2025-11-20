@@ -42,6 +42,9 @@ class CaptchaControllerTest {
     @Mock
     private CaptchaStrategy smsCaptchaStrategy;
 
+    @Mock
+    private CaptchaStrategy sliderCaptchaStrategy;
+
     @InjectMocks
     private CaptchaController captchaController;
 
@@ -73,16 +76,21 @@ class CaptchaControllerTest {
         // 模拟工厂行为
         when(captchaStrategyFactory.getStrategy("image")).thenReturn(imageCaptchaStrategy);
         when(captchaStrategyFactory.getStrategy("sms")).thenReturn(smsCaptchaStrategy);
+        when(captchaStrategyFactory.getStrategy("slider")).thenReturn(sliderCaptchaStrategy);
         when(captchaStrategyFactory.supports("image")).thenReturn(true);
         when(captchaStrategyFactory.supports("sms")).thenReturn(true);
+        when(captchaStrategyFactory.supports("slider")).thenReturn(true);
         when(captchaStrategyFactory.supports("invalid")).thenReturn(false);
         doThrow(new IllegalArgumentException("不支持的验证码类型: invalid")).when(captchaStrategyFactory).getStrategy("invalid");
 
         // 模拟策略行为
         when(imageCaptchaStrategy.generateCaptcha(anyString())).thenReturn(captchaResult);
         when(smsCaptchaStrategy.generateCaptcha(anyString())).thenReturn(captchaResult);
+        when(sliderCaptchaStrategy.generateCaptcha(anyString())).thenReturn(captchaResult);
         when(imageCaptchaStrategy.validateCaptcha(testKey, testCode)).thenReturn(true);
         when(imageCaptchaStrategy.validateCaptcha(testKey, "wrong")).thenReturn(false);
+        when(sliderCaptchaStrategy.validateCaptcha(testKey, testCode)).thenReturn(true);
+        when(sliderCaptchaStrategy.validateCaptcha(testKey, "wrong")).thenReturn(false);
     }
 
     @Test
@@ -112,6 +120,20 @@ class CaptchaControllerTest {
         // 验证调用
         verify(captchaStrategyFactory, times(1)).getStrategy("sms");
         verify(smsCaptchaStrategy, times(1)).generateCaptcha(testPhone);
+    }
+
+    @Test
+    void generateCaptcha_shouldReturnSuccessForSliderType() throws Exception {
+        // 执行测试
+        mockMvc.perform(get("/api/captcha/generate/slider"))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.code").value(200))
+                .andExpect(jsonPath("$.message").value("success"));
+
+        // 验证调用
+        verify(captchaStrategyFactory, times(1)).getStrategy("slider");
+        verify(sliderCaptchaStrategy, times(1)).generateCaptcha(testKey);
     }
 
     @Test
@@ -151,6 +173,22 @@ class CaptchaControllerTest {
         // 验证调用
         verify(captchaStrategyFactory, times(1)).getStrategy("image");
         verify(imageCaptchaStrategy, times(1)).generateCaptcha(testKey);
+    }
+
+    @Test
+    void refreshCaptcha_shouldReturnSuccessForSliderType() throws Exception {
+        // 执行测试
+        mockMvc.perform(get("/captcha/refresh")
+                .param("type", "slider")
+                .param("key", testKey))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.code").value(200))
+                .andExpect(jsonPath("$.message").value("success"));
+
+        // 验证调用
+        verify(captchaStrategyFactory, times(1)).getStrategy("slider");
+        verify(sliderCaptchaStrategy, times(1)).generateCaptcha(testKey);
     }
 
     @Test
@@ -212,6 +250,50 @@ class CaptchaControllerTest {
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.code").value(500))
                 .andExpect(jsonPath("$.message").isNotEmpty());
+    }
+
+    @Test
+    void validateCaptcha_shouldReturnSuccessForSliderType() throws Exception {
+        // 准备请求数据
+        Map<String, String> request = new HashMap<>();
+        request.put("type", "slider");
+        request.put("key", testKey);
+        request.put("code", testCode);
+
+        // 执行测试
+        mockMvc.perform(post("/captcha/validate")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(request)))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.code").value(200))
+                .andExpect(jsonPath("$.message").value("success"));
+
+        // 验证调用
+        verify(captchaStrategyFactory, times(1)).getStrategy("slider");
+        verify(sliderCaptchaStrategy, times(1)).validateCaptcha(testKey, testCode);
+    }
+
+    @Test
+    void validateCaptcha_shouldReturnErrorForSliderWhenInvalidPosition() throws Exception {
+        // 准备请求数据
+        Map<String, String> request = new HashMap<>();
+        request.put("type", "slider");
+        request.put("key", testKey);
+        request.put("code", "wrong_position");
+
+        // 执行测试
+        mockMvc.perform(post("/captcha/validate")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(request)))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.code").value(500))
+                .andExpect(jsonPath("$.message").isNotEmpty());
+
+        // 验证调用
+        verify(captchaStrategyFactory, times(1)).getStrategy("slider");
+        verify(sliderCaptchaStrategy, times(1)).validateCaptcha(testKey, "wrong_position");
     }
 
     @Test

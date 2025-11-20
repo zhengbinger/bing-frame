@@ -1,0 +1,665 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>滑动条验证码示例</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #333;
+        }
+        
+        input[type="text"],
+        input[type="password"] {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+        
+        .captcha-container {
+            margin: 20px 0;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            background: #f9f9f9;
+        }
+        
+        .captcha-title {
+            margin-bottom: 15px;
+            font-weight: bold;
+            color: #333;
+        }
+        
+        /* 滑动条验证码样式 */
+        .slider-captcha {
+            position: relative;
+            width: 300px;
+            margin: 10px 0;
+        }
+        
+        .slider-track {
+            position: relative;
+            height: 40px;
+            background: #e0e0e0;
+            border-radius: 20px;
+            cursor: pointer;
+            overflow: hidden;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .slider-thumb {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 60px;
+            height: 40px;
+            background: linear-gradient(45deg, #4CAF50, #45a049);
+            border-radius: 20px;
+            cursor: grab;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+            transition: box-shadow 0.2s;
+            z-index: 2;
+        }
+        
+        .slider-thumb:hover {
+            box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+        }
+        
+        .slider-thumb:active {
+            cursor: grabbing;
+        }
+        
+        .slider-text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: #666;
+            font-size: 12px;
+            z-index: 1;
+            pointer-events: none;
+        }
+        
+        .slider-success {
+            background: linear-gradient(45deg, #4CAF50, #45a049);
+            color: white;
+        }
+        
+        .slider-failed {
+            background: linear-gradient(45deg, #f44336, #da190b);
+            color: white;
+        }
+        
+        /* 图片模式样式 */
+        .slider-captcha.image-mode .slider-track {
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+        
+        .slider-captcha.image-mode .slider-thumb {
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+        
+        /* 按钮样式 */
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: bold;
+            text-transform: uppercase;
+            transition: all 0.3s;
+            margin-right: 10px;
+        }
+        
+        .btn-primary {
+            background: #007bff;
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background: #0056b3;
+        }
+        
+        .btn-secondary {
+            background: #6c757d;
+            color: white;
+        }
+        
+        .btn-secondary:hover {
+            background: #545b62;
+        }
+        
+        .btn-success {
+            background: #28a745;
+            color: white;
+        }
+        
+        .btn-success:hover {
+            background: #1e7e34;
+        }
+        
+        /* 状态提示 */
+        .status-message {
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+        
+        .status-success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        
+        .status-error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        
+        .status-info {
+            background: #d1ecf1;
+            color: #0c5460;
+            border: 1px solid #bee5eb;
+        }
+        
+        /* 隐藏元素 */
+        .hidden {
+            display: none;
+        }
+        
+        /* 响应式设计 */
+        @media (max-width: 600px) {
+            .slider-captcha {
+                width: 100%;
+            }
+            
+            .slider-track {
+                width: 100% !important;
+            }
+            
+            .container {
+                padding: 15px;
+                margin: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>滑动条验证码示例</h1>
+        
+        <div class="form-group">
+            <label for="username">用户名：</label>
+            <input type="text" id="username" placeholder="请输入用户名">
+        </div>
+        
+        <div class="form-group">
+            <label for="password">密码：</label>
+            <input type="password" id="password" placeholder="请输入密码">
+        </div>
+        
+        <!-- 隐藏的验证码字段 -->
+        <input type="hidden" id="captchaKey">
+        <input type="hidden" id="captchaType">
+        <input type="hidden" id="targetPosition">
+        <input type="hidden" id="captchaCode">
+        
+        <!-- 图形验证码容器 -->
+        <div id="imageCaptchaContainer" class="captcha-container hidden">
+            <div class="captcha-title">图形验证码：</div>
+            <img id="captchaImage" style="border: 1px solid #ddd; border-radius: 5px; max-width: 150px;">
+            <div style="margin-top: 10px;">
+                <input type="text" id="imageCodeInput" placeholder="请输入验证码" style="width: 120px; margin-right: 10px;">
+                <button class="btn btn-secondary" onclick="refreshCaptcha('image')">刷新</button>
+            </div>
+        </div>
+        
+        <!-- 滑动条验证码容器 -->
+        <div id="sliderCaptchaContainer" class="captcha-container hidden">
+            <div class="captcha-title">滑动条验证码：请将滑块拖拽到正确位置</div>
+            <div id="sliderContainer">
+                <!-- 滑动条将在这里动态生成 -->
+            </div>
+        </div>
+        
+        <!-- 状态提示区域 -->
+        <div id="statusMessage"></div>
+        
+        <!-- 操作按钮 -->
+        <div style="margin-top: 20px;">
+            <button class="btn btn-primary" onclick="generateImageCaptcha()">生成图形验证码</button>
+            <button class="btn btn-primary" onclick="generateSliderCaptcha()">生成滑动条验证码</button>
+            <button class="btn btn-success" onclick="submitLogin()">登录</button>
+            <button class="btn btn-secondary" onclick="resetForm()">重置</button>
+        </div>
+    </div>
+
+    <script>
+        // 全局变量
+        let currentCaptchaType = '';
+        let sliderState = {
+            isDragging: false,
+            startX: 0,
+            currentX: 0,
+            isSuccess: false
+        };
+        
+        // 初始化页面
+        document.addEventListener('DOMContentLoaded', function() {
+            showStatus('info', '请选择验证码类型并生成验证码');
+        });
+        
+        // 显示状态消息
+        function showStatus(type, message) {
+            const statusDiv = document.getElementById('statusMessage');
+            statusDiv.className = `status-message status-${type}`;
+            statusDiv.innerHTML = message;
+            
+            // 3秒后自动清除状态消息
+            setTimeout(() => {
+                statusDiv.innerHTML = '';
+                statusDiv.className = '';
+            }, 3000);
+        }
+        
+        // 生成图形验证码
+        async function generateImageCaptcha() {
+            try {
+                showStatus('info', '正在获取图形验证码...');
+                
+                // 模拟API调用
+                const response = await mockApiCall('/api/captcha/generate/image');
+                const result = await response.json();
+                
+                if (result.code === 200) {
+                    // 显示图形验证码界面
+                    document.getElementById('imageCaptchaContainer').classList.remove('hidden');
+                    document.getElementById('sliderCaptchaContainer').classList.add('hidden');
+                    
+                    // 设置验证码图片（使用base64数据或占位符）
+                    const captchaImage = document.getElementById('captchaImage');
+                    captchaImage.src = result.data.captchaContent || 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTIwIiBoZWlnaHQ9IjQwIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxyZWN0IHdpZHRoPSIxMjAiIGhlaWdodD0iNDAiIGZpbGw9IiNlNWU3ZWIiLz48dGV4dCB4PSI2MCIgeT0iMjUiIGZpbGw9IiM2YjczODAiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGRvbWluYW50LWJhc2VsaW5lPSJjZW50cmFsIj5CQjQyPC90ZXh0Pjwvc3ZnPg==';
+                    
+                    // 保存验证码信息
+                    document.getElementById('captchaKey').value = result.data.captchaKey;
+                    document.getElementById('captchaType').value = 'image';
+                    currentCaptchaType = 'image';
+                    
+                    showStatus('success', '图形验证码获取成功');
+                } else {
+                    showStatus('error', '获取验证码失败：' + result.message);
+                }
+            } catch (error) {
+                console.error('获取图形验证码失败:', error);
+                showStatus('error', '获取验证码失败，请稍后重试');
+            }
+        }
+        
+        // 生成滑动条验证码
+        async function generateSliderCaptcha() {
+            try {
+                showStatus('info', '正在获取滑动条验证码...');
+                
+                // 模拟API调用
+                const response = await mockApiCall('/api/captcha/generate/slider');
+                const result = await response.json();
+                
+                if (result.code === 200) {
+                    // 显示滑动条验证码界面
+                    document.getElementById('imageCaptchaContainer').classList.add('hidden');
+                    document.getElementById('sliderCaptchaContainer').classList.remove('hidden');
+                    
+                    // 生成滑动条界面
+                    generateSliderUI(result.data);
+                    
+                    // 保存验证码信息
+                    document.getElementById('captchaKey').value = result.data.captchaKey;
+                    document.getElementById('captchaType').value = 'slider';
+                    document.getElementById('targetPosition').value = result.data.captchaData.targetPosition;
+                    currentCaptchaType = 'slider';
+                    
+                    showStatus('success', '滑动条验证码获取成功，请拖拽滑块完成验证');
+                } else {
+                    showStatus('error', '获取验证码失败：' + result.message);
+                }
+            } catch (error) {
+                console.error('获取滑动条验证码失败:', error);
+                showStatus('error', '获取验证码失败，请稍后重试');
+            }
+        }
+        
+        // 生成滑动条UI
+        function generateSliderUI(captchaData) {
+            const container = document.getElementById('sliderContainer');
+            
+            // 重置滑动条状态
+            resetSliderState();
+            
+            // 生成HTML结构
+            container.innerHTML = `
+                <div class="slider-captcha ${captchaData.enableImageMode ? 'image-mode' : ''}" style="width: ${captchaData.backgroundWidth}px;">
+                    <div class="slider-track" style="width: ${captchaData.backgroundWidth}px; height: ${captchaData.sliderHeight}px; ${captchaData.enableImageMode ? `background-image: url('${captchaData.backgroundImageUrl || '/images/slider-bg.jpg'}')` : ''}">
+                        <div class="slider-thumb" style="width: ${captchaData.sliderWidth}px; height: ${captchaData.sliderHeight}px; ${captchaData.enableImageMode ? `background-image: url('${captchaData.sliderImageUrl || '/images/slider-piece.png'}')` : ''}"></div>
+                        <div class="slider-text">请拖拽滑块完成验证</div>
+                    </div>
+                </div>
+            `;
+            
+            // 初始化滑动事件
+            initSliderEvents(captchaData);
+        }
+        
+        // 初始化滑动事件
+        function initSliderEvents(captchaData) {
+            const sliderContainer = document.querySelector('.slider-captcha');
+            const sliderThumb = sliderContainer.querySelector('.slider-thumb');
+            const sliderTrack = sliderContainer.querySelector('.slider-track');
+            const sliderText = sliderContainer.querySelector('.slider-text');
+            
+            // 清除之前的监听器
+            sliderThumb.onmousedown = null;
+            document.onmousemove = null;
+            document.onmouseup = null;
+            
+            // 鼠标按下事件
+            sliderThumb.onmousedown = function(e) {
+                if (sliderState.isSuccess) return; // 已经验证成功
+                
+                sliderState.isDragging = true;
+                sliderState.startX = e.clientX - sliderThumb.offsetLeft;
+                sliderThumb.style.cursor = 'grabbing';
+                e.preventDefault();
+            };
+            
+            // 鼠标移动事件
+            document.onmousemove = function(e) {
+                if (!sliderState.isDragging || sliderState.isSuccess) return;
+                
+                sliderState.currentX = e.clientX - sliderState.startX;
+                
+                // 边界检查
+                const maxX = sliderTrack.offsetWidth - sliderThumb.offsetWidth;
+                if (sliderState.currentX < 0) sliderState.currentX = 0;
+                if (sliderState.currentX > maxX) sliderState.currentX = maxX;
+                
+                // 更新滑块位置
+                sliderThumb.style.left = sliderState.currentX + 'px';
+                
+                // 更新进度百分比（如果需要显示）
+                const progress = Math.round((sliderState.currentX / maxX) * 100);
+                sliderText.textContent = `进度: ${progress}%`;
+            };
+            
+            // 鼠标释放事件
+            document.onmouseup = function() {
+                if (!sliderState.isDragging || sliderState.isSuccess) return;
+                
+                sliderState.isDragging = false;
+                sliderThumb.style.cursor = 'grab';
+                
+                // 验证滑动位置
+                validateSliderPosition(Math.round(sliderState.currentX), captchaData);
+            };
+            
+            // 触摸事件支持（移动端）
+            initTouchEvents(sliderThumb, sliderTrack, sliderText, captchaData);
+        }
+        
+        // 触摸事件初始化
+        function initTouchEvents(sliderThumb, sliderTrack, sliderText, captchaData) {
+            let touchStartX = 0;
+            
+            sliderThumb.addEventListener('touchstart', function(e) {
+                if (sliderState.isSuccess) return;
+                
+                sliderState.isDragging = true;
+                touchStartX = e.touches[0].clientX - sliderThumb.offsetLeft;
+                e.preventDefault();
+            });
+            
+            document.addEventListener('touchmove', function(e) {
+                if (!sliderState.isDragging || sliderState.isSuccess) return;
+                
+                sliderState.currentX = e.touches[0].clientX - touchStartX;
+                
+                // 边界检查
+                const maxX = sliderTrack.offsetWidth - sliderThumb.offsetWidth;
+                if (sliderState.currentX < 0) sliderState.currentX = 0;
+                if (sliderState.currentX > maxX) sliderState.currentX = maxX;
+                
+                // 更新滑块位置
+                sliderThumb.style.left = sliderState.currentX + 'px';
+                
+                const progress = Math.round((sliderState.currentX / maxX) * 100);
+                sliderText.textContent = `进度: ${progress}%`;
+            });
+            
+            document.addEventListener('touchend', function(e) {
+                if (!sliderState.isDragging || sliderState.isSuccess) return;
+                
+                sliderState.isDragging = false;
+                validateSliderPosition(Math.round(sliderState.currentX), captchaData);
+            });
+        }
+        
+        // 验证滑动位置
+        function validateSliderPosition(userPosition, captchaData) {
+            const targetPosition = captchaData.captchaData.targetPosition;
+            const tolerance = captchaData.captchaData.tolerance || 5;
+            
+            const sliderContainer = document.querySelector('.slider-captcha');
+            const sliderThumb = sliderContainer.querySelector('.slider-thumb');
+            const sliderText = sliderContainer.querySelector('.slider-text');
+            
+            if (Math.abs(userPosition - targetPosition) <= tolerance) {
+                // 验证成功
+                sliderState.isSuccess = true;
+                sliderThumb.classList.add('slider-success');
+                sliderText.textContent = '验证成功 ✓';
+                sliderText.classList.add('slider-success');
+                
+                // 禁用滑动
+                sliderThumb.style.pointerEvents = 'none';
+                document.getElementById('captchaCode').value = userPosition.toString();
+                
+                showStatus('success', '滑动条验证成功！');
+            } else {
+                // 验证失败
+                sliderThumb.classList.add('slider-failed');
+                sliderText.textContent = '验证失败，请重试';
+                sliderText.classList.add('slider-failed');
+                
+                showStatus('error', '滑动位置不正确，请重新尝试');
+                
+                // 1.5秒后重置
+                setTimeout(() => {
+                    resetSliderPosition(sliderThumb, sliderText);
+                    generateSliderCaptcha(); // 重新生成验证码
+                }, 1500);
+            }
+        }
+        
+        // 重置滑块位置
+        function resetSliderPosition(sliderThumb, sliderText) {
+            sliderThumb.classList.remove('slider-success', 'slider-failed');
+            sliderThumb.style.left = '0px';
+            sliderThumb.style.pointerEvents = 'auto';
+            sliderText.classList.remove('slider-success', 'slider-failed');
+            sliderText.textContent = '请拖拽滑块完成验证';
+        }
+        
+        // 重置滑动条状态
+        function resetSliderState() {
+            sliderState = {
+                isDragging: false,
+                startX: 0,
+                currentX: 0,
+                isSuccess: false
+            };
+        }
+        
+        // 刷新验证码
+        async function refreshCaptcha(type) {
+            if (type === 'image') {
+                await generateImageCaptcha();
+            } else if (type === 'slider') {
+                await generateSliderCaptcha();
+            }
+        }
+        
+        // 提交登录
+        async function submitLogin() {
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            const captchaKey = document.getElementById('captchaKey').value;
+            const captchaCode = document.getElementById('captchaCode').value;
+            const captchaType = document.getElementById('captchaType').value;
+            
+            if (!username || !password) {
+                showStatus('error', '请输入用户名和密码');
+                return;
+            }
+            
+            if (!captchaKey || !captchaCode || !captchaType) {
+                showStatus('error', '请先生成并完成验证码验证');
+                return;
+            }
+            
+            try {
+                showStatus('info', '正在提交登录信息...');
+                
+                // 模拟API调用
+                const loginData = {
+                    username: username,
+                    password: password,
+                    captchaKey: captchaKey,
+                    captchaCode: captchaCode,
+                    captchaType: captchaType
+                };
+                
+                const response = await mockApiCall('/api/login', 'POST', loginData);
+                const result = await response.json();
+                
+                if (result.code === 200) {
+                    showStatus('success', '登录成功！');
+                    console.log('登录数据:', result.data);
+                } else {
+                    showStatus('error', '登录失败：' + result.message);
+                }
+            } catch (error) {
+                console.error('登录失败:', error);
+                showStatus('error', '登录失败，请稍后重试');
+            }
+        }
+        
+        // 重置表单
+        function resetForm() {
+            document.getElementById('username').value = '';
+            document.getElementById('password').value = '';
+            document.getElementById('captchaKey').value = '';
+            document.getElementById('captchaType').value = '';
+            document.getElementById('targetPosition').value = '';
+            document.getElementById('captchaCode').value = '';
+            document.getElementById('imageCodeInput').value = '';
+            
+            document.getElementById('imageCaptchaContainer').classList.add('hidden');
+            document.getElementById('sliderCaptchaContainer').classList.add('hidden');
+            
+            resetSliderState();
+            showStatus('info', '表单已重置');
+        }
+        
+        // 模拟API调用
+        async function mockApiCall(url, method = 'GET', data = null) {
+            // 模拟网络延迟
+            await new Promise(resolve => setTimeout(resolve, 500));
+            
+            // 模拟不同的API响应
+            if (url.includes('/api/captcha/generate/image')) {
+                return {
+                    json: async () => ({
+                        code: 200,
+                        message: 'success',
+                        data: {
+                            captchaKey: 'img_' + Date.now(),
+                            captchaContent: 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTIwIiBoZWlnaHQ9IjQwIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxyZWN0IHdpZHRoPSIxMjAiIGhlaWdodD0iNDAiIGZpbGw9IiNlNWU3ZWIiLz48dGV4dCB4PSI2MCIgeT0iMjUiIGZpbGw9IiM2YjczODAiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGRvbWluYW50LWJhc2VsaW5lPSJjZW50cmFsIj5CQjQyPC90ZXh0Pjwvc3ZnPg==',
+                            captchaType: 'image',
+                            expireTime: Date.now() + 5 * 60 * 1000
+                        }
+                    })
+                };
+            } else if (url.includes('/api/captcha/generate/slider')) {
+                const targetPosition = Math.floor(Math.random() * 150) + 75; // 75-225之间的随机位置
+                return {
+                    json: async () => ({
+                        code: 200,
+                        message: 'success',
+                        data: {
+                            captchaKey: 'slider_' + Date.now(),
+                            captchaType: 'slider',
+                            captchaData: {
+                                targetPosition: targetPosition,
+                                currentPosition: 0,
+                                tolerance: 5,
+                                timestamp: Date.now()
+                            },
+                            sliderWidth: 60,
+                            backgroundWidth: 300,
+                            sliderHeight: 40,
+                            enableImageMode: false,
+                            expireTime: Date.now() + 5 * 60 * 1000
+                        }
+                    })
+                };
+            } else if (url.includes('/api/login')) {
+                return {
+                    json: async () => ({
+                        code: 200,
+                        message: 'success',
+                        data: {
+                            token: 'mock_jwt_token_' + Date.now(),
+                            userInfo: {
+                                username: data.username,
+                                role: 'admin'
+                            }
+                        }
+                    })
+                };
+            }
+            
+            throw new Error('Unknown API endpoint');
+        }
+    </script>
+</body>
+</html>

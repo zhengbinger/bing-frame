@@ -6,7 +6,8 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
-import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 
 /**
  * 系统配置数据传输对象
@@ -16,64 +17,64 @@ import io.swagger.v3.oas.annotations.media.Schema;
  * @author zhengbing
  * @date 2025-11-15
  */
-@Schema(description = "系统配置数据传输对象")
+@ApiModel(description = "系统配置数据传输对象")
 public class SystemConfigDTO {
 
-    @Schema(description = "配置ID（更新时必填）", example = "1", accessMode = Schema.AccessMode.READ_ONLY)
+    @ApiModelProperty(value = "配置ID（更新时必填）", example = "1", required = false)
     private Long id;
 
-    @Schema(description = "配置键", example = "system.name", required = true)
+    @ApiModelProperty(value = "配置键", example = "system.name", required = true)
     @NotBlank(message = "配置键不能为空")
     @Size(max = 100, message = "配置键长度不能超过100个字符")
     @Pattern(regexp = "^[a-zA-Z0-9._-]+$", message = "配置键只能包含字母、数字、点、下划线和横线")
     private String configKey;
 
-    @Schema(description = "配置值", example = "Bing Framework", required = true)
+    @ApiModelProperty(value = "配置值", example = "Bing Framework", required = true)
     @NotBlank(message = "配置值不能为空")
     @Size(max = 5000, message = "配置值长度不能超过5000个字符")
     private String configValue;
 
-    @Schema(description = "配置类型", example = "string", allowableValues = {"string", "int", "long", "boolean", "double", "json", "email", "url"}, required = true)
+    @ApiModelProperty(value = "配置类型", notes = "可选值：string, int, long, boolean, double, json, email, url", example = "string", allowableValues = "string, int, long, boolean, double, json, email, url", required = true)
     @NotBlank(message = "配置类型不能为空")
     @Pattern(regexp = "^(string|int|long|boolean|double|json|email|url)$", message = "配置类型只能是: string, int, long, boolean, double, json, email, url")
     private String configType;
 
-    @Schema(description = "配置描述", example = "系统名称配置")
+    @ApiModelProperty(value = "配置描述", example = "系统名称配置", required = false)
     @Size(max = 500, message = "配置描述长度不能超过500个字符")
     private String description;
 
-    @Schema(description = "配置分类", example = "system")
+    @ApiModelProperty(value = "配置分类", example = "system", required = false)
     @Size(max = 50, message = "配置分类长度不能超过50个字符")
     private String configCategory;
 
-    @Schema(description = "启用状态(0:禁用, 1:启用)", example = "1", allowableValues = {"0", "1"})
+    @ApiModelProperty(value = "启用状态", notes = "0:禁用, 1:启用", example = "1", allowableValues = "0,1", required = false)
     private Integer enabled;
 
-    @Schema(description = "排序权重", example = "1")
+    @ApiModelProperty(value = "排序权重", example = "1", required = false)
     private Integer sortOrder;
 
-    @Schema(description = "创建时间", accessMode = Schema.AccessMode.READ_ONLY)
+    @ApiModelProperty(value = "创建时间", required = false)
     private LocalDateTime createdTime;
 
-    @Schema(description = "更新时间", accessMode = Schema.AccessMode.READ_ONLY)
+    @ApiModelProperty(value = "更新时间", required = false)
     private LocalDateTime updatedTime;
 
-    @Schema(description = "是否支持动态更新", example = "true")
+    @ApiModelProperty(value = "是否支持动态更新", example = "true", required = false)
     private Boolean supportDynamicUpdate;
 
-    @Schema(description = "默认值", example = "Bing Framework")
+    @ApiModelProperty(value = "默认值", example = "Bing Framework", required = false)
     private String defaultValue;
 
-    @Schema(description = "最小值（数字类型配置）", example = "0")
+    @ApiModelProperty(value = "最小值", notes = "数字类型配置", example = "0", required = false)
     private String minValue;
 
-    @Schema(description = "最大值（数字类型配置）", example = "999999")
+    @ApiModelProperty(value = "最大值", notes = "数字类型配置", example = "999999", required = false)
     private String maxValue;
 
-    @Schema(description = "正则表达式验证（字符串类型配置）", example = "^[a-zA-Z0-9]+$")
+    @ApiModelProperty(value = "正则表达式验证", notes = "字符串类型配置", example = "^[a-zA-Z0-9]+$", required = false)
     private String validationRegex;
 
-    @Schema(description = "是否敏感配置，敏感配置在日志和响应中会被脱敏处理", example = "false")
+    @ApiModelProperty(value = "是否敏感配置", notes = "敏感配置在日志和响应中会被脱敏处理", example = "false", required = false)
     private Boolean sensitive;
 
     // 构造函数

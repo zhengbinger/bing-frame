@@ -394,3 +394,258 @@ DELETE /api/login-records/clean
 | `userAgent` | String | 用户代理信息 |
 | `loginTime` | Date | 登录时间 |
 | `status` | Integer | 登录状态（0-失败，1-成功） |
+
+### 7.2 验证码管理接口
+
+#### 7.2.1 接口概述
+
+`CaptchaController`提供了验证码生成和刷新的RESTful API接口，支持多种类型的验证码（图形验证码、滑动条验证码、短信验证码）。
+
+#### 7.2.2 支持的验证码类型
+
+| 类型 | 标识符 | 描述 | 适用场景 |
+| :--- | :--- | :--- | :--- |
+| 图形验证码 | `image` | 基于图像的字符验证码 | 通用场景，用户可以输入字符 |
+| 滑动条验证码 | `slider` | 基于滑块拼图的验证码 | 移动端友好，提升用户体验 |
+| 短信验证码 | `sms` | 通过短信发送的验证码 | 需要手机号验证的场景 |
+
+#### 7.2.3 详细接口说明
+
+**1. 生成指定类型验证码**
+
+```
+GET /api/captcha/generate/{type}
+```
+
+**路径参数**：
+- `type`：验证码类型（image/sms/slider）
+
+**请求示例**：
+```http
+GET /api/captcha/generate/slider
+```
+
+**响应示例（滑动条验证码）**：
+```json
+{
+  "code": 200,
+  "message": "success",
+  "data": {
+    "captchaKey": "s1s2s3s4s5s6s7s8s9s0",
+    "captchaType": "slider",
+    "captchaData": {
+      "targetPosition": 150,
+      "currentPosition": 0,
+      "tolerance": 5,
+      "timestamp": 1699876543210
+    },
+    "sliderWidth": 60,
+    "backgroundWidth": 300,
+    "sliderHeight": 40,
+    "expireTime": 1699876543210
+  }
+}
+```
+
+**响应示例（图形验证码）**：
+```json
+{
+  "code": 200,
+  "message": "success",
+  "data": {
+    "captchaKey": "a1b2c3d4e5f6g7h8i9j0",
+    "captchaContent": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAIAAAACACAYAAADDPmHLAA...",
+    "captchaType": "image",
+    "expireTime": 1699876543210
+  }
+}
+```
+
+**2. 生成默认类型验证码**
+
+```
+GET /api/captcha/generate
+```
+
+**响应示例**：
+返回使用默认类型（image）的验证码
+
+**3. 刷新指定类型验证码**
+
+```
+GET /api/captcha/refresh/{type}
+```
+
+**路径参数**：
+- `type`：验证码类型
+
+**请求示例**：
+```http
+GET /api/captcha/refresh/slider
+```
+
+**响应示例**：
+返回新的验证码数据，与生成接口格式相同
+
+**4. 刷新默认类型验证码**
+
+```
+GET /api/captcha/refresh
+```
+
+**响应示例**：
+返回使用默认类型的新验证码
+
+#### 7.2.4 验证码验证
+
+验证码验证通常在登录或其他需要验证的接口中完成，示例：
+
+```json
+{
+  "username": "admin",
+  "password": "password",
+  "captchaKey": "a1b2c3d4e5f6g7h8i9j0",
+  "captchaCode": "ABCD",
+  "captchaType": "image"
+}
+```
+
+#### 7.2.5 前端使用示例
+
+**JavaScript - 生成滑动条验证码**：
+```javascript
+async function generateSliderCaptcha() {
+  try {
+    const response = await fetch('/api/captcha/generate/slider');
+    const result = await response.json();
+    
+    if (result.code === 200) {
+      // 使用返回的数据初始化滑动条界面
+      const captchaData = result.data;
+      initSliderInterface(captchaData);
+    }
+  } catch (error) {
+    console.error('获取滑动条验证码失败:', error);
+  }
+}
+
+function initSliderInterface(captchaData) {
+  // 创建滑动条界面元素
+  const sliderHtml = `
+    <div class="slider-captcha">
+      <div class="slider-track" style="width: ${captchaData.backgroundWidth}px;">
+        <div class="slider-thumb" style="width: ${captchaData.sliderWidth}px;"></div>
+      </div>
+    </div>
+  `;
+  
+  document.getElementById('captchaContainer').innerHTML = sliderHtml;
+  document.getElementById('captchaKey').value = captchaData.captchaKey;
+  
+  // 初始化拖拽逻辑
+  initSliderDrag(captchaData);
+}
+```
+
+**React - 滑动条验证码组件**：
+```jsx
+import React, { useState, useEffect } from 'react';
+
+const SliderCaptcha = ({ onSuccess, onError }) => {
+  const [captchaData, setCaptchaData] = useState(null);
+  const [sliderPosition, setSliderPosition] = useState(0);
+  const [isDragging, setIsDragging] = useState(false);
+
+  useEffect(() => {
+    generateCaptcha();
+  }, []);
+
+  const generateCaptcha = async () => {
+    try {
+      const response = await fetch('/api/captcha/generate/slider');
+      const result = await response.json();
+      
+      if (result.code === 200) {
+        setCaptchaData(result.data);
+      }
+    } catch (error) {
+      onError && onError('获取验证码失败');
+    }
+  };
+
+  const handleMouseDown = (e) => {
+    setIsDragging(true);
+  };
+
+  const handleMouseMove = (e) => {
+    if (!isDragging || !captchaData) return;
+    
+    const track = e.currentTarget;
+    const rect = track.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const maxPosition = captchaData.backgroundWidth - captchaData.sliderWidth;
+    
+    setSliderPosition(Math.max(0, Math.min(x, maxPosition)));
+  };
+
+  const handleMouseUp = () => {
+    if (!isDragging) return;
+    setIsDragging(false);
+    
+    // 验证滑动位置
+    validatePosition();
+  };
+
+  const validatePosition = () => {
+    const targetPosition = captchaData.captchaData.targetPosition;
+    const tolerance = captchaData.captchaData.tolerance;
+    
+    if (Math.abs(sliderPosition - targetPosition) <= tolerance) {
+      onSuccess && onSuccess(captchaData.captchaKey, sliderPosition, 'slider');
+    } else {
+      onError && onError('滑动位置不正确，请重试');
+      generateCaptcha(); // 重新生成
+    }
+  };
+
+  if (!captchaData) {
+    return <div>加载中...</div>;
+  }
+
+  return (
+    <div className="slider-captcha">
+      <div 
+        className="slider-track"
+        style={{ width: captchaData.backgroundWidth }}
+        onMouseMove={handleMouseMove}
+        onMouseUp={handleMouseUp}
+      >
+        <div 
+          className="slider-thumb"
+          style={{ 
+            width: captchaData.sliderWidth,
+            left: sliderPosition
+          }}
+          onMouseDown={handleMouseDown}
+        >
+          拖拽验证
+        </div>
+      </div>
+    </div>
+  );
+};
+```
+
+#### 7.2.6 错误处理
+
+| HTTP状态码 | 错误码 | 描述 | 解决方案 |
+| :--- | :--- | :--- | :--- |
+| 400 | INVALID_TYPE | 不支持的验证码类型 | 检查type参数是否正确 |
+| 500 | GENERATION_FAILED | 验证码生成失败 | 检查服务器配置和Redis连接 |
+| 500 | CAPTCHA_DISABLED | 验证码功能已禁用 | 检查配置项bing.captcha.enabled |
+
+---
+
+**文档版本**: 1.0  
+**更新日期**: 2025-11-20  
+**作者**: zhengbing
