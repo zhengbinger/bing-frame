@@ -49,7 +49,7 @@ import com.bing.framework.util.RedisUtil;
  * @author zhengbing
  * @date 2025-11-05
  */
-@Api(tags = "认证管理", description = "提供用户登录、注册、注销和获取当前用户信息等认证相关功能")
+@Api(tags = "认证管理")
 @RestController
 @RequestMapping("/api/auth")
 @AuditLogLevel(module="认证管理" ,description = "用户登录、注册、注销和获取当前用户信息等认证相关功能")

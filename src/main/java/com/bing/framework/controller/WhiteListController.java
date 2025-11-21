@@ -26,7 +26,7 @@ import com.bing.framework.service.WhiteListService;
  * @author zhengbing
  * @date 2024-11-03
  */
-@Api(tags = "白名单管理", description = "提供白名单的增删改查等管理功能")
+@Api(tags = "白名单管理")
 @RestController
 @RequestMapping("/api/white-list")
 public class WhiteListController {

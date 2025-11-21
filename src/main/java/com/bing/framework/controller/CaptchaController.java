@@ -33,7 +33,7 @@ import com.bing.framework.strategy.CaptchaStrategyFactory;
  * @author zhengbing
  * @date 2025-11-05
  */
-@Api(value = "验证码管理", description = "提供验证码生成和刷新的API接口")
+@Api(value = "验证码管理")
 @RestController
 @RequestMapping("/api/captcha")
 @Slf4j

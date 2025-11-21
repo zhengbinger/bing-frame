@@ -24,7 +24,7 @@ import com.bing.framework.service.PermissionService;
  * @author zhengbing
  * @date 2025-11-05
  */
-@Api(tags = "权限管理", description = "提供权限的增删改查、树形结构展示及角色权限分配等功能")
+@Api(tags = "权限管理")
 @RestController
 @RequestMapping("/api/permissions")
 public class PermissionController {

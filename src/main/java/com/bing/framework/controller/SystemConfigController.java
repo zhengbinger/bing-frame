@@ -29,7 +29,7 @@ import io.swagger.annotations.ApiParam;
  * @author zhengbing
  * @date 2025-11-20
  */
-@Api(value = "SystemConfig", description = "系统配置管理相关接口")
+@Api(value = "SystemConfig")
 @RestController
 @RequestMapping("/api/system-config")
 @Validated

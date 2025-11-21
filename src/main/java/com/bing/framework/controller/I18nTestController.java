@@ -27,7 +27,7 @@ import com.bing.framework.common.Result;
  * @author zhengbing
  * @date 2025-11-17
  */
-@Api(tags = "国际化测试", description = "提供国际化功能测试接口，演示多语言错误消息的处理")
+@Api(tags = "国际化测试")
 @RestController
 @RequestMapping("/api/i18n")
 public class I18nTestController {

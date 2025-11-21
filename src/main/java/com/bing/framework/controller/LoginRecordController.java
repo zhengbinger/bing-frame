@@ -30,7 +30,7 @@ import com.bing.framework.service.LoginRecordService;
  * @author zhengbing
  * @date 2025-11-11
  */
-@Api(tags = "登录记录管理", description = "提供登录记录查询、清理等功能")
+@Api(tags = "登录记录管理")
 @RestController
 @RequestMapping("/api/loginRecords")
 @Slf4j

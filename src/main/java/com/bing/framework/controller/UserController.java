@@ -30,7 +30,7 @@ import com.bing.framework.service.UserService;
  * @author zhengbing
  * @date 2025-11-01
  */
-@Api(tags = "用户管理", description = "提供用户信息的查询、新增、更新、删除及密码管理等功能")
+@Api(tags = "用户管理")
 @RestController
 @RequestMapping("/api/user")
 public class UserController {

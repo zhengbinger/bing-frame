@@ -34,7 +34,7 @@ import java.util.Map;
 @RequestMapping("/api/audit-log/config")
 @Validated
 @Slf4j
-@Api(tags = "审计日志配置管理", description = "审计日志配置管理相关接口")
+@Api(tags = "审计日志配置管理")
 public class AuditLogConfigController {
     
     @Autowired

@@ -24,7 +24,7 @@ import com.bing.framework.service.RoleService;
  * @author zhengbing
  * @date 2025-11-05
  */
-@Api(tags = "角色管理", description = "提供角色的增删改查及用户角色分配等功能")
+@Api(tags = "角色管理")
 @RestController
 @RequestMapping("/api/roles")
 @AuditLogLevel(module = "角色管理", value = AuditLogLevel.Level.BASIC)

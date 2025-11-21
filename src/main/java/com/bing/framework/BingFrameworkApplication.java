@@ -40,8 +40,6 @@ public class BingFrameworkApplication {
 		ConfigurableApplicationContext context = SpringApplication.run(BingFrameworkApplication.class, args);
         log.info("应用启动成功！访问地址：http://localhost:8081/api");
         log.info("应用正在运行中，请按 Ctrl+C 停止应用");
-		
-
 	}
 
 }

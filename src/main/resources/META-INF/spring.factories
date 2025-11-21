@@ -1,0 +1,5 @@
+# Spring Boot Environment Post Processors
+org.springframework.boot.env.EnvironmentPostProcessor=com.bing.framework.security.EncryptedPropertyProcessor
+
+# Spring Boot Auto Configuration
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=com.bing.framework.security.EncryptionAutoConfiguration
